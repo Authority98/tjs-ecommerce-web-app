@@ -34,26 +34,26 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-emerald-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-tr from-purple-300 via-fuchsia-200 to-violet-400 dark:from-purple-700 dark:via-violet-600 dark:to-fuchsia-700 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/20 dark:border-gray-700/30"
+        className="bg-white dark:bg-gray-700/90 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/20 dark:border-gray-600/40"
       >
         <div className="text-center mb-8">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-emerald-600 to-green-600 rounded-full mb-4"
+            className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-fuchsia-500 rounded-full mb-4 shadow-lg hover:shadow-purple-400/60"
           >
             <Lock className="h-8 w-8 text-white" />
           </motion.div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 font-dosis">
             Admin Login
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-gray-600 dark:text-gray-300 font-manrope">
             Access the admin dashboard
           </p>
         </div>
@@ -78,7 +78,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-[#F7B541] focus:border-transparent transition-all"
               placeholder="admin@twinklejingle.com"
               required
             />
@@ -94,7 +94,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all pr-10"
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-[#F7B541] focus:border-transparent transition-all pr-10"
                 placeholder="Enter your password"
                 required
               />
@@ -113,14 +113,14 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
             disabled={loading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-lg hover:from-emerald-700 hover:to-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-gradient-to-r from-purple-500 to-violet-600 text-white font-bold rounded-xl hover:from-purple-600 hover:to-violet-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-purple-400/60 hover:scale-105"
           >
             {loading ? 'Please wait...' : 'Sign In'}
           </motion.button>
         </form>
 
         <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-600 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-gray-500 dark:text-gray-400 font-manrope">
             Secure admin access for Twinkle Jingle
           </p>
         </div>

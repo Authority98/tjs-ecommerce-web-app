@@ -1,44 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { TreePine, Sparkles, Ribbon, Star, Gift, Heart } from 'lucide-react'
+import { Star, Gift, Heart, Sparkles } from 'lucide-react'
+import { CATEGORY_CONFIGS } from '../utils/categories'
 
 const CategorySelection: React.FC = () => {
-  const categories = [
-    {
-      id: 'trees',
-      title: 'Christmas Trees',
-      description: 'Premium Christmas trees with professional decoration services and custom styling options',
-      icon: TreePine,
-      gradient: 'from-emerald-600 via-green-600 to-forest-500',
-      bgGradient: 'from-emerald-50 to-green-50 dark:from-emerald-950/20 dark:to-green-950/20',
-      accent: 'emerald',
-      iconBg: 'bg-emerald-500',
-      hoverShadow: 'hover:shadow-emerald-500/25'
-    },
-    {
-      id: 'decorations',
-      title: 'Christmas Decorations',
-      description: 'Exquisite ornaments and magical decorative pieces to transform your space into a winter wonderland',
-      icon: Sparkles,
-      gradient: 'from-red-500 via-pink-500 to-rose-400',
-      bgGradient: 'from-red-50 to-pink-50 dark:from-red-950/20 dark:to-pink-950/20',
-      accent: 'red',
-      iconBg: 'bg-red-500',
-      hoverShadow: 'hover:shadow-red-500/25'
-    },
-    {
-      id: 'ribbons',
-      title: 'Premium Ribbons',
-      description: 'Luxurious ribbons and elegant bows crafted to add the perfect finishing touch to your holiday décor',
-      icon: Ribbon,
-      gradient: 'from-purple-500 via-violet-500 to-indigo-400',
-      bgGradient: 'from-purple-50 to-violet-50 dark:from-purple-950/20 dark:to-violet-950/20',
-      accent: 'purple',
-      iconBg: 'bg-purple-500',
-      hoverShadow: 'hover:shadow-purple-500/25'
-    }
-  ]
 
   const floatingElements = [
     { icon: Star, delay: 0, x: '10%', y: '20%' },
@@ -48,7 +14,7 @@ const CategorySelection: React.FC = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-emerald-950 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-tl from-purple-50 via-violet-100 to-fuchsia-200 dark:from-purple-900 dark:via-violet-700 dark:to-purple-800 relative overflow-hidden">
       {/* Floating Background Elements */}
       {floatingElements.map((element, index) => (
         <motion.div
@@ -66,7 +32,7 @@ const CategorySelection: React.FC = () => {
             ease: "easeInOut"
           }}
         >
-          <element.icon className="h-16 w-16 text-emerald-600" />
+          <element.icon className="h-16 w-16 text-[#F7B541]" />
         </motion.div>
       ))}
 
@@ -79,7 +45,7 @@ const CategorySelection: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">
               Select Your Category
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
@@ -88,25 +54,25 @@ const CategorySelection: React.FC = () => {
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {categories.map((category, index) => (
+            {CATEGORY_CONFIGS.map((category, index) => (
               <motion.div
                 key={category.id}
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 * index }}
-                whileHover={{ y: -12, scale: 1.02 }}
+                whileHover={{ y: -12, scale: 1.02, transition: { duration: 0 } }}
                 className="group"
               >
                 <Link to={`/products/${category.id}`}>
-                  <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${category.bgGradient} shadow-xl group-hover:shadow-2xl ${category.hoverShadow} transition-all duration-700 border border-white/20 dark:border-gray-700/30 h-full`}>
+                  <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${category.bgGradient} shadow-xl group-hover:shadow-2xl ${category.hoverShadow} transition-all duration-300 border border-white/20 dark:border-gray-700/30 h-full`}>
                     {/* Icon Container */}
                     <div className="relative p-8 text-center">
                       <motion.div
                         className="mx-auto mb-6 relative flex items-center justify-center"
                         whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.15 }}
                       >
-                        <div className={`w-24 h-24 ${category.iconBg} rounded-3xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-500`}>
+                        <div className={`w-24 h-24 ${category.iconBg} rounded-3xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
                           <category.icon className="h-12 w-12 text-white" />
                         </div>
                         
@@ -127,7 +93,7 @@ const CategorySelection: React.FC = () => {
                         </motion.div>
                       </motion.div>
                       
-                      <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                      <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-purple-600 dark:group-hover:text-amber-400 transition-colors font-dosis">
                         {category.title}
                       </h3>
                       

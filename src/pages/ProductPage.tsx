@@ -38,23 +38,23 @@ const ProductPage: React.FC = () => {
       case 'decorations':
         return {
           title: 'Christmas Decorations',
-          gradient: 'from-red-500 via-pink-500 to-rose-400',
-          bgGradient: 'from-red-50/80 via-pink-50/60 to-rose-50/40 dark:from-red-950/20 dark:via-pink-950/15 dark:to-rose-950/10',
-          accentColor: 'red'
+          gradient: 'from-purple-500 via-fuchsia-500 to-violet-400',
+          bgGradient: 'from-purple-50/80 via-fuchsia-50/60 to-violet-50/40 dark:from-purple-950/20 dark:via-fuchsia-950/15 dark:to-violet-950/10',
+          accentColor: 'purple'
         }
       case 'ribbons':
         return {
           title: 'Premium Ribbons',
-          gradient: 'from-purple-500 via-violet-500 to-indigo-400',
-          bgGradient: 'from-purple-50/80 via-violet-50/60 to-indigo-50/40 dark:from-purple-950/20 dark:via-violet-950/15 dark:to-indigo-950/10',
-          accentColor: 'purple'
+          gradient: 'from-violet-400 via-purple-400 to-fuchsia-300',
+          bgGradient: 'from-violet-50/60 via-purple-50/40 to-fuchsia-50/30 dark:from-violet-950/15 dark:via-purple-950/10 dark:to-fuchsia-950/8',
+          accentColor: 'violet'
         }
       case 'trees':
         return {
           title: 'Christmas Trees',
-          gradient: 'from-emerald-600 via-green-600 to-teal-500',
-          bgGradient: 'from-emerald-50/80 via-green-50/60 to-teal-50/40 dark:from-emerald-950/20 dark:via-green-950/15 dark:to-teal-950/10',
-          accentColor: 'emerald'
+          gradient: 'from-purple-600 via-violet-600 to-fuchsia-500',
+          bgGradient: 'from-purple-50/80 via-violet-50/60 to-fuchsia-50/40 dark:from-purple-950/20 dark:via-violet-950/15 dark:to-fuchsia-950/10',
+          accentColor: 'purple'
         }
       default:
         return {
@@ -81,7 +81,7 @@ const ProductPage: React.FC = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-emerald-950 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-bl from-purple-100 via-violet-50 to-fuchsia-100 dark:from-purple-900 dark:via-violet-800 dark:to-purple-700 relative overflow-hidden">
       {/* Enhanced Floating Background Elements */}
       {floatingElements.map((element, index) => (
         <motion.div
@@ -109,43 +109,22 @@ const ProductPage: React.FC = () => {
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-red-400/15 to-pink-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
 
       <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
-          {/* Enhanced Header Design */}
-          <div className="relative">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-8"
-            >
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4 leading-tight">
-                <span className={`bg-gradient-to-r ${categoryInfo.gradient} bg-clip-text text-transparent`}>
-                  {categoryInfo.title}
-                </span>
-              </h1>
-            </motion.div>
-          </div>
-        </motion.div>
+
 
         {products.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
-            className="text-center py-24"
+            className="text-center mb-10"
           >
             <div className={`inline-flex p-12 bg-gradient-to-br ${categoryInfo.bgGradient} rounded-3xl shadow-2xl mb-12 border border-white/20 dark:border-gray-700/30`}>
               <Gift className="h-20 w-20 text-gray-400 dark:text-gray-500" />
             </div>
-            <h3 className="text-4xl font-bold text-gray-700 dark:text-gray-300 mb-6">
+            <h3 className="text-4xl font-bold text-gray-700 dark:text-gray-300 mb-6 font-dosis">
               Coming Soon
             </h3>
-            <p className="text-xl text-gray-500 dark:text-gray-400 mb-12 max-w-md mx-auto leading-relaxed">
+            <p className="text-xl text-gray-500 dark:text-gray-400 mb-12 max-w-md mx-auto leading-relaxed font-manrope">
               We're curating an amazing collection of {category}. Check back soon for magical options!
             </p>
             <Link
@@ -190,11 +169,11 @@ const ProductPage: React.FC = () => {
                 <span className="font-semibold text-lg">Premium Quality</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
-                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse shadow-lg" style={{ animationDelay: '0.5s' }} />
+                <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse shadow-lg" style={{ animationDelay: '0.5s' }} />
                 <span className="font-semibold text-lg">Expert Installation</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
-                <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse shadow-lg" style={{ animationDelay: '1s' }} />
+                <div className="w-3 h-3 bg-amber-500 rounded-full animate-pulse shadow-lg" style={{ animationDelay: '1s' }} />
                 <span className="font-semibold text-lg">Satisfaction Guaranteed</span>
               </div>
             </div>

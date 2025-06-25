@@ -124,12 +124,12 @@ const CheckoutPage: React.FC = () => {
 
   if (!orderData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-emerald-950">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-violet-50 to-fuchsia-100 dark:from-purple-900 dark:via-violet-800 dark:to-fuchsia-900">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">No order data found</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">No order data found</h2>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white rounded-xl hover:from-purple-600 hover:to-fuchsia-600 transition-all hover:scale-105 hover:shadow-purple-400/60"
           >
             Back to Home
           </button>
@@ -145,7 +145,7 @@ const CheckoutPage: React.FC = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-emerald-950">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-fuchsia-100 dark:from-purple-900 dark:via-violet-800 dark:to-fuchsia-900">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -153,7 +153,7 @@ const CheckoutPage: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">Complete Your Order</h1>
+          <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">Complete Your Order</h1>
           
           {/* Progress Steps */}
           <div className="flex items-center space-x-4 mb-8">
@@ -162,16 +162,16 @@ const CheckoutPage: React.FC = () => {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
                     step.completed || currentStep === step.number
-                      ? 'bg-emerald-600 text-white'
+                      ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white shadow-purple-400/50'
                       : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                   }`}
                 >
                   {step.number}
                 </div>
                 <span
-                  className={`ml-2 font-medium ${
+                  className={`ml-2 font-medium font-dosis ${
                     step.completed || currentStep === step.number
-                      ? 'text-emerald-600 dark:text-emerald-400'
+                      ? 'text-purple-600 dark:text-amber-400'
                       : 'text-gray-500 dark:text-gray-400'
                   }`}
                 >
@@ -217,8 +217,8 @@ const CheckoutPage: React.FC = () => {
               )}
               
               {currentStep === 3 && (
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/20 dark:border-gray-700/30">
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Payment Information</h2>
+                <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 p-8 border border-white/20 dark:border-gray-700/30">
+                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">Payment Information</h2>
                   
                   <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
                     <p className="text-yellow-800 dark:text-yellow-200">
@@ -235,7 +235,7 @@ const CheckoutPage: React.FC = () => {
                       <input
                         type="text"
                         placeholder="4111 1111 1111 1111"
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
                         disabled
                       />
                     </div>
@@ -248,7 +248,7 @@ const CheckoutPage: React.FC = () => {
                         <input
                           type="text"
                           placeholder="MM/YY"
-                          className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                          className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
                           disabled
                         />
                       </div>
@@ -259,7 +259,7 @@ const CheckoutPage: React.FC = () => {
                         <input
                           type="text"
                           placeholder="123"
-                          className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                          className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
                           disabled
                         />
                       </div>
@@ -275,7 +275,7 @@ const CheckoutPage: React.FC = () => {
                     </button>
                     <button
                       onClick={handleSubmitOrder}
-                      className="flex-1 py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-lg hover:from-emerald-700 hover:to-green-700 transition-all"
+                      className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-fuchsia-700 transition-all hover:scale-105 hover:shadow-purple-400/60"
                     >
                       Place Order - ${calculateFinalTotal()}
                     </button>

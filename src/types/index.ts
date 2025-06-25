@@ -126,3 +126,25 @@ export const DECOR_LEVELS = [
   { percentage: 75, label: 'Two Third Decor', description: '75%' },
   { percentage: 50, label: 'Half Decor', description: '50%' }
 ]
+
+export interface Order {
+  id: string
+  customer_name: string
+  customer_email: string
+  customer_phone: string
+  delivery_address: string
+  product_id: string
+  tree_height?: string
+  tree_width?: string
+  tree_type?: string
+  rental_period?: number
+  decor_level?: number
+  installation_date?: string
+  teardown_date?: string
+  rush_order?: boolean
+  total_amount: number
+  status: 'pending' | 'confirmed' | 'delivered' | 'completed'
+  created_at: string
+  updated_at: string
+  products?: Product
+}

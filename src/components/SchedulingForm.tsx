@@ -48,7 +48,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
       transition={{ duration: 0.5 }}
       className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/20 dark:border-gray-700/30"
     >
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">
         {isTreeOrder ? 'Installation & Service Scheduling' : 'Delivery Scheduling'}
       </h2>
       
@@ -150,7 +150,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
           <button
             type="button"
             onClick={onBack}
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-lg hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500 transition-all"
           >
             Back
           </button>

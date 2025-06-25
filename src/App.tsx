@@ -1,7 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ThemeProvider } from './contexts/ThemeContext'
 import ProductPage from './pages/ProductPage'
 import TreeCustomization from './pages/TreeCustomization'
 import CheckoutPage from './pages/CheckoutPage'
@@ -12,9 +11,8 @@ import Header from './components/Header'
 
 function App() {
   return (
-    <ThemeProvider>
-      <Router>
-        <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-emerald-950 transition-colors duration-300">
+    <Router>
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-violet-100 transition-colors duration-300">
           <Header />
           <motion.main
             initial={{ opacity: 0 }}
@@ -34,7 +32,6 @@ function App() {
           </motion.main>
         </div>
       </Router>
-    </ThemeProvider>
   )
 }
 

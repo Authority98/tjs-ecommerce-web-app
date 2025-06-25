@@ -19,19 +19,19 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-gradient-to-br from-white/90 to-emerald-50/50 dark:from-gray-800/90 dark:to-emerald-950/30 backdrop-blur-xl rounded-3xl shadow-2xl p-8 sticky top-24 border border-white/30 dark:border-gray-700/40"
+      className="bg-gradient-to-br from-white/90 to-purple-50/50 dark:from-purple-950/20 dark:to-violet-950/30 backdrop-blur-xl rounded-3xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 p-8 sticky top-24 border border-white/30 dark:border-gray-700/30"
     >
       <div className="flex items-center space-x-3 mb-6">
-        <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl">
-          <Package className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+        <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-xl">
+          <Package className="h-6 w-6 text-purple-600 dark:text-amber-400" />
         </div>
-        <h3 className="text-2xl font-bold text-gray-800 dark:text-white">Order Summary</h3>
+        <h3 className="text-2xl font-bold text-gray-800 dark:text-white font-dosis">Order Summary</h3>
       </div>
       
       <div className="space-y-6">
         {/* Product */}
         <div className="relative">
-          <div className="flex space-x-4 p-4 bg-white/60 dark:bg-gray-700/40 rounded-2xl border border-white/40 dark:border-gray-600/40">
+          <div className="flex space-x-4 p-4 bg-white/60 dark:bg-purple-950/20 rounded-2xl border border-white/40 dark:border-gray-700/30">
             <div className="relative">
               <img
                 src={orderData.product.images[0] || 'https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=100'}
@@ -65,20 +65,20 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
             </h4>
             <div className="grid grid-cols-2 gap-3 text-sm">
               {orderData.treeOptions.height && (
-                <div className="bg-white/60 dark:bg-gray-700/40 rounded-lg p-2">
+                <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-2">
                   <div className="text-gray-500 dark:text-gray-400 text-xs">Size</div>
                   <div className="font-medium text-gray-800 dark:text-white">{orderData.treeOptions.height}</div>
                 </div>
               )}
-              <div className="bg-white/60 dark:bg-gray-700/40 rounded-lg p-2">
+              <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-2">
                 <div className="text-gray-500 dark:text-gray-400 text-xs">Type</div>
                 <div className="font-medium text-gray-800 dark:text-white">{orderData.treeOptions.type}</div>
               </div>
-              <div className="bg-white/60 dark:bg-gray-700/40 rounded-lg p-2">
+              <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-2">
                 <div className="text-gray-500 dark:text-gray-400 text-xs">Rental</div>
                 <div className="font-medium text-gray-800 dark:text-white">{orderData.treeOptions.rentalPeriod} days</div>
               </div>
-              <div className="bg-white/60 dark:bg-gray-700/40 rounded-lg p-2">
+              <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-2">
                 <div className="text-gray-500 dark:text-gray-400 text-xs">Decor</div>
                 <div className="font-medium text-gray-800 dark:text-white">{orderData.treeOptions.decorLevel}%</div>
               </div>
@@ -104,7 +104,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
         <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-2xl p-6 text-white shadow-xl">
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-emerald-100 text-sm">Total Amount</div>
+              <div className="text-amber-100 text-sm">Total Amount</div>
               <div className="text-3xl font-bold">${finalTotal}</div>
             </div>
             <div className="p-3 bg-white/20 rounded-xl">
@@ -118,8 +118,8 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
       <div className="mt-8 pt-6 border-t border-gray-200/50 dark:border-gray-600/50">
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
-            <div className="p-1 bg-green-100 dark:bg-green-900/30 rounded">
-              <Shield className="h-3 w-3 text-green-600 dark:text-green-400" />
+            <div className="p-1 bg-purple-100 dark:bg-purple-900/30 rounded">
+              <Shield className="h-3 w-3 text-purple-600 dark:text-purple-400" />
             </div>
             <span className="font-medium">Secure Checkout</span>
           </div>

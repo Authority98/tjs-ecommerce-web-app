@@ -15,6 +15,26 @@ const ProductTags: React.FC<ProductTagsProps> = ({ product }) => {
     ).filter(Boolean);
   };
 
+  const isLightColor = (hex: string) => {
+    // Remove # if present
+    const color = hex.replace('#', '');
+    
+    // Convert to RGB
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+    
+    // Calculate brightness using YIQ formula
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    
+    // If brightness > 128, it's a light color
+    return brightness > 128;
+  };
+
+  const getTextColor = (backgroundColor: string) => {
+    return isLightColor(backgroundColor) ? '#374151' : '#FFFFFF';
+  };
+
   const productColors = getProductColors();
 
   return (
@@ -31,8 +51,8 @@ const ProductTags: React.FC<ProductTagsProps> = ({ product }) => {
           className="flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium shadow-sm"
           style={{
             backgroundColor: color?.hex,
-            color: color?.value === 'white' ? '#374151' : '#FFFFFF',
-            border: color?.value === 'white' ? '1px solid #E5E7EB' : 'none'
+            color: getTextColor(color?.hex || '#000000'),
+            border: isLightColor(color?.hex || '#000000') ? '1px solid #E5E7EB' : 'none'
           }}
         >
           {color?.name}
