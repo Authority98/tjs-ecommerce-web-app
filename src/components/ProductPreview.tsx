@@ -33,7 +33,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
             <div className="absolute top-4 right-4">
               <div className="bg-white/90 dark:bg-purple-950/20 backdrop-blur-sm rounded-full px-3 py-1 border border-white/20 dark:border-gray-700/30">
-                <span className="text-2xl font-bold text-green-500 dark:text-green-400">${totalPrice}</span>
+                <span className="text-2xl font-bold" style={{color: '#9333E9'}}>${totalPrice}</span>
               </div>
             </div>
           </div>
@@ -46,7 +46,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
             <div className="space-y-3 mb-6">
               {/* Size Selection */}
               <div className="flex items-center space-x-2 text-sm">
-                <Ruler className="h-4 w-4 text-orange-400 dark:text-orange-300" />
+                <Ruler className="h-4 w-4" style={{color: '#9333E9'}} />
                 {selectedOptions.height ? (
                   <span className="text-gray-600 dark:text-gray-300">Size: {selectedOptions.height}</span>
                 ) : (
@@ -63,7 +63,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
               
               {/* Type Selection */}
               <div className="flex items-center space-x-2 text-sm">
-                <TreePine className="h-4 w-4 text-orange-400 dark:text-orange-300" />
+                <TreePine className="h-4 w-4" style={{color: '#9333E9'}} />
                 {selectedOptions.type ? (
                   <span className="text-gray-600 dark:text-gray-300">Type: {selectedOptions.type}</span>
                 ) : (
@@ -80,7 +80,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
               
               {/* Rental Period Selection */}
               <div className="flex items-center space-x-2 text-sm">
-                <Calendar className="h-4 w-4 text-orange-400 dark:text-orange-300" />
+                <Calendar className="h-4 w-4" style={{color: '#9333E9'}} />
                 {selectedOptions.rentalPeriod > 0 ? (
                   <span className="text-gray-600 dark:text-gray-300">Rental: {selectedOptions.rentalPeriod} days</span>
                 ) : (
@@ -97,7 +97,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
               
               {/* Decoration Level Selection */}
               <div className="flex items-center space-x-2 text-sm">
-                <Palette className="h-4 w-4 text-orange-400 dark:text-orange-300" />
+                <Palette className="h-4 w-4" style={{color: '#9333E9'}} />
                 {selectedOptions.decorLevel > 0 ? (
                   <span className="text-gray-600 dark:text-gray-300">Decor: {selectedOptions.decorLevel}%</span>
                 ) : (
@@ -113,10 +113,6 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
               </div>
             </div>
 
-            <div className="text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Total Price</p>
-              <p className="text-3xl font-bold text-purple-600 dark:text-amber-400">${totalPrice}</p>
-            </div>
           </div>
         </div>
       </div>

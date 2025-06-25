@@ -38,22 +38,22 @@ const Header: React.FC = () => {
             </motion.div>
           </Link>
           
-          <nav className="hidden md:flex space-x-8 text-lg">
+          <nav className="hidden md:flex space-x-10 text-xl">
             {[
               { path: '/products/trees', label: 'Trees', emoji: '🌲' },
-              { path: '/products/decorations', label: 'Decorations', emoji: '🎄' },
+              { path: '/products/decorations', label: 'Decorations', emoji: '✨' },
               { path: '/products/ribbons', label: 'Ribbons', emoji: '🎀' }
             ].map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all font-dosis font-medium ${
+                className={`flex items-center space-x-3 px-5 py-3 rounded-xl transition-all font-dosis font-medium ${
                   location.pathname.includes(item.path.split('/')[2])
                     ? 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-700 font-bold shadow-purple-300/60 scale-105'
                     : 'text-purple-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 hover:scale-102'
                 }`}
               >
-                <span>{item.emoji}</span>
+                <span className="text-xl">{item.emoji}</span>
                 <span>{item.label}</span>
               </Link>
             ))}
@@ -62,9 +62,9 @@ const Header: React.FC = () => {
           <div className="flex items-center space-x-3">
             <Link
               to="/admin"
-              className="p-2 text-purple-500 hover:text-purple-700 transition-all rounded-lg hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:scale-110"
+              className="p-3 text-purple-500 hover:text-purple-700 transition-all rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:scale-110"
             >
-              <Settings className="h-5 w-5" />
+              <Settings className="h-6 w-6" />
             </Link>
           </div>
         </div>

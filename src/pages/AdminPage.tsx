@@ -76,7 +76,7 @@ const AdminPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-200 via-violet-100 to-fuchsia-300 dark:from-purple-900 dark:via-violet-800 dark:to-purple-600">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-violet-100 dark:from-purple-900 dark:via-fuchsia-900 dark:to-violet-800">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div

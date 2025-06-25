@@ -38,7 +38,7 @@ const RentalPeriodSelection: React.FC<RentalPeriodSelectionProps> = ({
           <div className="font-bold text-xl text-gray-800 dark:text-white mb-1">
             {period.label}
           </div>
-          <div className="text-amber-600 dark:text-amber-400 font-semibold">
+          <div className="font-semibold" style={{color: '#9333E9'}}>
             {period.additionalCost > 0 ? `+$${period.additionalCost}` : 'Included'}
           </div>
           {selectedOptions.rentalPeriod === period.days && (

@@ -30,7 +30,7 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
     switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
       case 'confirmed': return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'delivered': return 'bg-green-100 text-green-800 border-green-200'
+      case 'delivered': return 'bg-purple-100 text-purple-800 border-purple-200'
       case 'completed': return 'bg-gray-100 text-gray-800 border-gray-200'
       default: return 'bg-gray-100 text-gray-800 border-gray-200'
     }
@@ -58,8 +58,8 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
           <Card className="p-6 hover:shadow-lg transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
-                <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
-                  <Package className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(147, 51, 233, 0.1)'}}>
+                  <Package className="h-5 w-5" style={{color: '#9333E9'}} />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-800 dark:text-white">
@@ -77,7 +77,10 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
                 </span>
                 <button
                   onClick={() => onViewOrder(order)}
-                  className="p-2 text-gray-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                  className="p-2 text-gray-500 transition-colors"
+                  style={{'--hover-color': '#9333E9'}}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#9333E9'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
                 >
                   <Eye className="h-4 w-4" />
                 </button>

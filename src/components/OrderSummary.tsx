@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { OrderSummary } from '../types'
+import { OrderSummary, RENTAL_PERIODS } from '../types'
 import { Package, Star, Shield, Clock } from 'lucide-react'
 
 interface OrderSummaryProps {
@@ -38,7 +38,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                 alt={orderData.product.title}
                 className="w-20 h-20 object-cover rounded-xl shadow-lg"
               />
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+              <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center" style={{backgroundColor: '#9333E9'}}>
                 <Star className="h-3 w-3 text-white" />
               </div>
             </div>
@@ -48,7 +48,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
               </h4>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600 dark:text-gray-300">Base Price</span>
-                <span className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
+                <span className="text-xl font-bold" style={{color: '#9333E9'}}>
                   ${orderData.product.price}
                 </span>
               </div>
@@ -58,9 +58,9 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
 
         {/* Tree Options */}
         {orderData.treeOptions && (
-          <div className="bg-gradient-to-r from-emerald-50/80 to-green-50/80 dark:from-emerald-950/20 dark:to-green-950/20 rounded-2xl p-4 border border-emerald-200/50 dark:border-emerald-700/30">
+          <div className="rounded-2xl p-4 border" style={{background: 'linear-gradient(to right, rgba(147, 51, 233, 0.08), rgba(147, 51, 233, 0.12))', borderColor: 'rgba(147, 51, 233, 0.3)'}}>
             <h4 className="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2" />
+              <div className="w-2 h-2 rounded-full mr-2" style={{backgroundColor: '#9333E9'}} />
               Customizations
             </h4>
             <div className="grid grid-cols-2 gap-3 text-sm">
@@ -76,7 +76,14 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
               </div>
               <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-2">
                 <div className="text-gray-500 dark:text-gray-400 text-xs">Rental</div>
-                <div className="font-medium text-gray-800 dark:text-white">{orderData.treeOptions.rentalPeriod} days</div>
+                <div className="font-medium text-gray-800 dark:text-white">
+                  {orderData.treeOptions.rentalPeriod} days
+                  {(() => {
+                    const rentalPeriod = RENTAL_PERIODS.find(p => p.days === orderData.treeOptions.rentalPeriod);
+                    const additionalCost = rentalPeriod?.additionalCost || 0;
+                    return additionalCost > 0 ? ` (+$${additionalCost})` : '';
+                  })()}
+                </div>
               </div>
               <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-2">
                 <div className="text-gray-500 dark:text-gray-400 text-xs">Decor</div>
@@ -101,7 +108,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
         )}
 
         {/* Total */}
-        <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-2xl p-6 text-white shadow-xl">
+        <div className="rounded-2xl p-6 text-white shadow-xl" style={{background: 'linear-gradient(to right, #9333E9, #7C3AED)'}}>
           <div className="flex justify-between items-center">
             <div>
               <div className="text-amber-100 text-sm">Total Amount</div>

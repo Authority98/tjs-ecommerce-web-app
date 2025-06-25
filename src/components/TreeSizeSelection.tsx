@@ -14,14 +14,6 @@ const TreeSizeSelection: React.FC<TreeSizeSelectionProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 font-dosis">
-          Choose Your Perfect Size
-        </h4>
-        <p className="text-gray-500 dark:text-gray-400 font-manrope">
-          Select the tree dimensions that best fit your space
-        </p>
-      </div>
       
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {TREE_SIZES.map((size, index) => {

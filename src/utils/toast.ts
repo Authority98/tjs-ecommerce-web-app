@@ -58,6 +58,7 @@ export const TOAST_MESSAGES = {
   TYPE_SELECTED: (type: string) => `🎄 Tree type selected: ${type}`,
   RENTAL_SELECTED: (period: string) => `📅 Rental period selected: ${period}`,
   DECOR_SELECTED: (level: string) => `🎨 Decoration level selected: ${level}`,
+  CONFIGURATION_COMPLETE: '🛡️ Configuration Complete! Ready to proceed.',
   ORDER_PLACED: '🎉 Order placed successfully!',
   ORDER_UPDATED: '✅ Order updated successfully!',
   PRODUCT_ADDED: '✅ Product added successfully!',

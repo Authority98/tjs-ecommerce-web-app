@@ -11,7 +11,7 @@ const StepHeader: React.FC<StepHeaderProps> = ({ title, description, icon: Icon 
   return (
     <div className="flex items-center space-x-3 mb-4">
       <div className="p-3 bg-gradient-to-r from-purple-100 to-violet-200 dark:from-purple-950/20 dark:to-violet-950/20 rounded-xl shadow-purple-200/50 border border-white/20 dark:border-gray-700/30">
-        <Icon className="h-6 w-6 text-purple-600 dark:text-amber-400" />
+        <Icon className="h-6 w-6" style={{color: '#9333E9'}} />
       </div>
       <div>
         <h3 className="text-2xl font-bold text-gray-800 dark:text-white font-dosis">

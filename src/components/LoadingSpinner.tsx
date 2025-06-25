@@ -39,7 +39,7 @@ const LoadingSpinner: React.FC = () => {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-emerald-50 dark:bg-emerald-950 overflow-hidden" style={{ backgroundColor: 'rgb(236 253 245)' }}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-purple-50 via-fuchsia-50 to-violet-100 dark:from-purple-900 dark:via-fuchsia-900 dark:to-violet-800 overflow-hidden">
       {/* Floating Particles */}
       {particles.map((particle) => (
         <motion.div

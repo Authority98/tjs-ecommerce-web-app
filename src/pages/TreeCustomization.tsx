@@ -14,7 +14,6 @@ import TreeSizeSelection from '../components/TreeSizeSelection'
 import TreeTypeSelection from '../components/TreeTypeSelection'
 import RentalPeriodSelection from '../components/RentalPeriodSelection'
 import DecorationLevelSelection from '../components/DecorationLevelSelection'
-import CompletionIndicator from '../components/CompletionIndicator'
 
 const TreeCustomization: React.FC = () => {
   const { productId } = useParams<{ productId: string }>()
@@ -40,6 +39,7 @@ const TreeCustomization: React.FC = () => {
   useEffect(() => {
     fetchProduct()
   }, [productId])
+
 
 
 
@@ -134,6 +134,12 @@ const TreeCustomization: React.FC = () => {
   }
 
   const canProceed = steps.every((_, index) => isStepComplete(index))
+
+  useEffect(() => {
+    if (canProceed) {
+      showSuccessToast(TOAST_MESSAGES.CONFIGURATION_COMPLETE)
+    }
+  }, [canProceed])
 
 
 
@@ -252,7 +258,6 @@ const TreeCustomization: React.FC = () => {
                   />
                 )}
 
-                <CompletionIndicator canProceed={canProceed} />
               </motion.div>
             </AnimatePresence>
           </motion.div>

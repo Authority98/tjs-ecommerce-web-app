@@ -95,15 +95,6 @@ const ThankYouPage: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Success Message */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6 font-dosis"
-          >
-            Order Confirmed!
-          </motion.div>
         </motion.div>
 
         {/* Order Details Card */}

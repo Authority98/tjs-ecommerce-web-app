@@ -56,24 +56,19 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
         <div>
           <label htmlFor="installationDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             <div className="flex items-center space-x-2">
-              <Calendar className="h-4 w-4 text-emerald-600" />
+              <Calendar className="h-4 w-4" style={{color: '#9333E9'}} />
               <span>{isTreeOrder ? 'Installation Date' : 'Delivery Date'} {isTreeOrder && '*'}</span>
             </div>
           </label>
-          <div className="relative">
-            <input
-              type="date"
-              id="installationDate"
-              value={installationDate}
-              onChange={(e) => setInstallationDate(e.target.value)}
-              min={today}
-              className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-lg"
-              required={isTreeOrder}
-            />
-            <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-              <Calendar className="h-5 w-5 text-gray-400" />
-            </div>
-          </div>
+          <input
+            type="date"
+            id="installationDate"
+            value={installationDate}
+            onChange={(e) => setInstallationDate(e.target.value)}
+            min={today}
+            className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all text-lg"
+            required={isTreeOrder}
+          />
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
             {isTreeOrder 
               ? 'Select your preferred date for tree installation and decoration'
@@ -86,23 +81,18 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
           <div>
             <label htmlFor="teardownDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-emerald-600" />
+                <Calendar className="h-4 w-4" style={{color: '#9333E9'}} />
                 <span>Teardown Date</span>
               </div>
             </label>
-            <div className="relative">
-              <input
-                type="date"
-                id="teardownDate"
-                value={teardownDate}
-                onChange={(e) => setTeardownDate(e.target.value)}
-                min={getMinTeardownDate()}
-                className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-lg"
-              />
-              <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                <Calendar className="h-5 w-5 text-gray-400" />
-              </div>
-            </div>
+            <input
+              type="date"
+              id="teardownDate"
+              value={teardownDate}
+              onChange={(e) => setTeardownDate(e.target.value)}
+              min={getMinTeardownDate()}
+              className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all text-lg"
+            />
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
               Optional: Schedule when you'd like us to remove the tree and decorations
             </p>
@@ -156,7 +146,10 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
           </button>
           <button
             type="submit"
-            className="flex-1 py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-lg hover:from-emerald-700 hover:to-green-700 transition-all"
+            className="flex-1 py-3 text-white font-bold rounded-lg transition-all"
+            style={{background: 'linear-gradient(to right, #9333E9, #7C3AED)', hover: 'linear-gradient(to right, #7C3AED, #6D28D9)'}}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #7C3AED, #6D28D9)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #9333E9, #7C3AED)'}
           >
             Continue to Payment
           </button>
