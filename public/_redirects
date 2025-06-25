@@ -1,0 +1,23 @@
+# Netlify redirects for SPA routing
+# This ensures all routes are served by index.html for client-side routing
+
+# Handle all routes except API calls and static assets
+/*    /index.html   200
+
+# Optional: Handle common file extensions that should be served directly
+/*.js   /index.html   200
+/*.css  /index.html   200
+/*.png  /index.html   200
+/*.jpg  /index.html   200
+/*.jpeg /index.html   200
+/*.gif  /index.html   200
+/*.svg  /index.html   200
+/*.ico  /index.html   200
+/*.webp /index.html   200
+
+# Handle admin routes specifically
+/admin/*  /index.html   200
+/products/*  /index.html   200
+/tree-customization/*  /index.html   200
+/checkout  /index.html   200
+/thank-you  /index.html   200

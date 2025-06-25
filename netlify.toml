@@ -1,0 +1,58 @@
+[build]
+  # Build command
+  command = "npm run build"
+  
+  # Directory with the static files
+  publish = "dist"
+
+[build.environment]
+  # Node version for build
+  NODE_VERSION = "18"
+
+# SPA redirect rules (fallback for _redirects file)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache images
+[[headers]]
+  for = "/*.{png,jpg,jpeg,gif,svg,webp,ico}"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+# Environment variable substitution (for build)
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+# Dev server configuration
+[dev]
+  command = "npm run dev"
+  port = 5173
+  publish = "dist"
