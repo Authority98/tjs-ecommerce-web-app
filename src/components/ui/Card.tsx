@@ -1,12 +1,11 @@
 import React from 'react'
-import { motion, MotionProps } from 'framer-motion'
 
 interface CardProps {
   children: React.ReactNode
   variant?: 'default' | 'glass' | 'solid' | 'outlined'
   padding?: 'none' | 'sm' | 'md' | 'lg'
   className?: string
-  motionProps?: MotionProps
+
   hover?: boolean
 }
 
@@ -15,7 +14,7 @@ const Card: React.FC<CardProps> = ({
   variant = 'default',
   padding = 'md',
   className = '',
-  motionProps,
+
   hover = false
 }) => {
   const getVariantClasses = () => {
@@ -49,20 +48,11 @@ const Card: React.FC<CardProps> = ({
   const baseClasses = 'rounded-2xl shadow-lg'
   const variantClasses = getVariantClasses()
   const paddingClasses = getPaddingClasses()
-  const hoverClasses = hover ? 'hover:shadow-xl transition-shadow duration-200' : ''
+  const hoverClasses = ''
 
   const finalClassName = `${baseClasses} ${variantClasses} ${paddingClasses} ${hoverClasses} ${className}`
 
-  if (motionProps) {
-    return (
-      <motion.div
-        className={finalClassName}
-        {...motionProps}
-      >
-        {children}
-      </motion.div>
-    )
-  }
+
 
   return (
     <div className={finalClassName}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+
 import { supabase } from '../lib/supabase'
 import { Product, PRODUCT_COLORS } from '../types'
 import ProductCard from '../components/ProductCard'
@@ -216,24 +216,13 @@ const ProductPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-bl from-purple-100 via-violet-50 to-fuchsia-100 dark:from-purple-900 dark:via-violet-800 dark:to-purple-700 relative overflow-hidden">
       {/* Enhanced Floating Background Elements */}
       {floatingElements.map((element, index) => (
-        <motion.div
+        <div
           key={index}
           className="absolute opacity-8 dark:opacity-4 pointer-events-none"
           style={{ left: element.x, top: element.y }}
-          animate={{
-            y: [0, -20, 0],
-            rotate: [0, 10, -10, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-          duration: 8 + index,
-          delay: element.delay,
-          repeat: Infinity,
-          ease: "linear"
-        }}
         >
           <element.icon className={`${element.size} text-emerald-600/30 dark:text-emerald-400/20`} />
-        </motion.div>
+        </div>
       ))}
 
       {/* Gradient Orbs */}
@@ -245,11 +234,9 @@ const ProductPage: React.FC = () => {
         {(validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centrepieces') && products.length > 0 && (
           <div ref={filterContainerRef} className="relative mb-8">
             {/* Filter Toggle Button */}
-            <motion.button
+            <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 transition-colors duration-100 shadow-lg"
-              whileHover={{ scale: 1.005 }}
-              whileTap={{ scale: 0.99 }}
+              className="flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg"
             >
               <Filter className="h-5 w-5 mr-2" />
               Filters
@@ -258,7 +245,7 @@ const ProductPage: React.FC = () => {
                   {filters.colors.length + (filters.decorated !== 'all' ? 1 : 0)}
                 </span>
               )}
-            </motion.button>
+            </button>
 
             {/* Filter Panel - Absolute positioned overlay */}
             {showFilters && (
@@ -273,10 +260,10 @@ const ProductPage: React.FC = () => {
                           <button
                             key={color.value}
                             onClick={() => toggleColorFilter(color.value)}
-                            className={`flex items-center px-3 py-2 rounded-lg border-2 transition-colors duration-100 ${
+                            className={`flex items-center px-3 py-2 rounded-lg border-2 ${
                               filters.colors.includes(color.value)
                                 ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30'
-                                : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                                : 'border-gray-200 dark:border-gray-600'
                             }`}
                           >
                             <div
@@ -327,10 +314,10 @@ const ProductPage: React.FC = () => {
                           <button
                             key={option.value}
                             onClick={() => setFilters(prev => ({ ...prev, decorated: option.value as any }))}
-                            className={`px-4 py-2 rounded-lg border-2 transition-colors duration-100 ${
+                            className={`px-4 py-2 rounded-lg border-2 ${
                               filters.decorated === option.value
                                 ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
-                                : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300'
+                                : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300'
                             }`}
                           >
                             <span className="text-sm font-medium">{option.label}</span>
@@ -344,7 +331,7 @@ const ProductPage: React.FC = () => {
                   <div className="flex items-end">
                     <button
                       onClick={clearFilters}
-                      className="flex items-center px-4 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-100"
+                      className="flex items-center px-4 py-2 text-sm text-gray-500 dark:text-gray-400"
                     >
                       <X className="h-4 w-4 mr-1" />
                       Clear
@@ -357,10 +344,7 @@ const ProductPage: React.FC = () => {
         )}
 
         {filteredProducts.length === 0 && products.length > 0 ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4 }}
+          <div
             className="text-center mb-10"
           >
             <div className={`inline-flex p-12 bg-gradient-to-br ${categoryInfo.bgGradient} rounded-3xl shadow-2xl mb-12 border border-white/20 dark:border-gray-700/30`}>
@@ -374,17 +358,14 @@ const ProductPage: React.FC = () => {
             </p>
             <button
               onClick={clearFilters}
-              className={`inline-flex items-center px-10 py-5 bg-gradient-to-r ${categoryInfo.gradient} text-white font-semibold text-lg rounded-2xl hover:shadow-xl transition-shadow duration-100`}
+              className={`inline-flex items-center px-10 py-5 bg-gradient-to-r ${categoryInfo.gradient} text-white font-semibold text-lg rounded-2xl`}
             >
               <X className="h-6 w-6 mr-3" />
               Clear Filters
             </button>
-          </motion.div>
+          </div>
         ) : products.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4 }}
+          <div
             className="text-center mb-10"
           >
             <div className={`inline-flex p-12 bg-gradient-to-br ${categoryInfo.bgGradient} rounded-3xl shadow-2xl mb-12 border border-white/20 dark:border-gray-700/30`}>
@@ -398,38 +379,29 @@ const ProductPage: React.FC = () => {
             </p>
             <Link
               to="/admin"
-              className={`inline-flex items-center px-10 py-5 bg-gradient-to-r ${categoryInfo.gradient} text-white font-semibold text-lg rounded-2xl hover:shadow-xl transition-shadow duration-200`}
+              className={`inline-flex items-center px-10 py-5 bg-gradient-to-r ${categoryInfo.gradient} text-white font-semibold text-lg rounded-2xl`}
             >
               <Sparkles className="h-6 w-6 mr-3" />
               Add Products (Admin)
             </Link>
-          </motion.div>
+          </div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+          <div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
           >
             {filteredProducts.map((product, index) => (
-              <motion.div
+              <div
                 key={product.id}
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
               >
                 <ProductCard product={product} />
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         )}
 
         {/* Enhanced Category Features */}
         {filteredProducts.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+          <div
             className="mt-24 text-center"
           >
             <div className={`inline-flex items-center space-x-12 px-12 py-8 bg-gradient-to-r ${categoryInfo.bgGradient} backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 dark:border-gray-700/40`}>
@@ -446,7 +418,7 @@ const ProductPage: React.FC = () => {
                 <span className="font-semibold text-lg">Satisfaction Guaranteed</span>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
     </div>

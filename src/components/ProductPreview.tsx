@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { Ruler, TreePine, Calendar, Palette } from 'lucide-react'
 import { Product, TreeOptions } from '../types'
 import ProductTags from './ProductTags'
@@ -17,12 +16,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
   totalPrice
 }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-      className="lg:col-span-1"
-    >
+    <div className="lg:col-span-1">
       <div className="sticky top-24">
         <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-white/20 dark:border-gray-700/30">
           <div className="relative">
@@ -121,7 +115,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 

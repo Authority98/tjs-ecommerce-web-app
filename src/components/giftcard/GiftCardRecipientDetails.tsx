@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { User, Mail } from 'lucide-react'
 
 interface GiftCardData {
@@ -18,11 +17,7 @@ const GiftCardRecipientDetails: React.FC<GiftCardRecipientDetailsProps> = ({
   onDataChange
 }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-4"
-    >
+    <div className="space-y-4">
       {/* Side-by-side name fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -68,7 +63,7 @@ const GiftCardRecipientDetails: React.FC<GiftCardRecipientDetailsProps> = ({
           placeholder="Enter recipient's email"
         />
       </div>
-    </motion.div>
+    </div>
   )
 }
 

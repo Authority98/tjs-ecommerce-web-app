@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
 import { Eye, Calendar, User, DollarSign, Package } from 'lucide-react'
 import { Order } from '../../types'
 import { Card } from '../ui'
@@ -49,13 +48,8 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
   return (
     <div className="space-y-4">
       {orders.map((order, index) => (
-        <motion.div
-          key={order.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: index * 0.05 }}
-        >
-          <Card className="p-6 hover:shadow-lg transition-all duration-300">
+        <div key={order.id}>
+          <Card className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
                 <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(147, 51, 233, 0.1)'}}>
@@ -77,7 +71,7 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
                 </span>
                 <button
                   onClick={() => onViewOrder(order)}
-                  className="p-2 text-gray-500 hover:text-purple-600 transition-colors"
+                  className="p-2 text-gray-500"
                 >
                   <Eye className="h-4 w-4" />
                 </button>
@@ -158,11 +152,11 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
                   key={status}
                   onClick={() => handleStatusUpdate(order.id, status)}
                   disabled={order.status === status || updatingStatus === order.id}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
-                    order.status === status
-                      ? `${getStatusColor(status)} opacity-100`
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  order.status === status
+                    ? `${getStatusColor(status)} opacity-100`
+                    : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   {updatingStatus === order.id && order.status !== status ? (
                     <div className="w-3 h-3 border border-gray-400 border-t-transparent rounded-full animate-spin"></div>
@@ -173,7 +167,7 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
               ))}
             </div>
           </Card>
-        </motion.div>
+        </div>
       ))}
     </div>
   )

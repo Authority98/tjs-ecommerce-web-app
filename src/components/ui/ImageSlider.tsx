@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import React, { useState, useEffect, useRef } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface ImageSliderProps {
@@ -93,49 +92,41 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
     >
       {/* Main Image Display with fade/slide animation */}
       <div className="relative w-full h-full aspect-[4/3] bg-gray-100">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={currentIndex}
-            src={displayImages[currentIndex]}
-            alt={`${alt} ${currentIndex + 1}`}
-            className="w-full h-full object-cover rounded-xl select-none"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -40 }}
-            transition={{ duration: 0.4 }}
-            draggable={false}
-            onError={e => {
-              e.currentTarget.src = "https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=800"
-            }}
-          />
-        </AnimatePresence>
+        <img
+          key={currentIndex}
+          src={displayImages[currentIndex]}
+          alt={`${alt} ${currentIndex + 1}`}
+          className="w-full h-full object-cover rounded-xl select-none"
+          draggable={false}
+          onError={e => {
+            e.currentTarget.src = "https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=800"
+          }}
+        />
         {/* Progress Bar */}
         {autoPlay && hasMultipleImages && (
           <div className="absolute bottom-0 left-0 w-full h-1 bg-black/10 rounded-b-xl overflow-hidden">
-            <div ref={progressRef} className="h-full bg-primary transition-all" style={{ width: 0 }} />
+            <div ref={progressRef} className="h-full bg-primary" style={{ width: 0 }} />
           </div>
         )}
         {/* Navigation Arrows */}
         {hasMultipleImages && (
           <>
-            <motion.button
+            <button
               onClick={goToPrevious}
-              whileTap={{ boxShadow: '0 0 0 4px rgba(0,0,0,0.15)' }}
-              className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/80 text-white h-10 w-10 p-0 flex items-center justify-center rounded-full shadow-md focus:outline-none"
+              className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-black/60 text-white h-10 w-10 p-0 flex items-center justify-center rounded-full shadow-md focus:outline-none"
               aria-label="Previous image"
               tabIndex={0}
             >
               <ChevronLeft size={24} />
-            </motion.button>
-            <motion.button
+            </button>
+            <button
               onClick={goToNext}
-              whileTap={{ boxShadow: '0 0 0 4px rgba(0,0,0,0.15)' }}
-              className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/80 text-white h-10 w-10 p-0 flex items-center justify-center rounded-full shadow-md focus:outline-none"
+              className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-black/60 text-white h-10 w-10 p-0 flex items-center justify-center rounded-full shadow-md focus:outline-none"
               aria-label="Next image"
               tabIndex={0}
             >
               <ChevronRight size={24} />
-            </motion.button>
+            </button>
           </>
         )}
       </div>

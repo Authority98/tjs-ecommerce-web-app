@@ -22,7 +22,7 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
     bgGradient: 'from-purple-50 to-violet-50 dark:from-purple-950/20 dark:to-violet-950/20',
     accent: 'purple',
     iconBg: 'bg-purple-500',
-    hoverShadow: 'hover:shadow-purple-500/25'
+    hoverShadow: ''
   },
   {
     id: 'decorations',
@@ -33,7 +33,7 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
     bgGradient: 'from-purple-50 to-fuchsia-50 dark:from-purple-950/20 dark:to-fuchsia-950/20',
     accent: 'purple',
     iconBg: 'bg-fuchsia-500',
-    hoverShadow: 'hover:shadow-fuchsia-500/25'
+    hoverShadow: ''
   },
   {
     id: 'ribbons',
@@ -44,7 +44,7 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
     bgGradient: 'from-violet-50 to-purple-50 dark:from-violet-950/15 dark:to-purple-950/15',
     accent: 'violet',
     iconBg: 'bg-violet-500',
-    hoverShadow: 'hover:shadow-violet-500/25'
+    hoverShadow: ''
   },
   {
     id: 'centrepieces',
@@ -55,7 +55,7 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
     bgGradient: 'from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15',
     accent: 'amber',
     iconBg: 'bg-amber-500',
-    hoverShadow: 'hover:shadow-amber-500/25'
+    hoverShadow: ''
   },
   {
     id: 'gift-card',
@@ -66,7 +66,7 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
     bgGradient: 'from-pink-50 to-rose-50 dark:from-pink-950/15 dark:to-rose-950/15',
     accent: 'pink',
     iconBg: 'bg-pink-500',
-    hoverShadow: 'hover:shadow-pink-500/25'
+    hoverShadow: ''
   }
 ]
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { Palette, Check } from 'lucide-react'
 import { PRODUCT_COLORS } from '../../types'
 import Input from './Input'
@@ -65,7 +64,7 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
             min="0"
             value={formData.price}
             onChange={(e) => handleInputChange('price', parseFloat(e.target.value) || 0)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#F7B541] focus:border-[#F7B541] transition-all duration-300"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#F7B541] focus:border-[#F7B541]"
             required
             disabled={loading}
             placeholder="0.00"
@@ -82,7 +81,7 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
           value={formData.description}
           onChange={(e) => handleInputChange('description', e.target.value)}
           rows={4}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#F7B541] focus:border-[#F7B541] transition-all duration-300"
+          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#F7B541] focus:border-[#F7B541]"
           required
           disabled={loading}
           placeholder="Describe your product..."
@@ -97,7 +96,7 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
         <select
           value={formData.category}
           onChange={(e) => handleInputChange('category', e.target.value as ProductFormData['category'])}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#F7B541] focus:border-[#F7B541] transition-all duration-300"
+          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#F7B541] focus:border-[#F7B541]"
           required
           disabled={loading}
         >
@@ -123,17 +122,15 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
               const isSelected = selectedColors.includes(color.value)
               
               return (
-                <motion.button
+                <button
                   key={color.value}
                   type="button"
                   onClick={() => toggleColor(color.value)}
-                  className={`relative p-3 rounded-xl border-2 transition-all duration-200 ${
+                  className={`relative p-3 rounded-xl border-2 ${
                     isSelected
                       ? 'border-[#F7B541] bg-[#F7B541]/10 dark:bg-[#511B7D]/20'
-                      : 'border-gray-200 dark:border-gray-600 hover:border-[#F7B541]/70 dark:hover:border-[#F7B541]'
+                      : 'border-gray-200 dark:border-gray-600'
                   }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   disabled={loading}
                 >
                   <div
@@ -145,15 +142,13 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
                   </span>
                   
                   {isSelected && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
+                    <div
                       className="absolute top-1 right-1 bg-[#F7B541] rounded-full p-1"
                     >
                       <Check className="h-3 w-3 text-white" />
-                    </motion.div>
+                    </div>
                   )}
-                </motion.button>
+                </button>
               )
             })}
           </div>

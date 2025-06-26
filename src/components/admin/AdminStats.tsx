@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { Package, ShoppingBag, DollarSign, Clock } from 'lucide-react'
 import { Card } from '../ui'
 
@@ -51,13 +50,8 @@ const AdminStats: React.FC<AdminStatsProps> = ({ stats }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {statCards.map((stat, index) => (
-        <motion.div
-          key={stat.title}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: index * 0.1 }}
-        >
-          <Card className="p-6 hover:shadow-lg transition-all duration-300">
+        <div key={stat.title}>
+          <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
@@ -72,7 +66,7 @@ const AdminStats: React.FC<AdminStatsProps> = ({ stats }) => {
               </div>
             </div>
           </Card>
-        </motion.div>
+        </div>
       ))}
     </div>
   )

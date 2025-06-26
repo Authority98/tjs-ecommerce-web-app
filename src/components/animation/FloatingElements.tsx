@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { LucideIcon } from 'lucide-react'
 
 interface FloatingElement {
@@ -25,7 +24,7 @@ const FloatingElements: React.FC<FloatingElementsProps> = ({
   return (
     <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
       {elements.map((element, index) => (
-        <motion.div
+        <div
           key={index}
           className={`absolute dark:opacity-5`}
           style={{ 
@@ -33,21 +32,11 @@ const FloatingElements: React.FC<FloatingElementsProps> = ({
             top: element.y,
             opacity: opacity
           }}
-          animate={{
-            y: [0, -20, 0],
-            rotate: [0, 10, -10, 0],
-          }}
-          transition={{
-            duration: element.duration || 4,
-            delay: element.delay,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
         >
           <element.icon 
             className={`h-16 w-16 ${element.color || 'text-emerald-600'}`} 
           />
-        </motion.div>
+        </div>
       ))}
     </div>
   )

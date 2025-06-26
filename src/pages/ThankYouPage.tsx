@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+
 import { CheckCircle, Gift, Calendar, Phone, Mail, Home, Sparkles, Star } from 'lucide-react'
 
 const ThankYouPage: React.FC = () => {
@@ -26,86 +26,45 @@ const ThankYouPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-fuchsia-100 dark:from-purple-900 dark:via-violet-800 dark:to-fuchsia-900 relative overflow-hidden">
       {/* Floating Background Elements */}
       {floatingElements.map((element, index) => (
-        <motion.div
+        <div
           key={index}
           className="absolute opacity-10 dark:opacity-5 pointer-events-none"
           style={{ left: element.x, top: element.y }}
-          animate={{
-            y: [0, -10, 0],
-            rotate: [0, 5, -5, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 3,
-            delay: element.delay,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
         >
           <element.icon className="h-12 w-12 text-purple-600 dark:text-amber-400" />
-        </motion.div>
+        </div>
       ))}
 
       {/* Success Confetti Effect */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(20)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
             className="absolute w-2 h-2 bg-gradient-to-r from-purple-400 to-fuchsia-400 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
             }}
-            animate={{
-              y: [0, -100, 0],
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3,
-              delay: Math.random() * 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
           />
         ))}
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-16 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4 }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12">
           {/* Success Icon */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex justify-center mb-8"
-          >
+          <div className="flex justify-center mb-8">
             <div className="relative">
               <div className="w-32 h-32 bg-gradient-to-r from-purple-500 to-fuchsia-500 rounded-full flex items-center justify-center shadow-2xl">
                 <CheckCircle className="h-16 w-16 text-white" />
               </div>
-              <motion.div
-                className="absolute -inset-4 bg-gradient-to-r from-purple-400/20 to-fuchsia-400/20 rounded-full"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
+              <div className="absolute -inset-4 bg-gradient-to-r from-purple-400/20 to-fuchsia-400/20 rounded-full" />
             </div>
-          </motion.div>
+          </div>
 
-        </motion.div>
+        </div>
 
         {/* Order Details Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.2 }}
-          className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-100 p-8 mb-12 border border-white/20 dark:border-gray-700/30"
-        >
+        <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-2xl p-8 mb-12 border border-white/20 dark:border-gray-700/30">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">
               Order Confirmed
@@ -208,15 +167,10 @@ const ThankYouPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Contact Information */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
-          className="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-950/20 dark:to-violet-950/20 rounded-3xl p-8 mb-12 border border-purple-200/50 dark:border-purple-700/30"
-        >
+        <div className="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-950/20 dark:to-violet-950/20 rounded-3xl p-8 mb-12 border border-purple-200/50 dark:border-purple-700/30">
           <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center font-dosis">
             Need Help? We're Here for You
           </h3>
@@ -243,38 +197,28 @@ const ThankYouPage: React.FC = () => {
               <div className="text-gray-600 dark:text-gray-300">Mon-Fri: 9AM-6PM</div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/"
-            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-semibold text-lg rounded-2xl hover:from-purple-700 hover:to-fuchsia-700 transition-all duration-100 shadow-lg hover:shadow-xl hover:shadow-purple-400/60"
+            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-semibold text-lg rounded-2xl shadow-lg"
           >
             <Home className="h-5 w-5 mr-2" />
             Continue Shopping
           </Link>
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-800 dark:text-white font-semibold text-lg rounded-2xl border-2 border-gray-300 dark:border-gray-500 hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500 transition-all duration-100 shadow-lg hover:shadow-xl"
+            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-800 dark:text-white font-semibold text-lg rounded-2xl border-2 border-gray-300 dark:border-gray-500 shadow-lg"
           >
             <Gift className="h-5 w-5 mr-2" />
             Print Receipt
           </button>
-        </motion.div>
+        </div>
 
         {/* Social Sharing */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
-          className="text-center mt-12"
-        >
+        <div className="text-center mt-12">
           <p className="text-gray-600 dark:text-gray-300 mb-4">
             Share your Christmas joy with friends and family!
           </p>
@@ -283,7 +227,7 @@ const ThankYouPage: React.FC = () => {
             <div className="w-2 h-2 bg-green-500 rounded-full" />
             <div className="w-2 h-2 bg-purple-500 rounded-full" />
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   )

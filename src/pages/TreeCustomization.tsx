@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+
 import { Ruler, TreePine, Calendar, Palette } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
 import { showSuccessToast, TOAST_MESSAGES } from '../utils/toast'
@@ -162,7 +162,7 @@ const TreeCustomization: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">Product not found</h2>
           <button
             onClick={() => navigate('/products/trees')}
-            className="px-6 py-3 text-white rounded-xl transition-all duration-100 bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:from-purple-600 hover:to-fuchsia-600 hover:shadow-purple-400/60"
+            className="px-6 py-3 text-white rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-500"
           >
             Back to Trees
           </button>
@@ -178,16 +178,13 @@ const TreeCustomization: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
 
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+        <div
           className="text-center mb-12"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">
             Customize <span className="text-purple-700 dark:text-amber-400">{product.title}</span>
           </h1>
-        </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           <ProductPreview
@@ -197,20 +194,12 @@ const TreeCustomization: React.FC = () => {
           />
 
           {/* Customization Panel - Now on Right */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
+          <div
             className="lg:col-span-2"
           >
-            <AnimatePresence mode="wait">
-              <motion.div
+              <div
                 key={activeStep}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-3xl shadow-xl hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-100 p-8 border border-white/20 dark:border-gray-700/30"
+                className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-3xl shadow-xl p-8 border border-white/20 dark:border-gray-700/30"
               >
                 {/* Step Content */}
                 <div className="mb-8 relative">
@@ -258,9 +247,8 @@ const TreeCustomization: React.FC = () => {
                   />
                 )}
 
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
+              </div>
+          </div>
         </div>
       </div>
       <Toaster />

@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion, MotionProps } from 'framer-motion'
 
 interface FadeInSectionProps {
   children: React.ReactNode
@@ -7,7 +6,7 @@ interface FadeInSectionProps {
   duration?: number
   direction?: 'up' | 'down' | 'left' | 'right' | 'none'
   className?: string
-  motionProps?: MotionProps
+
 }
 
 const FadeInSection: React.FC<FadeInSectionProps> = ({
@@ -16,7 +15,7 @@ const FadeInSection: React.FC<FadeInSectionProps> = ({
   duration = 0.6,
   direction = 'up',
   className = '',
-  motionProps
+
 }) => {
   const getInitialPosition = () => {
     switch (direction) {
@@ -41,15 +40,9 @@ const FadeInSection: React.FC<FadeInSectionProps> = ({
   }
 
   return (
-    <motion.div
-      initial={getInitialPosition()}
-      animate={getAnimatePosition()}
-      transition={{ duration, delay }}
-      className={className}
-      {...motionProps}
-    >
+    <div className={className}>
       {children}
-    </motion.div>
+    </div>
   )
 }
 

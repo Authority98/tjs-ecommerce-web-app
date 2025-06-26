@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { Plus, LogOut, Eye } from 'lucide-react'
 import { Order } from '../types'
 import { useAdminData } from '../hooks/useAdminData'
@@ -106,10 +105,7 @@ const AdminPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-violet-100 dark:from-purple-900 dark:via-fuchsia-900 dark:to-violet-800">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+        <div
           className="flex justify-between items-center mb-8"
         >
           <div>
@@ -125,11 +121,11 @@ const AdminPage: React.FC = () => {
             variant="ghost"
             icon={LogOut}
             onClick={handleLogout}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/30"
+            className="text-red-600"
           >
             Logout
           </Button>
-        </motion.div>
+        </div>
 
         {/* Stats */}
         <AdminStats stats={stats} />
@@ -138,20 +134,20 @@ const AdminPage: React.FC = () => {
         <div className="flex space-x-4 mb-6">
           <button
             onClick={() => setActiveTab('products')}
-            className={`px-6 py-3 rounded-2xl font-bold transition-all duration-100 ${
+            className={`px-6 py-3 rounded-2xl font-bold ${
               activeTab === 'products'
-                ? 'bg-gradient-to-r from-purple-500 to-violet-500 text-white shadow-xl hover:shadow-purple-400/60 scale-105'
-                : 'bg-gradient-to-r from-purple-100 to-violet-200 dark:from-purple-700 dark:to-violet-600 text-purple-700 dark:text-purple-200 hover:from-purple-200 hover:to-violet-300 dark:hover:from-purple-600 dark:hover:to-violet-500 hover:scale-102'
+                ? 'bg-gradient-to-r from-purple-500 to-violet-500 text-white shadow-xl scale-105'
+                : 'bg-gradient-to-r from-purple-100 to-violet-200 dark:from-purple-700 dark:to-violet-600 text-purple-700 dark:text-purple-200 scale-102'
             }`}
           >
             Products ({filteredProducts.length})
           </button>
           <button
             onClick={() => setActiveTab('orders')}
-            className={`px-6 py-3 rounded-2xl font-bold transition-all duration-100 ${
+            className={`px-6 py-3 rounded-2xl font-bold ${
               activeTab === 'orders'
-                ? 'bg-gradient-to-r from-fuchsia-500 to-purple-500 text-white shadow-xl hover:shadow-fuchsia-400/60 scale-105'
-                : 'bg-gradient-to-r from-purple-100 to-violet-200 dark:from-purple-700 dark:to-violet-600 text-purple-700 dark:text-purple-200 hover:from-purple-200 hover:to-violet-300 dark:hover:from-purple-600 dark:hover:to-violet-500 hover:scale-102'
+                ? 'bg-gradient-to-r from-fuchsia-500 to-purple-500 text-white shadow-xl scale-105'
+                : 'bg-gradient-to-r from-purple-100 to-violet-200 dark:from-purple-700 dark:to-violet-600 text-purple-700 dark:text-purple-200 scale-102'
             }`}
           >
             Orders ({orders.length})
@@ -160,10 +156,7 @@ const AdminPage: React.FC = () => {
 
         {/* Content */}
         {activeTab === 'products' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+          <div
           >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-white font-dosis">Products</h2>
@@ -185,14 +178,11 @@ const AdminPage: React.FC = () => {
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
             />
-          </motion.div>
+          </div>
         )}
 
         {activeTab === 'orders' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+          <div
           >
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">Orders</h2>
             
@@ -201,7 +191,7 @@ const AdminPage: React.FC = () => {
               onUpdateOrderStatus={updateOrderStatus}
               onViewOrder={handleViewOrder}
             />
-          </motion.div>
+          </div>
         )}
 
         {/* Product Form Modal */}
@@ -232,13 +222,13 @@ const AdminPage: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => handleDeleteOrder(selectedOrder.id)}
-                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-100 text-sm font-medium"
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium"
                   >
                     Delete Order
                   </button>
                   <button
                     onClick={() => setSelectedOrder(null)}
-                    className="p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-100"
+                    className="p-2 text-gray-500 rounded-lg"
                   >
                     ✕
                   </button>

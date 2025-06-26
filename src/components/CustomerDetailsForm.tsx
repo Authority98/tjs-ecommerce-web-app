@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { CustomerDetails } from '../types'
 
 interface CustomerDetailsFormProps {
@@ -30,12 +29,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/20 dark:border-gray-700/30"
-    >
+    <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/20 dark:border-gray-700/30">
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">Customer Details</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -48,7 +42,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
             id="name"
             value={customerDetails.name}
             onChange={(e) => updateField('name', e.target.value)}
-            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-colors duration-200"
+            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             required
           />
         </div>
@@ -62,7 +56,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
             id="email"
             value={customerDetails.email}
             onChange={(e) => updateField('email', e.target.value)}
-            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-colors duration-200"
+            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             required
           />
         </div>
@@ -76,7 +70,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
             id="phone"
             value={customerDetails.phone}
             onChange={(e) => updateField('phone', e.target.value)}
-            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-colors duration-200"
+            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             required
           />
         </div>
@@ -91,23 +85,21 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
               value={customerDetails.deliveryAddress}
               onChange={(e) => updateField('deliveryAddress', e.target.value)}
               rows={4}
-              className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-colors duration-200"
+              className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="Enter your complete delivery address including unit number, city, state, and zip code"
               required
             />
           </div>
         )}
 
-        <motion.button
+        <button
           type="submit"
-          whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.98 }}
-        className="w-full py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-fuchsia-700 transition-colors duration-200"
+          className="w-full py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold rounded-xl"
         >
           {nextButtonText}
-        </motion.button>
+        </button>
       </form>
-    </motion.div>
+    </div>
   )
 }
 

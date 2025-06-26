@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { Product } from '../types'
 import { useProductForm } from '../hooks/useProductForm'
@@ -36,13 +35,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.2 }}
-      className="relative"
-    >
+    <div className="relative">
       {/* Header */}
       <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
@@ -50,7 +43,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
         </h2>
         <button
           onClick={onClose}
-          className="p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+          className="p-2 text-gray-500"
           disabled={loading}
         >
           <X className="h-5 w-5" />
@@ -100,7 +93,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
           </Button>
         </div>
       </form>
-    </motion.div>
+    </div>
   )
 }
 

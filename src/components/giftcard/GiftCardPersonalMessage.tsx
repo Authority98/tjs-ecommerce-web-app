@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { MessageCircle } from 'lucide-react'
 
 interface GiftCardPersonalMessageProps {
@@ -12,11 +11,7 @@ const GiftCardPersonalMessage: React.FC<GiftCardPersonalMessageProps> = ({
   onMessageChange
 }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-4"
-    >
+    <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           <MessageCircle className="h-4 w-4 inline mr-1" />
@@ -34,7 +29,7 @@ const GiftCardPersonalMessage: React.FC<GiftCardPersonalMessageProps> = ({
           {personalMessage.length}/200 characters
         </p>
       </div>
-    </motion.div>
+    </div>
   )
 }
 

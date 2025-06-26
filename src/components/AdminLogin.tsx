@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
@@ -35,21 +34,11 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-purple-300 via-fuchsia-200 to-violet-400 dark:from-purple-700 dark:via-violet-600 dark:to-fuchsia-700 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="bg-white dark:bg-gray-700/90 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/20 dark:border-gray-600/40"
-      >
+      <div className="bg-white dark:bg-gray-700/90 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/20 dark:border-gray-600/40">
         <div className="text-center mb-8">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-fuchsia-500 rounded-full mb-4 shadow-lg hover:shadow-purple-400/60"
-          >
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-fuchsia-500 rounded-full mb-4 shadow-lg">
             <Lock className="h-8 w-8 text-white" />
-          </motion.div>
+          </div>
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 font-dosis">
             Admin Login
           </h1>
@@ -59,13 +48,9 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
         </div>
 
         {error && (
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-300 text-sm"
-          >
+          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-300 text-sm">
             {error}
-          </motion.div>
+          </div>
         )}
 
         <form onSubmit={handleAuth} className="space-y-6">
@@ -78,7 +63,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-[#F7B541] focus:border-transparent transition-colors duration-200"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-[#F7B541] focus:border-transparent"
               placeholder="admin@twinklejingle.com"
               required
             />
@@ -94,29 +79,27 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-[#F7B541] focus:border-transparent transition-colors duration-200 pr-10"
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-[#F7B541] focus:border-transparent pr-10"
                 placeholder="Enter your password"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
           </div>
 
-          <motion.button
+          <button
             type="submit"
             disabled={loading}
-            whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.98 }}
-        className="w-full py-3 bg-gradient-to-r from-purple-500 to-violet-600 text-white font-bold rounded-xl hover:from-purple-600 hover:to-violet-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-gradient-to-r from-purple-500 to-violet-600 text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Please wait...' : 'Sign In'}
-          </motion.button>
+          </button>
         </form>
 
         <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-600 text-center">
@@ -124,7 +107,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
             Secure admin access for Twinkle Jingle
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { Calendar, Clock, Send } from 'lucide-react'
 
 interface GiftCardDeliveryDateProps {
@@ -16,13 +15,11 @@ const GiftCardDeliveryDate: React.FC<GiftCardDeliveryDateProps> = ({
   onScheduledDateChange
 }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className="space-y-4"
     >
       <div className="space-y-3">
-        <label className="flex items-center space-x-3 cursor-pointer p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
+        <label className="flex items-center space-x-3 cursor-pointer p-3 rounded-xl border border-gray-200">
           <input
             type="radio"
             name="deliveryDate"
@@ -38,7 +35,7 @@ const GiftCardDeliveryDate: React.FC<GiftCardDeliveryDateProps> = ({
           </div>
         </label>
         
-        <label className="flex items-center space-x-3 cursor-pointer p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
+        <label className="flex items-center space-x-3 cursor-pointer p-3 rounded-xl border border-gray-200">
           <input
             type="radio"
             name="deliveryDate"
@@ -55,9 +52,7 @@ const GiftCardDeliveryDate: React.FC<GiftCardDeliveryDateProps> = ({
         </label>
         
         {deliveryDate === 'scheduled' && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+          <div
             className="ml-7 mt-3"
           >
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -71,10 +66,10 @@ const GiftCardDeliveryDate: React.FC<GiftCardDeliveryDateProps> = ({
               className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               min={new Date().toISOString().slice(0, 16)}
             />
-          </motion.div>
+          </div>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }
 

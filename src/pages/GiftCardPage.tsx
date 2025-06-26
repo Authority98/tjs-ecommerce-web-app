@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import {
   DollarSign,
@@ -108,7 +107,7 @@ const GiftCardPage: React.FC = () => {
       case 1: return giftCardData.isForSelf !== undefined
       case 2: return giftCardData.isForSelf === true || (giftCardData.recipientName && giftCardData.recipientEmail)
       case 3: return true // Personal message is optional
-      case 4: return giftCardData.deliveryDate
+      case 4: return !!giftCardData.deliveryDate
       default: return false
     }
   }
@@ -141,19 +140,14 @@ const GiftCardPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-red-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
             🎁 <span className="text-purple-700">eGift Cards</span>
           </h1>
           <p className="text-xl text-gray-600">
             The perfect gift for any occasion
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Gift Card Preview */}
@@ -166,21 +160,8 @@ const GiftCardPage: React.FC = () => {
           />
 
           {/* Step-by-Step Configuration */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            className="lg:col-span-2"
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeStep}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-white/20"
-              >
+          <div className="lg:col-span-2">
+              <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-white/20">
                 {/* Step Navigation */}
                 <div className="mb-8 relative">
                   <StepNavigation
@@ -241,9 +222,8 @@ const GiftCardPage: React.FC = () => {
                     onScheduledDateChange={setScheduledDate}
                   />
                 )}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
+              </div>
+          </div>
         </div>
       </div>
     </div>

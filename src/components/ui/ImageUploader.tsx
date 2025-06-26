@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
 import { Upload, Trash2, X } from 'lucide-react'
 import Button from './Button'
 import { supabase } from '../../lib/supabase'
@@ -115,11 +114,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       {/* Image Preview Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {images.map((image, index) => (
-          <motion.div
+          <div
             key={index}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
             className="relative group"
           >
             <img
@@ -134,12 +130,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             <button
               type="button"
               onClick={() => removeImage(index)}
-              className="absolute top-2 right-2 p-1 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:from-red-600 hover:to-rose-600"
+              className="absolute top-2 right-2 p-1 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-full"
               disabled={loading}
             >
               <X className="h-3 w-3" />
             </button>
-          </motion.div>
+          </div>
         ))}
 
         {/* Add Image Placeholder */}
@@ -153,7 +149,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={loading || uploadingImages}
             />
-            <div className="w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors cursor-pointer">
+            <div className="w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center cursor-pointer">
               <div className="text-center">
                 <Upload className="h-6 w-6 text-gray-400 mx-auto mb-2" />
                 <span className="text-sm text-gray-500 dark:text-gray-400">

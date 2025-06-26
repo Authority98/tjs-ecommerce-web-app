@@ -24,7 +24,7 @@ const Input: React.FC<InputProps> = ({
   const inputId = id || `input-${Math.random().toString(36).substring(2, 9)}`
 
   const getVariantClasses = () => {
-    const baseClasses = 'w-full px-4 py-3 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#F7B541]'
+    const baseClasses = 'w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F7B541]'
     
     switch (variant) {
       case 'outlined':

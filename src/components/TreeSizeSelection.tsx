@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { TreeOptions, TREE_SIZES } from '../types'
 
@@ -22,23 +21,18 @@ const TreeSizeSelection: React.FC<TreeSizeSelectionProps> = ({
           const relativeHeight = Math.min(100, (treeHeight / 5.4) * 100)
           
           return (
-            <motion.button
+            <button
               key={index}
               onClick={() => onSizeSelect(size)}
-              className={`relative p-3 rounded-xl border transition-colors duration-200 ${
+              className={`relative p-3 rounded-xl border ${
           isSelected
             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30 shadow-lg shadow-purple-300/50'
-            : 'border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 hover:bg-purple-50/50 dark:hover:bg-purple-900/10'
+            : 'border-gray-200 dark:border-gray-600'
         }`}
-        whileHover={{ scale: isSelected ? 1.02 : 1.01 }}
-              whileTap={{ scale: 0.98 }}
             >
               <div className="flex flex-col items-center mb-3">
                 <div className="relative flex items-end justify-center h-20 mb-2">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  <div
                     className={`bg-gradient-to-t from-purple-600 to-fuchsia-400 rounded-t-full ${
                       isSelected ? 'shadow-lg' : ''
                     }`}
@@ -51,13 +45,11 @@ const TreeSizeSelection: React.FC<TreeSizeSelectionProps> = ({
                 </div>
                 
                 {isSelected && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
+                  <div
                     className="absolute top-2 right-2"
                   >
                     <Check className="h-5 w-5 text-purple-600" />
-                  </motion.div>
+                  </div>
                 )}
               </div>
               
@@ -72,15 +64,13 @@ const TreeSizeSelection: React.FC<TreeSizeSelectionProps> = ({
                   W: {size.width.imperial}
                 </div>
               </div>
-            </motion.button>
+            </button>
           )
         })}
       </div>
       
       {selectedOptions.height && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+        <div
           className="p-6 bg-purple-50 dark:bg-purple-900/20 rounded-2xl border border-purple-200 dark:border-purple-700 shadow-purple-200/50"
         >
           <div className="flex items-center space-x-3 mb-3">
@@ -91,7 +81,7 @@ const TreeSizeSelection: React.FC<TreeSizeSelectionProps> = ({
             <div className="font-medium">Height: {selectedOptions.height}</div>
             <div className="font-medium">Width: {selectedOptions.width}</div>
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   )

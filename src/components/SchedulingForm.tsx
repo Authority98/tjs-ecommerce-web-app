@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { Calendar, Clock, Zap } from 'lucide-react'
 
 interface SchedulingFormProps {
@@ -42,12 +41,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/20 dark:border-gray-700/30"
-    >
+    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/20 dark:border-gray-700/30">
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">
         {isTreeOrder ? 'Installation & Service Scheduling' : 'Delivery Scheduling'}
       </h2>
@@ -66,7 +60,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
             value={installationDate}
             onChange={(e) => setInstallationDate(e.target.value)}
             min={today}
-            className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-colors duration-200 text-lg"
+            className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-purple-600 focus:border-purple-600 text-lg"
             required={isTreeOrder}
           />
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
@@ -91,7 +85,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
               value={teardownDate}
               onChange={(e) => setTeardownDate(e.target.value)}
               min={getMinTeardownDate()}
-              className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-colors duration-200 text-lg"
+              className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-purple-600 focus:border-purple-600 text-lg"
             />
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
               Optional: Schedule when you'd like us to remove the tree and decorations
@@ -105,12 +99,11 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
             Add-on Services
           </h3>
           
-          <motion.label
-            whileHover={{ scale: 1.01 }}
-        className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-colors duration-200 ${
+          <label
+            className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer ${
               rushOrder
                 ? 'border-amber-500 bg-amber-100/50 dark:bg-amber-900/30 shadow-lg'
-                : 'border-gray-200 dark:border-gray-600 hover:border-amber-300 dark:hover:border-amber-500 bg-white/60 dark:bg-gray-700/40'
+                : 'border-gray-200 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40'
             }`}
           >
             <div className="flex items-center">
@@ -133,29 +126,27 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
               </div>
             </div>
             <span className="text-xl font-bold text-amber-600 dark:text-amber-400">+$150</span>
-          </motion.label>
+          </label>
         </div>
 
         <div className="flex space-x-4 pt-4">
           <button
             type="button"
             onClick={onBack}
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-lg hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500 transition-colors duration-200"
+            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-lg"
           >
             Back
           </button>
           <button
             type="submit"
-            className="flex-1 py-3 text-white font-bold rounded-lg transition-colors duration-200"
-            style={{background: 'linear-gradient(to right, #9333E9, #7C3AED)', hover: 'linear-gradient(to right, #7C3AED, #6D28D9)'}}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #7C3AED, #6D28D9)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #9333E9, #7C3AED)'}
+            className="flex-1 py-3 text-white font-bold rounded-lg"
+            style={{background: 'linear-gradient(to right, #9333E9, #7C3AED)'}}
           >
             Continue to Payment
           </button>
         </div>
       </form>
-    </motion.div>
+    </div>
   )
 }
 
