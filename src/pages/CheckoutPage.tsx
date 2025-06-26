@@ -118,6 +118,7 @@ const CheckoutPage: React.FC = () => {
 
       // Create order payload based on order type
       const orderPayload = {
+        order_number: orderNumber,
         customer_name: customerDetails.name,
         customer_email: customerDetails.email,
         customer_phone: customerDetails.phone,
@@ -180,9 +181,12 @@ const CheckoutPage: React.FC = () => {
     )
   }
 
-  // Define steps based on order type - skip scheduling for gift cards
+  // Define steps based on order type - skip scheduling for gift cards and decoration/ribbon/centrepiece products
   const isGiftCard = orderData?.type === 'giftcard'
-  const steps = isGiftCard 
+  const isDecorationOrRibbon = orderData?.product?.category === 'decorations' || orderData?.product?.category === 'ribbons' || orderData?.product?.category === 'centrepieces'
+  const skipScheduling = isGiftCard || isDecorationOrRibbon
+  
+  const steps = skipScheduling 
     ? [
         { number: 1, title: 'Customer Details', completed: currentStep > 1 },
         { number: 2, title: 'Payment', completed: currentStep > 2 }
@@ -248,12 +252,12 @@ const CheckoutPage: React.FC = () => {
                   customerDetails={customerDetails}
                   setCustomerDetails={setCustomerDetails}
                   onNext={() => setCurrentStep(2)}
-                  nextButtonText={isGiftCard ? 'Continue to Payment' : 'Continue to Scheduling'}
+                  nextButtonText={skipScheduling ? 'Continue to Payment' : 'Continue to Scheduling'}
                   isGiftCard={isGiftCard}
                 />
               )}
               
-              {currentStep === 2 && !isGiftCard && (
+              {currentStep === 2 && !skipScheduling && (
                 <SchedulingForm
                   installationDate={installationDate}
                   setInstallationDate={setInstallationDate}
@@ -267,7 +271,7 @@ const CheckoutPage: React.FC = () => {
                 />
               )}
               
-              {((currentStep === 3 && !isGiftCard) || (currentStep === 2 && isGiftCard)) && (
+              {((currentStep === 3 && !skipScheduling) || (currentStep === 2 && skipScheduling)) && (
                 <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 p-8 border border-white/20 dark:border-gray-700/30">
                   <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">Payment Information</h2>
                   
@@ -319,7 +323,7 @@ const CheckoutPage: React.FC = () => {
                   
                   <div className="flex space-x-4">
                     <button
-                      onClick={() => setCurrentStep(isGiftCard ? 1 : 2)}
+                      onClick={() => setCurrentStep(skipScheduling ? 1 : 2)}
                       className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                     >
                       Back

@@ -13,8 +13,8 @@ interface AdminProductsGridProps {
   onDeleteProduct: (productId: string) => Promise<void>
   searchQuery: string
   onSearchChange: (query: string) => void
-  selectedCategory: 'all' | 'decorations' | 'ribbons' | 'trees'
-  onCategoryChange: (category: 'all' | 'decorations' | 'ribbons' | 'trees') => void
+  selectedCategory: 'all' | 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
+  onCategoryChange: (category: 'all' | 'decorations' | 'ribbons' | 'trees' | 'centrepieces') => void
 }
 
 const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
@@ -30,7 +30,8 @@ const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
     { id: 'all', label: 'All Products' },
     { id: 'trees', label: 'Trees' },
     { id: 'decorations', label: 'Decorations' },
-    { id: 'ribbons', label: 'Ribbons' }
+    { id: 'ribbons', label: 'Ribbons' },
+    { id: 'centrepieces', label: 'Centre Pieces' }
   ] as const
 
 

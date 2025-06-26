@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { TreePine, Settings, Sparkles, Ribbon, Gift, Menu, X } from 'lucide-react'
+import { TreePine, Settings, Sparkles, Ribbon, Gift, Crown, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 const Header: React.FC = () => {
@@ -12,6 +12,7 @@ const Header: React.FC = () => {
     { path: '/products/trees', label: 'Trees', icon: TreePine, iconBg: 'bg-purple-500', gradient: 'from-purple-600 via-violet-600 to-fuchsia-500' },
     { path: '/products/decorations', label: 'Decorations', icon: Sparkles, iconBg: 'bg-fuchsia-500', gradient: 'from-purple-500 via-fuchsia-500 to-violet-400' },
     { path: '/products/ribbons', label: 'Ribbons', icon: Ribbon, iconBg: 'bg-violet-500', gradient: 'from-violet-400 via-purple-400 to-fuchsia-300' },
+    { path: '/products/centrepieces', label: 'Centre Pieces', icon: Crown, iconBg: 'bg-amber-500', gradient: 'from-amber-400 via-yellow-400 to-orange-300' },
     { path: '/gift-cards', label: 'Gift Cards', icon: Gift, iconBg: 'bg-pink-500', gradient: 'from-pink-400 via-rose-400 to-red-300' }
   ]
 

@@ -15,7 +15,7 @@ export type Database = {
           description: string
           price: number
           images: string[]
-          category: 'decorations' | 'ribbons' | 'trees'
+          category: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
           color?: string
           decorated?: boolean
           created_at: string
@@ -27,7 +27,7 @@ export type Database = {
           description: string
           price: number
           images: string[]
-          category: 'decorations' | 'ribbons' | 'trees'
+          category: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
           color?: string
           decorated?: boolean
           created_at?: string
@@ -39,7 +39,7 @@ export type Database = {
           description?: string
           price?: number
           images?: string[]
-          category?: 'decorations' | 'ribbons' | 'trees'
+          category?: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
           color?: string
           decorated?: boolean
           created_at?: string

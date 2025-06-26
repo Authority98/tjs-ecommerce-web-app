@@ -63,7 +63,7 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-800 dark:text-white">
-                    Order #{order.id.slice(-8)}
+                    Order #{order.order_number}
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     {new Date(order.created_at).toLocaleDateString()}

@@ -257,6 +257,19 @@ For support, email support@twinklejingle.com or join our Slack channel.
 
 ## 🆕 Recent Updates (Latest Release)
 
+### 🔧 Filter System Overhaul (Latest)
+- **🎯 Universal Color Filters**: Color filtering now works correctly across all categories (trees, decorations, ribbons, centrepieces)
+- **🏷️ Category-Specific Filters**: Decoration status filter properly restricted to trees category only
+- **🔄 Smart Filter Reset**: Filters automatically reset when switching between categories to prevent cross-contamination
+- **📊 Accurate Filter Counts**: Filter badge displays correct count of active filters per category
+- **🎨 Complete Filter Coverage**: All product categories now have proper filter functionality:
+  - **Trees**: Color, price, and decoration status filters
+  - **Decorations**: Color and price filters
+  - **Ribbons**: Color and price filters
+  - **Centrepieces**: Color and price filters (previously missing)
+- **🎛️ Admin Form Fixes**: Pre-decorated toggle in admin product form restricted to trees category only
+- **🔍 Consistent Logic**: Unified use of `validCategory` throughout filter implementation for reliability
+
 ### UI/UX Improvements
 - **🎨 Modern Color Scheme**: Migrated from green to elegant purple/fuchsia theme across all components
 - **🧭 Enhanced Navigation**: Replaced text-only menu items with beautiful icon boxes matching category colors
@@ -295,6 +308,7 @@ For support, email support@twinklejingle.com or join our Slack channel.
 - **🛡️ Error Handling**: Improved empty states and user feedback
 - **⚡ Performance**: Optimized component rendering and reduced unnecessary re-renders
 - **📐 Responsive Design**: Enhanced mobile experience with adaptive sizing and spacing
+- **🔍 Filter Logic Optimization**: Streamlined filter application logic for better performance and maintainability
 
 ## 🔮 Roadmap
 

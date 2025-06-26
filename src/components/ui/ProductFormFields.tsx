@@ -8,7 +8,7 @@ interface ProductFormData {
   title: string
   description: string
   price: number
-  category: 'decorations' | 'ribbons' | 'trees'
+  category: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
   decorated: boolean
 }
 
@@ -55,24 +55,22 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
           placeholder="Enter product title"
         />
 
-        {formData.category === 'trees' && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Price ($)
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              value={formData.price}
-              onChange={(e) => handleInputChange('price', parseFloat(e.target.value) || 0)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#F7B541] focus:border-[#F7B541] transition-all duration-300"
-              required
-              disabled={loading}
-              placeholder="0.00"
-            />
-          </div>
-        )}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Price ($)
+          </label>
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            value={formData.price}
+            onChange={(e) => handleInputChange('price', parseFloat(e.target.value) || 0)}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#F7B541] focus:border-[#F7B541] transition-all duration-300"
+            required
+            disabled={loading}
+            placeholder="0.00"
+          />
+        </div>
       </div>
 
       {/* Description */}
@@ -106,11 +104,12 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
           <option value="decorations">Decorations</option>
           <option value="ribbons">Ribbons</option>
           <option value="trees">Trees</option>
+          <option value="centrepieces">Centre Pieces</option>
         </select>
       </div>
 
-      {/* Colors - Only for Trees */}
-      {formData.category === 'trees' && (
+      {/* Colors - For Trees, Decorations, Ribbons, and Centre Pieces */}
+      {(formData.category === 'trees' || formData.category === 'decorations' || formData.category === 'ribbons' || formData.category === 'centrepieces') && (
         <div>
           <div className="flex items-center space-x-3 mb-4">
             <Palette className="h-5 w-5 text-[#511B7D] dark:text-[#F7B541]" />
@@ -161,7 +160,7 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
         </div>
       )}
 
-      {/* Decorated Toggle - Only for Trees */}
+      {/* Decorated Toggle - For Trees only */}
       {formData.category === 'trees' && (
         <div className="flex items-center space-x-3">
           <input

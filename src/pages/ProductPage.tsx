@@ -15,6 +15,7 @@ interface Filters {
 
 const ProductPage: React.FC = () => {
   const { category } = useParams<{ category: string }>()
+  const validCategory = category as 'trees' | 'decorations' | 'ribbons' | 'centrepieces' | undefined
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
@@ -29,7 +30,13 @@ const ProductPage: React.FC = () => {
 
   useEffect(() => {
     fetchProducts()
-  }, [category])
+    // Reset filters when category changes
+    setFilters({
+      colors: [],
+      maxPrice: 1000,
+      decorated: 'all'
+    })
+  }, [validCategory])
 
   useEffect(() => {
     applyFilters()
@@ -57,7 +64,7 @@ const ProductPage: React.FC = () => {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('category', category)
+        .eq('category', validCategory)
         .order('created_at', { ascending: false })
 
       if (error) throw error
@@ -81,21 +88,29 @@ const ProductPage: React.FC = () => {
 
   const getActiveFiltersCount = () => {
     let count = 0
-    if (category === 'trees') {
-      if (filters.colors.length > 0) count += filters.colors.length
-      if (filters.decorated !== 'all') count += 1
+    
+    // Color filters for all categories that support colors
+    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centrepieces') && filters.colors.length > 0) {
+      count += filters.colors.length
     }
+    
+    // Decoration filter only for trees
+    if (validCategory === 'trees' && filters.decorated !== 'all') {
+      count += 1
+    }
+    
     // Price filter is active if not at maximum value
-     const hasCustomMaxPrice = filters.maxPrice < 1000
-     if (hasCustomMaxPrice) count += 1
+    const hasCustomMaxPrice = filters.maxPrice < 1000
+    if (hasCustomMaxPrice) count += 1
+    
     return count
   }
 
   const applyFilters = () => {
     let filtered = [...products]
 
-    // Filter by colors (only for trees)
-    if (category === 'trees' && filters.colors.length > 0) {
+    // Filter by colors (for all categories that support colors)
+    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centrepieces') && filters.colors.length > 0) {
       filtered = filtered.filter(product => {
         if (!product.color) return false
         
@@ -113,7 +128,7 @@ const ProductPage: React.FC = () => {
       )
 
     // Filter by decoration status (only for trees)
-    if (category === 'trees' && filters.decorated !== 'all') {
+    if (validCategory === 'trees' && filters.decorated !== 'all') {
       filtered = filtered.filter(product => {
         if (filters.decorated === 'decorated') {
           return product.decorated === true
@@ -144,7 +159,7 @@ const ProductPage: React.FC = () => {
   }
 
   const getCategoryInfo = () => {
-    switch (category) {
+    switch (validCategory) {
       case 'decorations':
         return {
           title: 'Christmas Decorations',
@@ -165,6 +180,13 @@ const ProductPage: React.FC = () => {
           gradient: 'from-purple-600 via-violet-600 to-fuchsia-500',
           bgGradient: 'from-purple-50/80 via-violet-50/60 to-fuchsia-50/40 dark:from-purple-950/20 dark:via-violet-950/15 dark:to-fuchsia-950/10',
           accentColor: 'purple'
+        }
+      case 'centrepieces':
+        return {
+          title: 'Centre Pieces',
+          gradient: 'from-amber-400 via-yellow-400 to-orange-300',
+          bgGradient: 'from-amber-50/80 via-yellow-50/60 to-orange-50/40 dark:from-amber-950/20 dark:via-yellow-950/15 dark:to-orange-950/10',
+          accentColor: 'amber'
         }
       default:
         return {
@@ -220,7 +242,7 @@ const ProductPage: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
         {/* Filter Button and Panel */}
-        {(category === 'trees' || category === 'decorations' || category === 'ribbons') && products.length > 0 && (
+        {(validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centrepieces') && products.length > 0 && (
           <div ref={filterContainerRef} className="relative mb-8">
             {/* Filter Toggle Button */}
             <motion.button
@@ -242,8 +264,8 @@ const ProductPage: React.FC = () => {
             {showFilters && (
               <div ref={filterRef} className="absolute top-16 left-0 right-0 z-50 p-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 dark:border-gray-700/40">
                 <div className="flex flex-col lg:flex-row gap-6">
-                  {/* Colors Filter - Only for trees */}
-                  {category === 'trees' && (
+                  {/* Colors Filter - For trees, decorations, ribbons, and centrepieces */}
+                  {(validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centrepieces') && (
                     <div className="flex-1">
                       <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Colors</h3>
                       <div className="flex flex-wrap gap-2">
@@ -292,8 +314,8 @@ const ProductPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Decoration Status Filter - Only for trees */}
-                  {category === 'trees' && (
+                  {/* Decoration Status Filter - For trees only */}
+                  {validCategory === 'trees' && (
                     <div className="flex-1">
                       <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Decoration</h3>
                       <div className="flex flex-wrap gap-2">

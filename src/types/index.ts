@@ -4,7 +4,7 @@ export interface Product {
   description: string
   price: number
   images: string[]
-  category: 'decorations' | 'ribbons' | 'trees'
+  category: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
   color?: string
   decorated?: boolean
   created_at: string
@@ -139,6 +139,7 @@ export const DECOR_LEVELS = [
 
 export interface Order {
   id: string
+  order_number: string
   customer_name: string
   customer_email: string
   customer_phone: string
