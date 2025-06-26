@@ -226,19 +226,19 @@ const ProductPage: React.FC = () => {
             scale: [1, 1.1, 1],
           }}
           transition={{
-            duration: 6 + index,
-            delay: element.delay,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
+          duration: 8 + index,
+          delay: element.delay,
+          repeat: Infinity,
+          ease: "linear"
+        }}
         >
           <element.icon className={`${element.size} text-emerald-600/30 dark:text-emerald-400/20`} />
         </motion.div>
       ))}
 
       {/* Gradient Orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-emerald-400/20 to-green-400/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-red-400/15 to-pink-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-emerald-400/10 to-green-400/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-red-400/5 to-pink-400/5 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
         {/* Filter Button and Panel */}
@@ -247,9 +247,9 @@ const ProductPage: React.FC = () => {
             {/* Filter Toggle Button */}
             <motion.button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 transition-colors duration-100 shadow-lg"
+              whileHover={{ scale: 1.005 }}
+              whileTap={{ scale: 0.99 }}
             >
               <Filter className="h-5 w-5 mr-2" />
               Filters
@@ -273,7 +273,7 @@ const ProductPage: React.FC = () => {
                           <button
                             key={color.value}
                             onClick={() => toggleColorFilter(color.value)}
-                            className={`flex items-center px-3 py-2 rounded-lg border-2 transition-all duration-200 ${
+                            className={`flex items-center px-3 py-2 rounded-lg border-2 transition-colors duration-100 ${
                               filters.colors.includes(color.value)
                                 ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30'
                                 : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
@@ -327,7 +327,7 @@ const ProductPage: React.FC = () => {
                           <button
                             key={option.value}
                             onClick={() => setFilters(prev => ({ ...prev, decorated: option.value as any }))}
-                            className={`px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
+                            className={`px-4 py-2 rounded-lg border-2 transition-colors duration-100 ${
                               filters.decorated === option.value
                                 ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
                                 : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300'
@@ -344,7 +344,7 @@ const ProductPage: React.FC = () => {
                   <div className="flex items-end">
                     <button
                       onClick={clearFilters}
-                      className="flex items-center px-4 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-200"
+                      className="flex items-center px-4 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-100"
                     >
                       <X className="h-4 w-4 mr-1" />
                       Clear
@@ -360,7 +360,7 @@ const ProductPage: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.4 }}
             className="text-center mb-10"
           >
             <div className={`inline-flex p-12 bg-gradient-to-br ${categoryInfo.bgGradient} rounded-3xl shadow-2xl mb-12 border border-white/20 dark:border-gray-700/30`}>
@@ -374,7 +374,7 @@ const ProductPage: React.FC = () => {
             </p>
             <button
               onClick={clearFilters}
-              className={`inline-flex items-center px-10 py-5 bg-gradient-to-r ${categoryInfo.gradient} text-white font-semibold text-lg rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}
+              className={`inline-flex items-center px-10 py-5 bg-gradient-to-r ${categoryInfo.gradient} text-white font-semibold text-lg rounded-2xl hover:shadow-xl transition-shadow duration-100`}
             >
               <X className="h-6 w-6 mr-3" />
               Clear Filters
@@ -384,7 +384,7 @@ const ProductPage: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.4 }}
             className="text-center mb-10"
           >
             <div className={`inline-flex p-12 bg-gradient-to-br ${categoryInfo.bgGradient} rounded-3xl shadow-2xl mb-12 border border-white/20 dark:border-gray-700/30`}>
@@ -398,7 +398,7 @@ const ProductPage: React.FC = () => {
             </p>
             <Link
               to="/admin"
-              className={`inline-flex items-center px-10 py-5 bg-gradient-to-r ${categoryInfo.gradient} text-white font-semibold text-lg rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}
+              className={`inline-flex items-center px-10 py-5 bg-gradient-to-r ${categoryInfo.gradient} text-white font-semibold text-lg rounded-2xl hover:shadow-xl transition-shadow duration-200`}
             >
               <Sparkles className="h-6 w-6 mr-3" />
               Add Products (Admin)
@@ -408,7 +408,7 @@ const ProductPage: React.FC = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
           >
             {filteredProducts.map((product, index) => (
@@ -416,7 +416,7 @@ const ProductPage: React.FC = () => {
                 key={product.id}
                 initial={{ opacity: 0, y: 60 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
               >
                 <ProductCard product={product} />
               </motion.div>
@@ -429,20 +429,20 @@ const ProductPage: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
             className="mt-24 text-center"
           >
             <div className={`inline-flex items-center space-x-12 px-12 py-8 bg-gradient-to-r ${categoryInfo.bgGradient} backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 dark:border-gray-700/40`}>
               <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-lg" />
+                <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg" />
                 <span className="font-semibold text-lg">Premium Quality</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
-                <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse shadow-lg" style={{ animationDelay: '0.5s' }} />
+                <div className="w-3 h-3 bg-purple-500 rounded-full shadow-lg" />
                 <span className="font-semibold text-lg">Expert Installation</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
-                <div className="w-3 h-3 bg-amber-500 rounded-full animate-pulse shadow-lg" style={{ animationDelay: '1s' }} />
+                <div className="w-3 h-3 bg-amber-500 rounded-full shadow-lg" />
                 <span className="font-semibold text-lg">Satisfaction Guaranteed</span>
               </div>
             </div>

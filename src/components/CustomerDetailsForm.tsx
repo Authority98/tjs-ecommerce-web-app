@@ -48,7 +48,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
             id="name"
             value={customerDetails.name}
             onChange={(e) => updateField('name', e.target.value)}
-            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
+            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-colors duration-200"
             required
           />
         </div>
@@ -62,7 +62,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
             id="email"
             value={customerDetails.email}
             onChange={(e) => updateField('email', e.target.value)}
-            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
+            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-colors duration-200"
             required
           />
         </div>
@@ -76,7 +76,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
             id="phone"
             value={customerDetails.phone}
             onChange={(e) => updateField('phone', e.target.value)}
-            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
+            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-colors duration-200"
             required
           />
         </div>
@@ -91,7 +91,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
               value={customerDetails.deliveryAddress}
               onChange={(e) => updateField('deliveryAddress', e.target.value)}
               rows={4}
-              className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
+              className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-colors duration-200"
               placeholder="Enter your complete delivery address including unit number, city, state, and zip code"
               required
             />
@@ -100,9 +100,9 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
 
         <motion.button
           type="submit"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-fuchsia-700 transition-all hover:scale-105 hover:shadow-purple-400/60"
+          whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.98 }}
+        className="w-full py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-fuchsia-700 transition-colors duration-200"
         >
           {nextButtonText}
         </motion.button>

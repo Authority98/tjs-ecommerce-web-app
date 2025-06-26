@@ -58,9 +58,9 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
                   <div className="flex items-center space-x-2">
                     <span className="text-gray-400 dark:text-gray-500">Size:</span>
                     <div className="flex space-x-1">
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
+                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms', animationDuration: '2s' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.7s', animationDuration: '2s' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '1.4s', animationDuration: '2s' }}></div>
                     </div>
                   </div>
                 )}
@@ -75,9 +75,9 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
                   <div className="flex items-center space-x-2">
                     <span className="text-gray-400 dark:text-gray-500">Type:</span>
                     <div className="flex space-x-1">
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
+                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms', animationDuration: '2s' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.7s', animationDuration: '2s' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '1.4s', animationDuration: '2s' }}></div>
                     </div>
                   </div>
                 )}
@@ -92,9 +92,9 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
                   <div className="flex items-center space-x-2">
                     <span className="text-gray-400 dark:text-gray-500">Rental:</span>
                     <div className="flex space-x-1">
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
+                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms', animationDuration: '2s' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.7s', animationDuration: '2s' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '1.4s', animationDuration: '2s' }}></div>
                     </div>
                   </div>
                 )}
@@ -109,9 +109,9 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
                   <div className="flex items-center space-x-2">
                     <span className="text-gray-400 dark:text-gray-500">Decor:</span>
                     <div className="flex space-x-1">
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
+                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms', animationDuration: '2s' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.7s', animationDuration: '2s' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '1.4s', animationDuration: '2s' }}></div>
                     </div>
                   </div>
                 )}

@@ -31,12 +31,12 @@ const ThankYouPage: React.FC = () => {
           className="absolute opacity-10 dark:opacity-5 pointer-events-none"
           style={{ left: element.x, top: element.y }}
           animate={{
-            y: [0, -20, 0],
-            rotate: [0, 10, -10, 0],
+            y: [0, -10, 0],
+            rotate: [0, 5, -5, 0],
             scale: [1, 1.1, 1],
           }}
           transition={{
-            duration: 4,
+            duration: 3,
             delay: element.delay,
             repeat: Infinity,
             ease: "easeInOut"
@@ -74,8 +74,8 @@ const ThankYouPage: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 py-16 relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4 }}
           className="text-center mb-12"
         >
           {/* Success Icon */}
@@ -103,8 +103,8 @@ const ThankYouPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
-          className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 p-8 mb-12 border border-white/20 dark:border-gray-700/30"
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-100 p-8 mb-12 border border-white/20 dark:border-gray-700/30"
         >
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">
@@ -214,7 +214,7 @@ const ThankYouPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.1 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
           className="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-950/20 dark:to-violet-950/20 rounded-3xl p-8 mb-12 border border-purple-200/50 dark:border-purple-700/30"
         >
           <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center font-dosis">
@@ -249,19 +249,19 @@ const ThankYouPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.3 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <Link
             to="/"
-            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-semibold text-lg rounded-2xl hover:from-purple-700 hover:to-fuchsia-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-400/60 transform hover:scale-105"
+            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-semibold text-lg rounded-2xl hover:from-purple-700 hover:to-fuchsia-700 transition-all duration-100 shadow-lg hover:shadow-xl hover:shadow-purple-400/60"
           >
             <Home className="h-5 w-5 mr-2" />
             Continue Shopping
           </Link>
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-800 dark:text-white font-semibold text-lg rounded-2xl border-2 border-gray-300 dark:border-gray-500 hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-800 dark:text-white font-semibold text-lg rounded-2xl border-2 border-gray-300 dark:border-gray-500 hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500 transition-all duration-100 shadow-lg hover:shadow-xl"
           >
             <Gift className="h-5 w-5 mr-2" />
             Print Receipt
@@ -272,16 +272,16 @@ const ThankYouPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.5 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
           className="text-center mt-12"
         >
           <p className="text-gray-600 dark:text-gray-300 mb-4">
             Share your Christmas joy with friends and family!
           </p>
           <div className="flex justify-center space-x-4">
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
-            <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="w-2 h-2 bg-red-500 rounded-full" />
+            <div className="w-2 h-2 bg-green-500 rounded-full" />
+            <div className="w-2 h-2 bg-purple-500 rounded-full" />
           </div>
         </motion.div>
       </div>

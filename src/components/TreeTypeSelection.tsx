@@ -18,12 +18,12 @@ const TreeTypeSelection: React.FC<TreeTypeSelectionProps> = ({
         <motion.button
           key={type}
           onClick={() => onTypeSelect(type)}
-          className={`p-3 rounded-xl border text-left transition-all ${
+          className={`p-3 rounded-xl border text-left transition-colors duration-200 ${
             selectedOptions.type === type
-              ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 shadow-lg shadow-purple-300/40'
-              : 'border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 hover:bg-purple-50/50 dark:hover:bg-purple-900/10'
+              ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+              : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-purple-300 dark:hover:border-purple-600'
           }`}
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
         >
           <div className="flex items-center justify-between mb-2">

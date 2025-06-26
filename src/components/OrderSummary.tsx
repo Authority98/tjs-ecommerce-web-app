@@ -19,7 +19,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-gradient-to-br from-white/90 to-purple-50/50 dark:from-purple-950/20 dark:to-violet-950/30 backdrop-blur-xl rounded-3xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 p-8 sticky top-24 border border-white/30 dark:border-gray-700/30"
+      className="bg-gradient-to-br from-white/90 to-purple-50/50 dark:from-purple-950/20 dark:to-violet-950/30 backdrop-blur-xl rounded-3xl shadow-2xl hover:shadow-purple-500/25 transition-shadow duration-200 p-8 sticky top-24 border border-white/30 dark:border-gray-700/30"
     >
       <div className="flex items-center space-x-3 mb-6">
         <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-xl">

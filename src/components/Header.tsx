@@ -20,15 +20,15 @@ const Header: React.FC = () => {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
       className="bg-gradient-to-tl from-purple-50 via-violet-100 to-fuchsia-200 backdrop-blur-xl border-b border-gray-200/50 sticky top-0 z-50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center h-24 py-4">
           <Link to="/" className="flex items-center group">
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
+              whileHover={{ scale: 1.005 }}
+              transition={{ duration: 0.15 }}
               className="relative"
             >
               <img
@@ -55,24 +55,24 @@ const Header: React.FC = () => {
               return (
                 <motion.div
                   key={item.path}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
                 >
                   <Link
                      to={item.path}
-                     className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all font-dosis font-medium group whitespace-nowrap ${
+                     className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors duration-100 font-dosis font-medium group whitespace-nowrap ${
                        isActive
                          ? 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-700 font-bold shadow-lg shadow-purple-300/60'
                          : 'text-purple-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700'
                      }`}
                    >
                     <motion.div
-                       className={`w-8 h-8 ${item.iconBg} rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-300 ${
+                       className={`w-8 h-8 ${item.iconBg} rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-100 ${
                          isActive ? 'shadow-lg' : ''
                        }`}
-                       whileHover={{ rotate: [0, -10, 10, 0] }}
-                       transition={{ duration: 0.3 }}
+                       whileHover={{ rotate: [0, -2, 2, 0] }}
+                       transition={{ duration: 0.2 }}
                      >
                        <item.icon className="h-4 w-4 text-white" />
                      </motion.div>
@@ -83,10 +83,10 @@ const Header: React.FC = () => {
                       <motion.div
                         animate={{ 
                           rotate: [0, 360],
-                          scale: [1, 1.2, 1]
+                          scale: [1, 1.05, 1]
                         }}
                         transition={{ 
-                          duration: 2,
+                          duration: 3,
                           repeat: Infinity,
                           ease: "easeInOut"
                         }}
@@ -104,7 +104,7 @@ const Header: React.FC = () => {
             {/* Desktop Admin Link */}
             <Link
               to="/admin"
-              className="hidden md:block p-3 text-purple-500 hover:text-purple-700 transition-all rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:scale-110"
+              className="hidden md:block p-3 text-purple-500 hover:text-purple-700 transition-colors duration-100 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50"
             >
               <Settings className="h-6 w-6" />
             </Link>
@@ -112,13 +112,13 @@ const Header: React.FC = () => {
             {/* Mobile Hamburger Menu Button */}
             <motion.button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-3 text-purple-600 hover:text-purple-700 transition-all rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              className="md:hidden p-3 text-purple-600 hover:text-purple-700 transition-colors duration-100 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50"
+        whileHover={{ scale: 1.005 }}
+        whileTap={{ scale: 0.99 }}
             >
               <motion.div
                 animate={{ rotate: isMobileMenuOpen ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.2 }}
               >
                 {isMobileMenuOpen ? (
                   <X className="h-6 w-6" />
@@ -138,7 +138,7 @@ const Header: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.2 }}
             className="md:hidden absolute top-full left-0 right-0 bg-gradient-to-br from-purple-50 via-violet-100 to-fuchsia-200 backdrop-blur-xl border-b border-gray-200/50 shadow-xl z-40"
           >
             <div className="max-w-7xl mx-auto px-4 py-6">
@@ -150,26 +150,26 @@ const Header: React.FC = () => {
                       key={item.path}
                       initial={{ opacity: 0, x: -50 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1, duration: 0.3 }}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      transition={{ delay: index * 0.05, duration: 0.2 }}
+                      whileHover={{ scale: 1.005 }}
+        whileTap={{ scale: 0.99 }}
                     >
                       <Link
                         to={item.path}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`flex items-center space-x-4 p-4 rounded-2xl transition-all font-dosis font-medium group ${
+                        className={`flex items-center space-x-4 p-4 rounded-2xl transition-colors duration-100 font-dosis font-medium group ${
                           isActive
                             ? 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-700 font-bold shadow-lg shadow-purple-300/60'
                             : 'text-purple-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700'
                         }`}
                       >
                         <motion.div
-                          className={`w-12 h-12 ${item.iconBg} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+                          className={`w-12 h-12 ${item.iconBg} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-100`}
                           whileHover={{ 
-                            rotate: [0, -10, 10, 0],
-                            scale: 1.1
+                            rotate: [0, -3, 3, 0],
+                            scale: 1.02
                           }}
-                          transition={{ duration: 0.4 }}
+                          transition={{ duration: 0.2 }}
                         >
                           <item.icon className="h-6 w-6 text-white" />
                         </motion.div>
@@ -180,7 +180,7 @@ const Header: React.FC = () => {
                             className="h-0.5 bg-gradient-to-r from-purple-400 to-violet-400 rounded-full mt-1"
                             initial={{ width: 0 }}
                             animate={{ width: isActive ? '100%' : '0%' }}
-                            transition={{ duration: 0.3 }}
+                            transition={{ duration: 0.2 }}
                           />
                         </div>
                         
@@ -189,10 +189,10 @@ const Header: React.FC = () => {
                           <motion.div
                             animate={{ 
                               rotate: [0, 360],
-                              scale: [1, 1.3, 1]
+                              scale: [1, 1.05, 1]
                             }}
                             transition={{ 
-                              duration: 2,
+                              duration: 3,
                               repeat: Infinity,
                               ease: "easeInOut"
                             }}
@@ -203,8 +203,8 @@ const Header: React.FC = () => {
                         
                         {/* Cute arrow indicator */}
                         <motion.div
-                          animate={{ x: isActive ? 5 : 0 }}
-                          transition={{ duration: 0.2 }}
+                          animate={{ x: isActive ? 3 : 0 }}
+                          transition={{ duration: 0.15 }}
                           className="text-purple-400"
                         >
                           →
@@ -218,22 +218,22 @@ const Header: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: menuItems.length * 0.1, duration: 0.3 }}
+                  transition={{ delay: menuItems.length * 0.05, duration: 0.2 }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <Link
                     to="/admin"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center space-x-4 p-4 rounded-2xl transition-all font-dosis font-medium text-purple-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 group"
+                    className="flex items-center space-x-4 p-4 rounded-2xl transition-colors duration-100 font-dosis font-medium text-purple-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 group"
                   >
                     <motion.div
-                      className="w-12 h-12 bg-gray-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300"
+                      className="w-12 h-12 bg-gray-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-100"
                       whileHover={{ 
-                        rotate: [0, -10, 10, 0],
-                        scale: 1.1
+                        rotate: [0, -3, 3, 0],
+                        scale: 1.02
                       }}
-                      transition={{ duration: 0.4 }}
+                      transition={{ duration: 0.2 }}
                     >
                       <Settings className="h-6 w-6 text-white" />
                     </motion.div>

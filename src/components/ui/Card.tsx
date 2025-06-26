@@ -49,7 +49,7 @@ const Card: React.FC<CardProps> = ({
   const baseClasses = 'rounded-2xl shadow-lg'
   const variantClasses = getVariantClasses()
   const paddingClasses = getPaddingClasses()
-  const hoverClasses = hover ? 'hover:shadow-xl transition-all duration-300' : ''
+  const hoverClasses = hover ? 'hover:shadow-xl transition-shadow duration-200' : ''
 
   const finalClassName = `${baseClasses} ${variantClasses} ${paddingClasses} ${hoverClasses} ${className}`
 

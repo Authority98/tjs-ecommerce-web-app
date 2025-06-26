@@ -56,7 +56,7 @@ const Button: React.FC<ButtonProps> = ({
     }
   }
 
-  const baseClasses = 'font-semibold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2'
+  const baseClasses = 'font-semibold rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2'
   const variantClasses = getVariantClasses()
   const sizeClasses = getSizeClasses()
   const shadowClasses = variant === 'primary' || variant === 'danger' ? 'shadow-lg hover:shadow-xl' : 'shadow-sm'
@@ -80,7 +80,7 @@ const Button: React.FC<ButtonProps> = ({
       <motion.button
         className={finalClassName}
         disabled={disabled || loading}
-        whileHover={{ scale: 1.02, y: -2 }}
+        whileHover={{ scale: 1.01, y: -1 }}
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0 }}
         {...motionProps}

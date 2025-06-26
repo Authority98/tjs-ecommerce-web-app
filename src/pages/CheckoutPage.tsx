@@ -172,7 +172,7 @@ const CheckoutPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">No order data found</h2>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white rounded-xl hover:from-purple-600 hover:to-fuchsia-600 transition-all hover:scale-105 hover:shadow-purple-400/60"
+            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white rounded-xl hover:from-purple-600 hover:to-fuchsia-600 transition-all duration-100"
           >
             Back to Home
           </button>
@@ -203,7 +203,7 @@ const CheckoutPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
           className="mb-8"
         >
           <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">Complete Your Order</h1>
@@ -272,7 +272,7 @@ const CheckoutPage: React.FC = () => {
               )}
               
               {((currentStep === 3 && !skipScheduling) || (currentStep === 2 && skipScheduling)) && (
-                <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 p-8 border border-white/20 dark:border-gray-700/30">
+                <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-purple-500/25 transition-all duration-100 p-8 border border-white/20 dark:border-gray-700/30">
                   <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">Payment Information</h2>
                   
                   <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
@@ -290,7 +290,7 @@ const CheckoutPage: React.FC = () => {
                       <input
                         type="text"
                         placeholder="4111 1111 1111 1111"
-                        className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
+                        className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all duration-100"
                         disabled
                       />
                     </div>
@@ -324,13 +324,13 @@ const CheckoutPage: React.FC = () => {
                   <div className="flex space-x-4">
                     <button
                       onClick={() => setCurrentStep(skipScheduling ? 1 : 2)}
-                      className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                      className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-100"
                     >
                       Back
                     </button>
                     <button
                       onClick={handleSubmitOrder}
-                      className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-fuchsia-700 transition-all hover:scale-105 hover:shadow-purple-400/60"
+                      className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-fuchsia-700 transition-all duration-100"
                     >
                       Place Order - ${calculateFinalTotal()}
                     </button>

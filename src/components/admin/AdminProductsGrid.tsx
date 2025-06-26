@@ -57,7 +57,7 @@ const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
             <button
               key={category.id}
               onClick={() => onCategoryChange(category.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-100 ${
                 selectedCategory === category.id
                   ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white shadow-lg'
                   : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500'
@@ -97,7 +97,7 @@ const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              <Card padding="none" className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 border border-white/20 dark:border-gray-700/30">
+              <Card padding="none" className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-100 border border-white/20 dark:border-gray-700/30">
                 <div className="relative overflow-hidden">
                   {product.images && product.images.length > 0 && (
                     <img
@@ -107,7 +107,7 @@ const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
                     />
                   )}
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-100" />
                   {/* Price Badge */}
                   <div className="absolute top-3 right-3">
                     <div className="bg-white/95 dark:bg-purple-950/20 backdrop-blur-sm rounded-xl px-3 py-1 shadow-lg border border-white/20 dark:border-gray-700/30">
@@ -129,7 +129,7 @@ const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
                 </div>
 
                 <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2 line-clamp-1 transition-colors group-hover:text-purple-600 dark:group-hover:text-amber-400 font-dosis">
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2 line-clamp-1 transition-colors duration-100 group-hover:text-purple-600 dark:group-hover:text-amber-400 font-dosis">
                     {product.title}
                   </h3>
                   

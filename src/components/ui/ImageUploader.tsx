@@ -134,7 +134,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             <button
               type="button"
               onClick={() => removeImage(index)}
-              className="absolute top-2 right-2 p-1 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all hover:from-red-600 hover:to-rose-600"
+              className="absolute top-2 right-2 p-1 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:from-red-600 hover:to-rose-600"
               disabled={loading}
             >
               <X className="h-3 w-3" />

@@ -27,12 +27,12 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
           <motion.button
             key={level.percentage}
             onClick={() => onDecorLevelSelect(level.percentage)}
-            className={`p-6 rounded-2xl border-2 text-center transition-all ${
+            className={`p-6 rounded-2xl border-2 text-center transition-colors duration-200 ${
               selectedOptions.decorLevel === level.percentage
-                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 shadow-lg shadow-purple-300/50'
-                : 'border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 hover:bg-purple-50/50 dark:hover:bg-purple-900/10'
+                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+                : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-purple-300 dark:hover:border-purple-600'
             }`}
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
           >
             <div className="flex justify-center mb-3">

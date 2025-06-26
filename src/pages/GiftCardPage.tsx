@@ -144,7 +144,7 @@ const GiftCardPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-12"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
@@ -169,7 +169,7 @@ const GiftCardPage: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
             className="lg:col-span-2"
           >
             <AnimatePresence mode="wait">
@@ -178,7 +178,7 @@ const GiftCardPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.2 }}
                 className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-white/20"
               >
                 {/* Step Navigation */}

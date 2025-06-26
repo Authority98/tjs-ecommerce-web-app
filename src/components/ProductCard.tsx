@@ -27,20 +27,20 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
 
   return (
     <motion.div
-      className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 border border-white/20 dark:border-gray-700/30"
+      className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden group hover:shadow-2xl transition-shadow duration-100 border border-white/20 dark:border-gray-700/30"
     >
       <div className="relative overflow-hidden">
         <ImageSlider
           images={product.images}
           alt={product.title}
-          className="w-full h-72 transition-transform duration-300"
+          className="w-full h-72 transition-transform duration-100"
           showDots={product.images.length > 1}
           showArrows={product.images.length > 1}
           autoPlay={false}
         />
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-100 pointer-events-none z-0" />
         
         {/* Price Badge */}
         <motion.div
@@ -69,13 +69,13 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
 
         {/* Floating Elements */}
         <motion.div
-          className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-100"
           animate={{ 
-            rotate: [0, 10, -10, 0],
-            scale: [1, 1.1, 1]
+            rotate: [0, 5, -5, 0],
+            scale: [1, 1.05, 1]
           }}
           transition={{ 
-            duration: 3,
+            duration: 4,
             repeat: Infinity,
             ease: "easeInOut"
           }}
@@ -87,7 +87,7 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
       <div className="p-8">
         <motion.h3 
           className="text-2xl font-bold text-gray-800 dark:text-white mb-3 line-clamp-2 transition-colors group-hover:text-purple-600 dark:group-hover:text-amber-400 font-dosis"
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.005 }}
         >
           {product.title}
         </motion.h3>
@@ -99,8 +99,8 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
         
         <Link to={handleProductClick()}>
           <motion.button
-            className={`w-full flex items-center justify-center px-8 py-4 bg-gradient-to-r ${getCategoryGradient(product.category)} text-white font-bold text-lg rounded-2xl hover:shadow-xl transition-all duration-300 group/btn`}
-            whileHover={{ scale: 1.02, y: -2 }}
+            className={`w-full flex items-center justify-center px-8 py-4 bg-gradient-to-r ${getCategoryGradient(product.category)} text-white font-bold text-lg rounded-2xl hover:shadow-xl transition-shadow duration-100 group/btn`}
+        whileHover={{ scale: 1.005, y: -0.5 }}
             whileTap={{ scale: 0.98 }}
           >
             <span className="flex items-center space-x-3">
@@ -118,25 +118,15 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
             </span>
             <motion.div
               className="ml-3"
-              animate={{ x: [0, 5, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
+              animate={{ x: [0, 3, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
             >
               →
             </motion.div>
           </motion.button>
         </Link>
 
-        {/* Trust Indicators */}
-        <div className="flex items-center justify-center space-x-6 mt-6 pt-4 border-t border-gray-200/50 dark:border-gray-700/50">
-          <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400">
-            <div className="w-2 h-2 rounded-full animate-pulse bg-purple-500" />
-            <span>Premium Quality</span>
-          </div>
-          <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400">
-            <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#F7B541', animationDelay: '0.5s' }} />
-            <span>Fast Delivery</span>
-          </div>
-        </div>
+
       </div>
     </motion.div>
   )
