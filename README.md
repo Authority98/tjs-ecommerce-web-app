@@ -11,6 +11,8 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 - **Interactive Tree Customization**: Step-by-step tree sizing, type selection, rental periods, and decoration levels
 - **Smart Cart System**: Seamless checkout process with customer details and scheduling
 - **Admin Dashboard**: Complete order management and product administration
+  - Displays static product images for clarity and performance
+  - Image slider removed from admin product cards for a streamlined experience
 - **Dark/Light Mode**: System-wide theme toggle with persistent preferences
 
 ### 🎨 User Experience
@@ -19,6 +21,7 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 - **Toast Notifications**: Beautiful success/error feedback with glass morphism design
 - **Auto-Advancing Steps**: Intelligent progression through customization workflow
 - **Loading States**: Elegant skeleton loading and progress indicators
+- **UI/UX Improvements**: Navigation arrows in image sliders are now visually compact and stable
 
 ### 🛡️ Technical Features
 - **Type Safety**: Full TypeScript implementation
