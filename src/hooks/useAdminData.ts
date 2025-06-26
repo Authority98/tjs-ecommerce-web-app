@@ -132,6 +132,16 @@ export const useAdminData = (): UseAdminDataReturn => {
             title,
             category,
             images
+          ),
+          gift_cards (
+            id,
+            amount,
+            recipient_name,
+            recipient_email,
+            sender_name,
+            personal_message,
+            scheduled_date,
+            is_for_self
           )
         `)
         .order('created_at', { ascending: false })

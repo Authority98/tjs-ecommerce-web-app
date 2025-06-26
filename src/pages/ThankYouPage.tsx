@@ -7,6 +7,8 @@ const ThankYouPage: React.FC = () => {
   const [searchParams] = useSearchParams()
   const orderNumber = searchParams.get('orderNumber')
   const total = searchParams.get('total')
+  const orderType = searchParams.get('orderType') // 'giftcard' or 'product'
+  const isGiftCard = orderType === 'giftcard'
 
   useEffect(() => {
     // Scroll to top when component mounts
@@ -140,33 +142,69 @@ const ThankYouPage: React.FC = () => {
                 What's Next?
               </h3>
               <div className="space-y-3">
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-purple-600 dark:text-amber-400 text-sm font-bold">1</span>
-                  </div>
-                  <div>
-                    <div className="font-medium text-gray-800 dark:text-white">Confirmation Call</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">We'll call you within 24 hours to confirm details</div>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-purple-600 dark:text-amber-400 text-sm font-bold">2</span>
-                  </div>
-                  <div>
-                    <div className="font-medium text-gray-800 dark:text-white">Professional Setup</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Our team will handle delivery and installation</div>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-purple-600 dark:text-amber-400 text-sm font-bold">3</span>
-                  </div>
-                  <div>
-                    <div className="font-medium text-gray-800 dark:text-white">Enjoy the Magic</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Relax and enjoy your perfect Christmas setup</div>
-                  </div>
-                </div>
+                {isGiftCard ? (
+                  // Gift Card Flow
+                  <>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-purple-600 dark:text-amber-400 text-sm font-bold">1</span>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-800 dark:text-white">Gift Card Processing</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-300">Your gift card has been processed and sent to the recipient</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-purple-600 dark:text-amber-400 text-sm font-bold">2</span>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-800 dark:text-white">Digital Delivery</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-300">Gift card details will be emailed to the recipient</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-purple-600 dark:text-amber-400 text-sm font-bold">3</span>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-800 dark:text-white">Ready to Redeem</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-300">Recipient can use the gift card for any of our services</div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  // Regular Product Flow
+                  <>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-purple-600 dark:text-amber-400 text-sm font-bold">1</span>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-800 dark:text-white">Confirmation Call</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-300">We'll call you within 24 hours to confirm details</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-purple-600 dark:text-amber-400 text-sm font-bold">2</span>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-800 dark:text-white">Professional Setup</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-300">Our team will handle delivery and installation</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-purple-600 dark:text-amber-400 text-sm font-bold">3</span>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-800 dark:text-white">Enjoy the Magic</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-300">Relax and enjoy your perfect Christmas setup</div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

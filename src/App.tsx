@@ -7,6 +7,7 @@ import CheckoutPage from './pages/CheckoutPage'
 import ThankYouPage from './pages/ThankYouPage'
 import AdminPage from './pages/AdminPage'
 import CategorySelection from './pages/CategorySelection'
+import GiftCardPage from './pages/GiftCardPage'
 import Header from './components/Header'
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
               <Route path="/products/:category" element={<ProductPage />} />
               <Route path="/tree-customization/:productId" element={<TreeCustomization />} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/gift-cards" element={<GiftCardPage />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
               <Route path="/admin" element={<AdminPage />} />
               {/* Redirect any unknown routes to category selection */}

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Ruler, TreePine, Calendar, Palette } from 'lucide-react'
 import { Product, TreeOptions } from '../types'
 import ProductTags from './ProductTags'
+import ImageSlider from './ui/ImageSlider'
 
 interface ProductPreviewProps {
   product: Product
@@ -25,12 +26,16 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
       <div className="sticky top-24">
         <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-white/20 dark:border-gray-700/30">
           <div className="relative">
-            <img
-              src={product.images[0] || 'https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=800'}
+            <ImageSlider
+              images={product.images}
               alt={product.title}
-              className="w-full h-64 object-cover"
+              className="w-full h-64"
+              showDots={product.images.length > 1}
+              showArrows={product.images.length > 1}
+              autoPlay={true}
+              autoPlayInterval={4000}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
             <div className="absolute top-4 right-4">
               <div className="bg-white/90 dark:bg-purple-950/20 backdrop-blur-sm rounded-full px-3 py-1 border border-white/20 dark:border-gray-700/30">
                 <span className="text-2xl font-bold" style={{color: '#9333E9'}}>${totalPrice}</span>

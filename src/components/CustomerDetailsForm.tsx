@@ -6,16 +6,21 @@ interface CustomerDetailsFormProps {
   customerDetails: CustomerDetails
   setCustomerDetails: (details: CustomerDetails) => void
   onNext: () => void
+  nextButtonText?: string
+  isGiftCard?: boolean
 }
 
 const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
   customerDetails,
   setCustomerDetails,
-  onNext
+  onNext,
+  nextButtonText = 'Continue to Scheduling',
+  isGiftCard = false
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (customerDetails.name && customerDetails.email && customerDetails.phone && customerDetails.deliveryAddress) {
+    const isValid = customerDetails.name && customerDetails.email && customerDetails.phone && (isGiftCard || customerDetails.deliveryAddress)
+    if (isValid) {
       onNext()
     }
   }
@@ -76,20 +81,22 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
           />
         </div>
 
-        <div>
-          <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Delivery Address *
-          </label>
-          <textarea
-            id="address"
-            value={customerDetails.deliveryAddress}
-            onChange={(e) => updateField('deliveryAddress', e.target.value)}
-            rows={4}
-            className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
-            placeholder="Enter your complete delivery address including unit number, city, state, and zip code"
-            required
-          />
-        </div>
+        {!isGiftCard && (
+          <div>
+            <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Delivery Address *
+            </label>
+            <textarea
+              id="address"
+              value={customerDetails.deliveryAddress}
+              onChange={(e) => updateField('deliveryAddress', e.target.value)}
+              rows={4}
+              className="w-full p-3 border border-gray-300 dark:border-purple-400/30 bg-white dark:bg-purple-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:border-purple-300 dark:hover:border-purple-400 transition-all"
+              placeholder="Enter your complete delivery address including unit number, city, state, and zip code"
+              required
+            />
+          </div>
+        )}
 
         <motion.button
           type="submit"
@@ -97,7 +104,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
           whileTap={{ scale: 0.98 }}
           className="w-full py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-fuchsia-700 transition-all hover:scale-105 hover:shadow-purple-400/60"
         >
-          Continue to Scheduling
+          {nextButtonText}
         </motion.button>
       </form>
     </motion.div>

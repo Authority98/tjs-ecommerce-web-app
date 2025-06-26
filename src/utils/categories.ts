@@ -1,4 +1,4 @@
-import { TreePine, Sparkles, Ribbon } from 'lucide-react'
+import { TreePine, Sparkles, Ribbon, Gift } from 'lucide-react'
 
 export interface CategoryConfig {
   id: string
@@ -45,6 +45,17 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
     accent: 'violet',
     iconBg: 'bg-violet-500',
     hoverShadow: 'hover:shadow-violet-500/25'
+  },
+  {
+    id: 'gift-card',
+    title: 'Gift Cards',
+    description: 'Share the magic of the holidays with our beautiful digital gift cards - the perfect present for loved ones',
+    icon: Gift,
+    gradient: 'from-pink-400 via-rose-400 to-red-300',
+    bgGradient: 'from-pink-50 to-rose-50 dark:from-pink-950/15 dark:to-rose-950/15',
+    accent: 'pink',
+    iconBg: 'bg-pink-500',
+    hoverShadow: 'hover:shadow-pink-500/25'
   }
 ]
 

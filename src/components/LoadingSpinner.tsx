@@ -82,7 +82,20 @@ const LoadingSpinner: React.FC = () => {
             }}
             className="relative"
           >
-            <TreePine className="w-24 h-24 mx-auto text-purple-600 dark:text-purple-400" />
+            <img
+              src="/assets/images/logo.webp"
+              alt="Twinkle Jingle Logo"
+              className="w-40 h-40 mx-auto object-contain"
+              onError={(e) => {
+                // Fallback to TreePine icon if logo fails to load
+                const target = e.target as HTMLImageElement
+                target.style.display = 'none'
+                const fallback = target.nextElementSibling as HTMLElement
+                if (fallback) fallback.style.display = 'block'
+              }}
+            />
+            {/* Fallback icon (hidden by default) */}
+            <TreePine className="w-24 h-24 mx-auto text-purple-600 dark:text-purple-400 hidden" />
             
             {/* Simple star on top */}
             <motion.div
@@ -103,7 +116,7 @@ const LoadingSpinner: React.FC = () => {
         </div>
 
         {/* Three Dot Loading */}
-        <div className="flex justify-center space-x-2 mb-8">
+        <div className="flex justify-center space-x-2 mb-8 mt-4">
           {[0, 1, 2].map((i) => (
             <motion.div
               key={i}

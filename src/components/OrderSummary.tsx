@@ -4,7 +4,7 @@ import { OrderSummary, RENTAL_PERIODS } from '../types'
 import { Package, Star, Shield, Clock } from 'lucide-react'
 
 interface OrderSummaryProps {
-  orderData: OrderSummary
+  orderData: OrderSummary | any // Allow gift card data structure
   rushOrder: boolean
   finalTotal: number
 }
@@ -29,32 +29,81 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
       </div>
       
       <div className="space-y-6">
-        {/* Product */}
+        {/* Product or Gift Card */}
         <div className="relative">
           <div className="flex space-x-4 p-4 bg-white/60 dark:bg-purple-950/20 rounded-2xl border border-white/40 dark:border-gray-700/30">
             <div className="relative">
-              <img
-                src={orderData.product.images[0] || 'https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=100'}
-                alt={orderData.product.title}
-                className="w-20 h-20 object-cover rounded-xl shadow-lg"
-              />
+              {orderData.type === 'giftcard' ? (
+                <div className="w-20 h-20 bg-gradient-to-br from-pink-400 via-purple-500 to-violet-600 rounded-xl shadow-lg flex items-center justify-center">
+                  <span className="text-white text-2xl font-bold">🎁</span>
+                </div>
+              ) : (
+                <img
+                  src={orderData.product?.images?.[0] || 'https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=100'}
+                  alt={orderData.product?.title || 'Product'}
+                  className="w-20 h-20 object-cover rounded-xl shadow-lg"
+                />
+              )}
               <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center" style={{backgroundColor: '#9333E9'}}>
                 <Star className="h-3 w-3 text-white" />
               </div>
             </div>
             <div className="flex-1">
               <h4 className="font-bold text-gray-800 dark:text-white line-clamp-2 mb-2">
-                {orderData.product.title}
+                {orderData.type === 'giftcard' ? '🎄 Twinkle Jingle eGift Card' : orderData.product?.title}
               </h4>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Base Price</span>
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  {orderData.type === 'giftcard' ? 'Gift Card Value' : 'Base Price'}
+                </span>
                 <span className="text-xl font-bold" style={{color: '#9333E9'}}>
-                  ${orderData.product.price}
+                  ${orderData.type === 'giftcard' ? orderData.giftCard?.amount || orderData.totalAmount : orderData.product?.price}
                 </span>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Gift Card Details */}
+        {orderData.type === 'giftcard' && orderData.giftCard && (
+          <div className="rounded-2xl p-4 border" style={{background: 'linear-gradient(to right, rgba(147, 51, 233, 0.08), rgba(147, 51, 233, 0.12))', borderColor: 'rgba(147, 51, 233, 0.3)'}}>
+            <h4 className="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
+              <div className="w-2 h-2 rounded-full mr-2" style={{backgroundColor: '#9333E9'}} />
+              Gift Card Details
+            </h4>
+            <div className="space-y-3 text-sm">
+              {!orderData.giftCard.isForSelf && orderData.giftCard.recipientName && (
+                <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-3">
+                  <div className="text-gray-500 dark:text-gray-400 text-xs">Recipient</div>
+                  <div className="font-medium text-gray-800 dark:text-white">{orderData.giftCard.recipientName}</div>
+                  {orderData.giftCard.recipientEmail && (
+                    <div className="text-gray-600 dark:text-gray-300 text-xs">{orderData.giftCard.recipientEmail}</div>
+                  )}
+                </div>
+              )}
+              {orderData.giftCard.senderName && (
+                <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-3">
+                  <div className="text-gray-500 dark:text-gray-400 text-xs">From</div>
+                  <div className="font-medium text-gray-800 dark:text-white">{orderData.giftCard.senderName}</div>
+                </div>
+              )}
+              {orderData.giftCard.personalMessage && (
+                <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-3">
+                  <div className="text-gray-500 dark:text-gray-400 text-xs">Personal Message</div>
+                  <div className="font-medium text-gray-800 dark:text-white italic">"{orderData.giftCard.personalMessage}"</div>
+                </div>
+              )}
+              {orderData.giftCard.deliveryDate && (
+                <div className="bg-white/60 dark:bg-purple-950/20 rounded-lg p-3">
+                  <div className="text-gray-500 dark:text-gray-400 text-xs">Delivery</div>
+                  <div className="font-medium text-gray-800 dark:text-white">
+                    {orderData.giftCard.deliveryDate === 'now' ? 'Immediate Delivery' : `Scheduled for ${orderData.giftCard.scheduledDate}`}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Tree Options */}
         {orderData.treeOptions && (

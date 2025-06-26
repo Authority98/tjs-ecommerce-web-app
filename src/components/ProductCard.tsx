@@ -5,6 +5,7 @@ import { Product } from '../types'
 import { Sparkles, TreePine, Gift, Star } from 'lucide-react'
 import { getCategoryConfig, getCategoryGradient, getCategoryIcon } from '../utils/categories'
 import ProductTags from './ProductTags'
+import ImageSlider from './ui/ImageSlider'
 
 interface ProductCardProps {
   product: Product
@@ -26,19 +27,20 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
 
   return (
     <motion.div
-      whileHover={{ y: -12, scale: 1.02, transition: { duration: 0 } }}
       className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 border border-white/20 dark:border-gray-700/30"
     >
       <div className="relative overflow-hidden">
-        <motion.img
-          src={product.images[0] || 'https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=500'}
+        <ImageSlider
+          images={product.images}
           alt={product.title}
-          className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-300"
-          whileHover={{ scale: 1.1 }}
+          className="w-full h-72 transition-transform duration-300"
+          showDots={product.images.length > 1}
+          showArrows={product.images.length > 1}
+          autoPlay={false}
         />
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0" />
         
         {/* Price Badge */}
         <motion.div

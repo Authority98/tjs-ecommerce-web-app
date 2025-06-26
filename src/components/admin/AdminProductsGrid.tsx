@@ -5,6 +5,7 @@ import { Product } from '../../types'
 import { getCategoryGradient, getCategoryIcon } from '../../utils/categories'
 import Card from '../ui/Card'
 import Button from '../ui/Button'
+import ImageSlider from '../ui/ImageSlider'
 
 interface AdminProductsGridProps {
   products: Product[]
@@ -95,17 +96,17 @@ const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              <Card className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 border border-white/20 dark:border-gray-700/30 p-0">
+              <Card padding="none" className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 border border-white/20 dark:border-gray-700/30">
                 <div className="relative overflow-hidden">
-                  <img
-                    src={product.images[0] || 'https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=400'}
-                    alt={product.title}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  
+                  {product.images && product.images.length > 0 && (
+                    <img
+                      src={product.images[0]}
+                      alt={product.title}
+                      className="w-full h-48 object-cover rounded-xl mb-2"
+                    />
+                  )}
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
                   {/* Price Badge */}
                   <div className="absolute top-3 right-3">
                     <div className="bg-white/95 dark:bg-purple-950/20 backdrop-blur-sm rounded-xl px-3 py-1 shadow-lg border border-white/20 dark:border-gray-700/30">

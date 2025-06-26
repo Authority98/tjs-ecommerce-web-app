@@ -35,6 +35,15 @@ const CheckoutPage: React.FC = () => {
       if (storedData) {
         const checkoutData = JSON.parse(storedData)
         setOrderData(checkoutData)
+        
+        // Auto-fill customer details for gift cards
+        if (checkoutData.type === 'giftcard' && checkoutData.giftCard?.senderName) {
+          setCustomerDetails(prev => ({
+            ...prev,
+            name: checkoutData.giftCard.senderName
+          }))
+        }
+        
         setLoading(false)
         return
       }
@@ -83,23 +92,55 @@ const CheckoutPage: React.FC = () => {
     try {
       const orderNumber = generateOrderNumber()
       
+      let giftCardId = null;
+      
+      // Handle gift card orders
+      if (isGiftCard && orderData.giftCard) {
+        const giftCardPayload = {
+          amount: orderData.giftCard.amount,
+          recipient_name: orderData.giftCard.recipientName,
+          recipient_email: orderData.giftCard.recipientEmail,
+          sender_name: orderData.giftCard.senderName,
+          personal_message: orderData.giftCard.personalMessage,
+          scheduled_date: orderData.giftCard.scheduledDate || null,
+          is_for_self: orderData.giftCard.isForSelf
+        };
+        
+        const { data: giftCardData, error: giftCardError } = await supabase
+          .from('gift_cards')
+          .insert([giftCardPayload])
+          .select('id')
+          .single();
+          
+        if (giftCardError) throw giftCardError;
+        giftCardId = giftCardData.id;
+      }
+
+      // Create order payload based on order type
       const orderPayload = {
         customer_name: customerDetails.name,
         customer_email: customerDetails.email,
         customer_phone: customerDetails.phone,
         delivery_address: customerDetails.deliveryAddress,
-        product_id: orderData.product.id,
-        tree_height: orderData.treeOptions?.height,
-        tree_width: orderData.treeOptions?.width,
-        tree_type: orderData.treeOptions?.type,
-        rental_period: orderData.treeOptions?.rentalPeriod,
-        decor_level: orderData.treeOptions?.decorLevel,
-        installation_date: installationDate || null,
-        teardown_date: teardownDate || null,
-        rush_order: rushOrder,
+        order_type: isGiftCard ? 'giftcard' : 'product',
+        ...(isGiftCard ? {
+          gift_card_id: giftCardId,
+          product_id: null
+        } : {
+          product_id: orderData.product?.id,
+          gift_card_id: null,
+          tree_height: orderData.treeOptions?.height,
+          tree_width: orderData.treeOptions?.width,
+          tree_type: orderData.treeOptions?.type,
+          rental_period: orderData.treeOptions?.rentalPeriod,
+          decor_level: orderData.treeOptions?.decorLevel,
+          installation_date: installationDate || null,
+          teardown_date: teardownDate || null,
+          rush_order: rushOrder
+        }),
         total_amount: calculateFinalTotal(),
         status: 'pending' as const
-      }
+      };
 
       const { error } = await supabase
         .from('orders')
@@ -111,7 +152,8 @@ const CheckoutPage: React.FC = () => {
       sessionStorage.removeItem('checkoutData')
       
       // Navigate to thank you page with order number
-      navigate(`/thank-you?orderNumber=${orderNumber}&total=${calculateFinalTotal()}`)
+      const orderType = orderData.giftCard ? 'giftcard' : 'product'
+      navigate(`/thank-you?orderNumber=${orderNumber}&total=${calculateFinalTotal()}&orderType=${orderType}`)
     } catch (error) {
       console.error('Error submitting order:', error)
       alert('Error placing order. Please try again.')
@@ -138,11 +180,18 @@ const CheckoutPage: React.FC = () => {
     )
   }
 
-  const steps = [
-    { number: 1, title: 'Customer Details', completed: currentStep > 1 },
-    { number: 2, title: 'Scheduling', completed: currentStep > 2 },
-    { number: 3, title: 'Payment', completed: currentStep > 3 }
-  ]
+  // Define steps based on order type - skip scheduling for gift cards
+  const isGiftCard = orderData?.type === 'giftcard'
+  const steps = isGiftCard 
+    ? [
+        { number: 1, title: 'Customer Details', completed: currentStep > 1 },
+        { number: 2, title: 'Payment', completed: currentStep > 2 }
+      ]
+    : [
+        { number: 1, title: 'Customer Details', completed: currentStep > 1 },
+        { number: 2, title: 'Scheduling', completed: currentStep > 2 },
+        { number: 3, title: 'Payment', completed: currentStep > 3 }
+      ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-fuchsia-100 dark:from-purple-900 dark:via-violet-800 dark:to-fuchsia-900">
@@ -199,10 +248,12 @@ const CheckoutPage: React.FC = () => {
                   customerDetails={customerDetails}
                   setCustomerDetails={setCustomerDetails}
                   onNext={() => setCurrentStep(2)}
+                  nextButtonText={isGiftCard ? 'Continue to Payment' : 'Continue to Scheduling'}
+                  isGiftCard={isGiftCard}
                 />
               )}
               
-              {currentStep === 2 && (
+              {currentStep === 2 && !isGiftCard && (
                 <SchedulingForm
                   installationDate={installationDate}
                   setInstallationDate={setInstallationDate}
@@ -216,7 +267,7 @@ const CheckoutPage: React.FC = () => {
                 />
               )}
               
-              {currentStep === 3 && (
+              {((currentStep === 3 && !isGiftCard) || (currentStep === 2 && isGiftCard)) && (
                 <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 p-8 border border-white/20 dark:border-gray-700/30">
                   <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">Payment Information</h2>
                   
@@ -268,7 +319,7 @@ const CheckoutPage: React.FC = () => {
                   
                   <div className="flex space-x-4">
                     <button
-                      onClick={() => setCurrentStep(2)}
+                      onClick={() => setCurrentStep(isGiftCard ? 1 : 2)}
                       className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                     >
                       Back

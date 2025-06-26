@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Upload, Trash2, X } from 'lucide-react'
 import Button from './Button'
+import { supabase } from '../../lib/supabase'
 
 interface ImageUploaderProps {
   images: string[]
@@ -17,25 +18,59 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   loading = false
 }) => {
   const [uploadingImages, setUploadingImages] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
     if (files.length === 0) return
 
     setUploadingImages(true)
+    setUploadError(null)
     
     try {
-      // For now, we'll create placeholder URLs
-      // In a real app, you'd upload to Supabase Storage or similar service
-      const newImageUrls = files.map((file, index) => {
-        // Create a placeholder URL - in production, upload to storage
-        return `https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=800&t=${Date.now()}-${index}`
-      })
+      const newImageUrls: string[] = []
       
-      const updatedImages = [...images, ...newImageUrls].slice(0, maxImages)
-      onImagesChange(updatedImages)
+      for (const file of files) {
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          setUploadError(`File ${file.name} is too large. Maximum size is 5MB.`)
+          continue
+        }
+        
+        // Generate unique filename
+        const fileExt = file.name.split('.').pop()
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
+        
+        // Upload to Supabase Storage
+        const { data, error } = await supabase.storage
+          .from('product-images')
+          .upload(fileName, file)
+        
+        if (error) {
+          console.error('Error uploading file:', error)
+          if (error.message.includes('Bucket not found')) {
+            setUploadError('Storage bucket not configured. Please contact administrator.')
+          } else {
+            setUploadError(`Failed to upload ${file.name}: ${error.message}`)
+          }
+          continue
+        }
+        
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(fileName)
+        
+        newImageUrls.push(publicUrl)
+      }
+      
+      if (newImageUrls.length > 0) {
+        const updatedImages = [...images, ...newImageUrls].slice(0, maxImages)
+        onImagesChange(updatedImages)
+      }
     } catch (error) {
       console.error('Error uploading images:', error)
+      setUploadError('Failed to upload images. Please try again.')
     } finally {
       setUploadingImages(false)
     }
@@ -91,6 +126,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
               src={image}
               alt={`Product ${index + 1}`}
               className="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+              onError={(e) => {
+                console.error('Failed to load image:', image)
+                e.currentTarget.src = 'https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=400'
+              }}
             />
             <button
               type="button"
@@ -125,6 +164,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           </div>
         )}
       </div>
+
+      {uploadError && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+          <p className="text-sm text-red-600 dark:text-red-400">{uploadError}</p>
+        </div>
+      )}
 
       {images.length === 0 && (
         <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">

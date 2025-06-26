@@ -53,7 +53,7 @@ const CategorySelection: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {CATEGORY_CONFIGS.map((category, index) => (
               <motion.div
                 key={category.id}
@@ -63,7 +63,7 @@ const CategorySelection: React.FC = () => {
                 whileHover={{ y: -12, scale: 1.02, transition: { duration: 0 } }}
                 className="group"
               >
-                <Link to={`/products/${category.id}`}>
+                <Link to={category.id === 'gift-card' ? '/gift-cards' : `/products/${category.id}`}>
                   <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${category.bgGradient} shadow-xl group-hover:shadow-2xl ${category.hoverShadow} transition-all duration-300 border border-white/20 dark:border-gray-700/30 h-full`}>
                     {/* Icon Container */}
                     <div className="relative p-8 text-center">

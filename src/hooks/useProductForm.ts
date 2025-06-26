@@ -33,7 +33,7 @@ export const useProductForm = ({ product, onSuccess }: UseProductFormProps = {})
     title: product?.title || '',
     description: product?.description || '',
     price: product?.price || 0,
-    category: product?.category || 'decorations',
+    category: product?.category || 'trees',
     color: product?.color || '',
     decorated: product?.decorated || false,
     images: product?.images || []

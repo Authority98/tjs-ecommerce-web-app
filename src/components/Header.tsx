@@ -42,7 +42,8 @@ const Header: React.FC = () => {
             {[
               { path: '/products/trees', label: 'Trees', emoji: '🌲' },
               { path: '/products/decorations', label: 'Decorations', emoji: '✨' },
-              { path: '/products/ribbons', label: 'Ribbons', emoji: '🎀' }
+              { path: '/products/ribbons', label: 'Ribbons', emoji: '🎀' },
+              { path: '/gift-cards', label: 'Gift Cards', emoji: '🎁' }
             ].map((item) => (
               <Link
                 key={item.path}

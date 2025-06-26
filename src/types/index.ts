@@ -27,7 +27,17 @@ export interface CustomerDetails {
 }
 
 export interface OrderSummary {
-  product: Product
+  type?: 'product' | 'giftcard'
+  product?: Product
+  giftCard?: {
+    amount: number
+    recipientName?: string
+    recipientEmail?: string
+    senderName?: string
+    personalMessage?: string
+    scheduledDate?: string
+    isForSelf?: boolean
+  }
   treeOptions?: TreeOptions
   customerDetails?: CustomerDetails
   installationDate?: string
@@ -133,7 +143,9 @@ export interface Order {
   customer_email: string
   customer_phone: string
   delivery_address: string
-  product_id: string
+  product_id?: string
+  gift_card_id?: string
+  order_type: 'product' | 'giftcard'
   tree_height?: string
   tree_width?: string
   tree_type?: string
@@ -147,4 +159,14 @@ export interface Order {
   created_at: string
   updated_at: string
   products?: Product
+  gift_cards?: {
+    id: string
+    amount: number
+    recipient_name: string
+    recipient_email: string
+    sender_name: string
+    personal_message?: string
+    scheduled_date?: string
+    is_for_self: boolean
+  }
 }
