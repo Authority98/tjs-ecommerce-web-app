@@ -9,16 +9,18 @@ import AdminPage from './pages/AdminPage'
 import CategorySelection from './pages/CategorySelection'
 import GiftCardPage from './pages/GiftCardPage'
 import Header from './components/Header'
+import Footer from './components/Footer'
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-violet-100 transition-colors duration-300">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-violet-100 transition-colors duration-300 flex flex-col">
           <Header />
           <motion.main
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
+            className="flex-1"
           >
             <Routes>
               <Route path="/" element={<CategorySelection />} />
@@ -28,12 +30,12 @@ function App() {
               <Route path="/gift-cards" element={<GiftCardPage />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
               <Route path="/admin" element={<AdminPage />} />
-              {/* Redirect any unknown routes to category selection */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </motion.main>
-        </div>
-      </Router>
+          <Footer />
+      </div>
+    </Router>
   )
 }
 

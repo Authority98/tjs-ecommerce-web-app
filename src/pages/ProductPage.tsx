@@ -1,20 +1,56 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../lib/supabase'
-import { Product } from '../types'
+import { Product, PRODUCT_COLORS } from '../types'
 import ProductCard from '../components/ProductCard'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { Sparkles, TreePine, Ribbon, Star, Gift, Snowflake, Crown, Heart } from 'lucide-react'
+import { Sparkles, TreePine, Ribbon, Star, Gift, Snowflake, Crown, Heart, Filter, X } from 'lucide-react'
+
+interface Filters {
+  colors: string[]
+  maxPrice: number
+  decorated: 'all' | 'decorated' | 'not-decorated'
+}
 
 const ProductPage: React.FC = () => {
   const { category } = useParams<{ category: string }>()
   const [products, setProducts] = useState<Product[]>([])
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [showFilters, setShowFilters] = useState(false)
+  const [filters, setFilters] = useState<Filters>({
+    colors: [],
+    maxPrice: 1000,
+    decorated: 'all'
+  })
+  const filterRef = useRef<HTMLDivElement>(null)
+  const filterContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchProducts()
   }, [category])
+
+  useEffect(() => {
+    applyFilters()
+  }, [products, filters])
+
+  // Close filters when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filterContainerRef.current && !filterContainerRef.current.contains(event.target as Node)) {
+        setShowFilters(false)
+      }
+    }
+
+    if (showFilters) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showFilters])
 
   const fetchProducts = async () => {
     try {
@@ -26,11 +62,85 @@ const ProductPage: React.FC = () => {
 
       if (error) throw error
       setProducts(data || [])
+      
+      // Set initial max price based on actual products
+      if (data && data.length > 0) {
+        const prices = data.map(p => p.price)
+        const maxPrice = Math.max(...prices)
+        setFilters(prev => ({
+          ...prev,
+          maxPrice: Math.min(maxPrice, 1000) // Cap at 1000 or actual max, whichever is lower
+        }))
+      }
     } catch (error) {
       console.error('Error fetching products:', error)
     } finally {
       setLoading(false)
     }
+  }
+
+  const getActiveFiltersCount = () => {
+    let count = 0
+    if (category === 'trees') {
+      if (filters.colors.length > 0) count += filters.colors.length
+      if (filters.decorated !== 'all') count += 1
+    }
+    // Price filter is active if not at maximum value
+     const hasCustomMaxPrice = filters.maxPrice < 1000
+     if (hasCustomMaxPrice) count += 1
+    return count
+  }
+
+  const applyFilters = () => {
+    let filtered = [...products]
+
+    // Filter by colors (only for trees)
+    if (category === 'trees' && filters.colors.length > 0) {
+      filtered = filtered.filter(product => {
+        if (!product.color) return false
+        
+        // Handle comma-separated colors in product.color
+        const productColors = product.color.split(',').map(c => c.trim())
+        return filters.colors.some(filterColor => 
+          productColors.includes(filterColor)
+        )
+      })
+    }
+
+    // Filter by max price
+      filtered = filtered.filter(product => 
+        product.price <= filters.maxPrice
+      )
+
+    // Filter by decoration status (only for trees)
+    if (category === 'trees' && filters.decorated !== 'all') {
+      filtered = filtered.filter(product => {
+        if (filters.decorated === 'decorated') {
+          return product.decorated === true
+        } else {
+          return product.decorated === false || product.decorated === undefined
+        }
+      })
+    }
+
+    setFilteredProducts(filtered)
+  }
+
+  const toggleColorFilter = (color: string) => {
+    setFilters(prev => ({
+      ...prev,
+      colors: prev.colors.includes(color)
+        ? prev.colors.filter(c => c !== color)
+        : [...prev.colors, color]
+    }))
+  }
+
+  const clearFilters = () => {
+    setFilters({
+      colors: [],
+      maxPrice: 1000,
+      decorated: 'all'
+    })
   }
 
   const getCategoryInfo = () => {
@@ -109,9 +219,146 @@ const ProductPage: React.FC = () => {
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-red-400/15 to-pink-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
 
       <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
+        {/* Filter Button and Panel */}
+        {(category === 'trees' || category === 'decorations' || category === 'ribbons') && products.length > 0 && (
+          <div ref={filterContainerRef} className="relative mb-8">
+            {/* Filter Toggle Button */}
+            <motion.button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Filter className="h-5 w-5 mr-2" />
+              Filters
+              {(filters.colors.length > 0 || filters.decorated !== 'all') && (
+                <span className="ml-2 px-2 py-1 bg-purple-500 text-white text-xs rounded-full">
+                  {filters.colors.length + (filters.decorated !== 'all' ? 1 : 0)}
+                </span>
+              )}
+            </motion.button>
 
+            {/* Filter Panel - Absolute positioned overlay */}
+            {showFilters && (
+              <div ref={filterRef} className="absolute top-16 left-0 right-0 z-50 p-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 dark:border-gray-700/40">
+                <div className="flex flex-col lg:flex-row gap-6">
+                  {/* Colors Filter - Only for trees */}
+                  {category === 'trees' && (
+                    <div className="flex-1">
+                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Colors</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {PRODUCT_COLORS.map((color) => (
+                          <button
+                            key={color.value}
+                            onClick={() => toggleColorFilter(color.value)}
+                            className={`flex items-center px-3 py-2 rounded-lg border-2 transition-all duration-200 ${
+                              filters.colors.includes(color.value)
+                                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30'
+                                : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                            }`}
+                          >
+                            <div
+                              className="w-4 h-4 rounded-full mr-2 border border-gray-300 dark:border-gray-600"
+                              style={{ backgroundColor: color.hex }}
+                            />
+                            <span className="text-sm text-gray-700 dark:text-gray-300">{color.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-        {products.length === 0 ? (
+                  {/* Price Range Filter */}
+                  <div className="flex-1">
+                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Max Price</h3>
+                    <div className="space-y-3">
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs text-gray-600 dark:text-gray-400">Up to: ${filters.maxPrice}</label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="1000"
+                          value={filters.maxPrice}
+                          onChange={(e) => setFilters(prev => ({
+                            ...prev,
+                            maxPrice: parseInt(e.target.value)
+                          }))}
+                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                        />
+                      </div>
+                      <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+                        $0 - ${filters.maxPrice}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Decoration Status Filter - Only for trees */}
+                  {category === 'trees' && (
+                    <div className="flex-1">
+                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Decoration</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { value: 'all', label: 'All' },
+                          { value: 'decorated', label: 'Decorated' },
+                          { value: 'not-decorated', label: 'Not Decorated' }
+                        ].map((option) => (
+                          <button
+                            key={option.value}
+                            onClick={() => setFilters(prev => ({ ...prev, decorated: option.value as any }))}
+                            className={`px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
+                              filters.decorated === option.value
+                                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+                                : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300'
+                            }`}
+                          >
+                            <span className="text-sm font-medium">{option.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Clear Filters */}
+                  <div className="flex items-end">
+                    <button
+                      onClick={clearFilters}
+                      className="flex items-center px-4 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-200"
+                    >
+                      <X className="h-4 w-4 mr-1" />
+                      Clear
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {filteredProducts.length === 0 && products.length > 0 ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-10"
+          >
+            <div className={`inline-flex p-12 bg-gradient-to-br ${categoryInfo.bgGradient} rounded-3xl shadow-2xl mb-12 border border-white/20 dark:border-gray-700/30`}>
+              <Filter className="h-20 w-20 text-gray-400 dark:text-gray-500" />
+            </div>
+            <h3 className="text-4xl font-bold text-gray-700 dark:text-gray-300 mb-6 font-dosis">
+              No Results Found
+            </h3>
+            <p className="text-xl text-gray-500 dark:text-gray-400 mb-12 max-w-md mx-auto leading-relaxed font-manrope">
+              Try adjusting your filters to see more products.
+            </p>
+            <button
+              onClick={clearFilters}
+              className={`inline-flex items-center px-10 py-5 bg-gradient-to-r ${categoryInfo.gradient} text-white font-semibold text-lg rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}
+            >
+              <X className="h-6 w-6 mr-3" />
+              Clear Filters
+            </button>
+          </motion.div>
+        ) : products.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -142,7 +389,7 @@ const ProductPage: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
           >
-            {products.map((product, index) => (
+            {filteredProducts.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 60 }}
@@ -156,7 +403,7 @@ const ProductPage: React.FC = () => {
         )}
 
         {/* Enhanced Category Features */}
-        {products.length > 0 && (
+        {filteredProducts.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

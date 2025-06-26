@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { TreePine, Settings, Sparkles } from 'lucide-react'
+import { TreePine, Settings, Sparkles, Ribbon, Gift } from 'lucide-react'
 
 const Header: React.FC = () => {
   const location = useLocation()
@@ -38,26 +38,60 @@ const Header: React.FC = () => {
             </motion.div>
           </Link>
           
-          <nav className="hidden md:flex space-x-10 text-xl">
+          <nav className="flex space-x-3 md:space-x-6 text-base md:text-xl overflow-x-auto scrollbar-hide">
             {[
-              { path: '/products/trees', label: 'Trees', emoji: '🌲' },
-              { path: '/products/decorations', label: 'Decorations', emoji: '✨' },
-              { path: '/products/ribbons', label: 'Ribbons', emoji: '🎀' },
-              { path: '/gift-cards', label: 'Gift Cards', emoji: '🎁' }
-            ].map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center space-x-3 px-5 py-3 rounded-xl transition-all font-dosis font-medium ${
-                  location.pathname.includes(item.path.split('/')[2])
-                    ? 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-700 font-bold shadow-purple-300/60 scale-105'
-                    : 'text-purple-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 hover:scale-102'
-                }`}
-              >
-                <span className="text-xl">{item.emoji}</span>
-                <span>{item.label}</span>
-              </Link>
-            ))}
+              { path: '/products/trees', label: 'Trees', icon: TreePine, iconBg: 'bg-purple-500', gradient: 'from-purple-600 via-violet-600 to-fuchsia-500' },
+              { path: '/products/decorations', label: 'Decorations', icon: Sparkles, iconBg: 'bg-fuchsia-500', gradient: 'from-purple-500 via-fuchsia-500 to-violet-400' },
+              { path: '/products/ribbons', label: 'Ribbons', icon: Ribbon, iconBg: 'bg-violet-500', gradient: 'from-violet-400 via-purple-400 to-fuchsia-300' },
+              { path: '/gift-cards', label: 'Gift Cards', icon: Gift, iconBg: 'bg-pink-500', gradient: 'from-pink-400 via-rose-400 to-red-300' }
+            ].map((item) => {
+              const isActive = location.pathname.includes(item.path.split('/')[2])
+              return (
+                <motion.div
+                  key={item.path}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Link
+                     to={item.path}
+                     className={`flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 rounded-xl transition-all font-dosis font-medium group whitespace-nowrap ${
+                       isActive
+                         ? 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-700 font-bold shadow-lg shadow-purple-300/60'
+                         : 'text-purple-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700'
+                     }`}
+                   >
+                    <motion.div
+                       className={`w-6 h-6 md:w-8 md:h-8 ${item.iconBg} rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-300 ${
+                         isActive ? 'shadow-lg' : ''
+                       }`}
+                       whileHover={{ rotate: [0, -10, 10, 0] }}
+                       transition={{ duration: 0.3 }}
+                     >
+                       <item.icon className="h-3 w-3 md:h-4 md:w-4 text-white" />
+                     </motion.div>
+                     <span className="hidden sm:inline md:inline">{item.label}</span>
+                    
+                    {/* Subtle sparkle effect for active items */}
+                    {isActive && (
+                      <motion.div
+                        animate={{ 
+                          rotate: [0, 360],
+                          scale: [1, 1.2, 1]
+                        }}
+                        transition={{ 
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        <Sparkles className="h-3 w-3 text-yellow-400" />
+                      </motion.div>
+                    )}
+                  </Link>
+                </motion.div>
+              )
+            })}
           </nav>
 
           <div className="flex items-center space-x-3">
