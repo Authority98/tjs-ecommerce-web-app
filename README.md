@@ -260,7 +260,27 @@ For support, email support@twinklejingle.com or join our Slack channel.
 
 ## 🆕 Recent Updates (Latest Release)
 
-### ⚡ Performance Optimization & Bug Fixes (Latest)
+### 🔍 Lightbox Zoom & Mobile Responsiveness (Latest)
+- **🖼️ Portal-Based Lightbox**: Added advanced image viewing with React portals for proper z-index layering
+  - Full-screen image overlay that correctly covers header and all UI elements
+  - Smooth backdrop blur and click-to-close functionality
+  - Keyboard navigation support (Escape to close, Arrow keys for navigation)
+  - Touch-friendly mobile controls with swipe gestures
+- **🔍 Zoom Integration**: Implemented lightbox zoom feature across product displays
+  - **ProductCard**: Category page products now have zoom functionality with hover overlay
+  - **ProductPreview**: Tree customization page images support full lightbox viewing
+  - Consistent zoom icon sizing and positioning across all components
+- **📱 Mobile Responsiveness Fixes**: Enhanced mobile experience for category features
+  - Fixed "Premium Quality, Expert Installation, Satisfaction Guaranteed" badges
+  - Responsive layout: vertical stacking on mobile, horizontal on desktop
+  - Adaptive text sizing and padding for optimal mobile viewing
+  - Prevented text cutoff issues on smaller screens
+- **🎨 UI Consistency**: Unified image navigation and display patterns
+  - Consistent navigation arrows and image counters
+  - Standardized hover effects and transition animations
+  - Improved accessibility with proper ARIA labels
+
+### ⚡ Performance Optimization & Bug Fixes
 - **🚀 Motion Components Removal**: Completely removed all Framer Motion dependencies and components for maximum performance
   - Eliminated all `motion.div`, `motion.img`, and `motion.button` components
   - Removed `AnimatePresence`, hover effects, and transition animations
