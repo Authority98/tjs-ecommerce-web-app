@@ -9,6 +9,7 @@ interface ImageSliderProps {
   showArrows?: boolean
   autoPlay?: boolean
   autoPlayInterval?: number
+  onImageClick?: (index: number) => void
 }
 
 const ImageSlider: React.FC<ImageSliderProps> = ({
@@ -18,7 +19,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   showDots = true,
   showArrows = true,
   autoPlay = false,
-  autoPlayInterval = 4000
+  autoPlayInterval = 4000,
+  onImageClick
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
@@ -98,6 +100,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
           alt={`${alt} ${currentIndex + 1}`}
           className="w-full h-full object-cover rounded-xl select-none"
           draggable={false}
+          onClick={() => onImageClick?.(currentIndex)}
           onError={e => {
             e.currentTarget.src = "https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=800"
           }}
@@ -112,7 +115,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         {hasMultipleImages && (
           <>
             <button
-              onClick={goToPrevious}
+              onClick={(e) => {
+                e.stopPropagation()
+                goToPrevious()
+              }}
               className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-black/60 text-white h-10 w-10 p-0 flex items-center justify-center rounded-full shadow-md focus:outline-none"
               aria-label="Previous image"
               tabIndex={0}
@@ -120,7 +126,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
               <ChevronLeft size={24} />
             </button>
             <button
-              onClick={goToNext}
+              onClick={(e) => {
+                e.stopPropagation()
+                goToNext()
+              }}
               className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-black/60 text-white h-10 w-10 p-0 flex items-center justify-center rounded-full shadow-md focus:outline-none"
               aria-label="Next image"
               tabIndex={0}

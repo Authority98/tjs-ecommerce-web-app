@@ -230,6 +230,15 @@ const ProductPage: React.FC = () => {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-red-400/5 to-pink-400/5 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">
+            {categoryInfo.title}
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Discover our premium collection of {validCategory === 'trees' ? 'Christmas trees' : validCategory === 'decorations' ? 'festive decorations' : validCategory === 'ribbons' ? 'elegant ribbons' : validCategory === 'centrepieces' ? 'stunning centerpieces' : 'products'} for your perfect holiday celebration
+          </p>
+        </div>
         {/* Filter Button and Panel */}
         {(validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centrepieces') && products.length > 0 && (
           <div ref={filterContainerRef} className="relative mb-8">
@@ -404,18 +413,18 @@ const ProductPage: React.FC = () => {
           <div
             className="mt-24 text-center"
           >
-            <div className={`inline-flex items-center space-x-12 px-12 py-8 bg-gradient-to-r ${categoryInfo.bgGradient} backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 dark:border-gray-700/40`}>
+            <div className={`inline-flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-12 px-6 sm:px-12 py-8 bg-gradient-to-r ${categoryInfo.bgGradient} backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 dark:border-gray-700/40`}>
               <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
                 <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg" />
-                <span className="font-semibold text-lg">Premium Quality</span>
+                <span className="font-semibold text-sm sm:text-lg">Premium Quality</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
                 <div className="w-3 h-3 bg-purple-500 rounded-full shadow-lg" />
-                <span className="font-semibold text-lg">Expert Installation</span>
+                <span className="font-semibold text-sm sm:text-lg">Expert Installation</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
                 <div className="w-3 h-3 bg-amber-500 rounded-full shadow-lg" />
-                <span className="font-semibold text-lg">Satisfaction Guaranteed</span>
+                <span className="font-semibold text-sm sm:text-lg">Satisfaction Guaranteed</span>
               </div>
             </div>
           </div>

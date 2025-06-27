@@ -1,8 +1,8 @@
-import React from 'react'
-import { Ruler, TreePine, Calendar, Palette } from 'lucide-react'
+import React, { useState, Fragment } from 'react'
+import { Ruler, TreePine, Calendar, Palette, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import { Product, TreeOptions } from '../types'
 import ProductTags from './ProductTags'
-import ImageSlider from './ui/ImageSlider'
+import Lightbox from './ui/Lightbox'
 
 interface ProductPreviewProps {
   product: Product
@@ -15,20 +15,76 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
   selectedOptions,
   totalPrice
 }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false)
+  const [lightboxInitialIndex, setLightboxInitialIndex] = useState(0)
+
+  const handleImageClick = () => {
+    setLightboxInitialIndex(currentImageIndex)
+    setIsLightboxOpen(true)
+  }
+
+  const goToPrevious = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length)
+  }
+
+  const goToNext = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setCurrentImageIndex((prev) => (prev + 1) % product.images.length)
+  }
+
   return (
+    <Fragment>
     <div className="lg:col-span-1">
       <div className="sticky top-24">
         <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-white/20 dark:border-gray-700/30">
           <div className="relative">
-            <ImageSlider
-              images={product.images}
-              alt={product.title}
-              className="w-full h-64"
-              showDots={product.images.length > 1}
-              showArrows={product.images.length > 1}
-              autoPlay={true}
-              autoPlayInterval={4000}
-            />
+            {/* Main Image Display */}
+            <div className="relative w-full h-64 overflow-hidden cursor-pointer group" onClick={handleImageClick}>
+              <img
+                src={product.images[currentImageIndex]}
+                alt={`${product.title} ${currentImageIndex + 1}`}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.src = "https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=800"
+                }}
+              />
+              
+              {/* Navigation Arrows */}
+              {product.images.length > 1 && (
+                <>
+                  <button
+                    onClick={goToPrevious}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={goToNext}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </>
+              )}
+              
+              {/* Image Counter */}
+              {product.images.length > 1 && (
+                <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
+                  {currentImageIndex + 1}/{product.images.length}
+                </div>
+              )}
+              
+              {/* Zoom Icon Overlay */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200 flex items-center justify-center pointer-events-none">
+                <div className="bg-white/90 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <ZoomIn className="h-6 w-6 text-gray-700" />
+                </div>
+              </div>
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
             <div className="absolute top-4 right-4">
               <div className="bg-white/90 dark:bg-purple-950/20 backdrop-blur-sm rounded-full px-3 py-1 border border-white/20 dark:border-gray-700/30">
@@ -116,6 +172,17 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
         </div>
       </div>
     </div>
+    
+    {/* Lightbox */}
+    {isLightboxOpen && (
+      <Lightbox
+        images={product.images}
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        initialIndex={lightboxInitialIndex}
+      />
+    )}
+    </Fragment>
   )
 }
 
