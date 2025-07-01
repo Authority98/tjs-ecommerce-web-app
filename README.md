@@ -40,6 +40,7 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 - **TypeScript** - Type-safe development
 - **Vite** - Lightning-fast build tool and dev server
 - **Tailwind CSS** - Utility-first CSS framework
+- **React Icons** - Comprehensive icon library for WhatsApp, email, and UI icons
 - **Optimized Performance** - Zero animation overhead for maximum speed
 - **React Router 6** - Client-side routing
 - **React Hot Toast** - Beautiful notification system
@@ -250,9 +251,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - **Design Inspiration**: Modern e-commerce platforms
-- **Icons**: Lucide React icon library
+- **Icons**: Lucide React and React Icons libraries for comprehensive icon coverage
 - **Images**: Pexels and Unsplash for placeholder content
 - **Performance**: Optimized for speed with zero animation overhead
+- **Contact Integration**: WhatsApp and email icons from React Icons (Font Awesome & Material Design)
 
 ## 📞 Support
 
@@ -260,7 +262,25 @@ For support, email support@twinklejingle.com or join our Slack channel.
 
 ## 🆕 Recent Updates (Latest Release)
 
-### 🔍 Lightbox Zoom & Mobile Responsiveness (Latest)
+### 📞 Header Contact Enhancement & Performance Optimization (Latest)
+- **🎯 Professional Contact Icons**: Integrated react-icons for authentic WhatsApp and email icons
+  - **WhatsApp Integration**: Replaced generic message icon with proper `FaWhatsapp` icon
+  - **Email Enhancement**: Updated to `MdEmail` for better visual recognition
+  - **Golden Accent**: Both icons styled with signature `#D9A66C` color for brand consistency
+- **📐 Optimized Header Spacing**: Reduced horizontal padding for cleaner, more compact layout
+  - **Desktop**: Reduced from `px-4 sm:px-6 lg:px-8` to `px-1 sm:px-2 lg:px-3`
+  - **Contact Separation**: Added `ml-8` spacing between navigation and contact information
+  - **Responsive Design**: Maintained mobile-first approach with proper breakpoints
+- **⚡ Dependency Cleanup**: Completely removed unused framer-motion package
+  - **Performance Boost**: Eliminated 4 unused animation packages from bundle
+  - **Cleaner Codebase**: Removed all motion-related imports and dependencies
+  - **Faster Load Times**: Reduced bundle size for improved initial page load
+- **🔗 Enhanced Contact Functionality**: Direct WhatsApp and email integration
+  - **WhatsApp Link**: Proper `wa.me` URL formatting for instant messaging
+  - **Email Integration**: Direct `mailto:` links for seamless communication
+  - **Hover Effects**: Smooth color transitions maintaining user experience
+
+### 🔍 Lightbox Zoom & Mobile Responsiveness
 - **🖼️ Portal-Based Lightbox**: Added advanced image viewing with React portals for proper z-index layering
   - Full-screen image overlay that correctly covers header and all UI elements
   - Smooth backdrop blur and click-to-close functionality
