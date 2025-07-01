@@ -13,7 +13,7 @@ const CategorySelection: React.FC = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-tl from-purple-50 via-violet-100 to-fuchsia-200 dark:from-purple-900 dark:via-violet-700 dark:to-purple-800 relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden">
       {/* Floating Background Elements */}
       {floatingElements.map((element, index) => (
         <div
@@ -29,10 +29,13 @@ const CategorySelection: React.FC = () => {
       <section className="py-20 px-4 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">
+            <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
+              Hello There!
+            </h1>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-dosis">
               Select Your Category
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-white max-w-3xl mx-auto">
               Choose from our premium collection to create your perfect holiday experience
             </p>
           </div>

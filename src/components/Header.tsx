@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { TreePine, Settings, Sparkles, Ribbon, Gift, Crown, Menu, X } from 'lucide-react'
+import { TreePine, Menu, X } from 'lucide-react'
+import { FaWhatsapp } from 'react-icons/fa'
+import { MdEmail } from 'react-icons/md'
 import { useState } from 'react'
 
 const Header: React.FC = () => {
@@ -8,16 +10,17 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const menuItems = [
-    { path: '/products/trees', label: 'Trees', icon: TreePine, iconBg: 'bg-purple-500', gradient: 'from-purple-600 via-violet-600 to-fuchsia-500' },
-    { path: '/products/decorations', label: 'Decorations', icon: Sparkles, iconBg: 'bg-fuchsia-500', gradient: 'from-purple-500 via-fuchsia-500 to-violet-400' },
-    { path: '/products/ribbons', label: 'Ribbons', icon: Ribbon, iconBg: 'bg-violet-500', gradient: 'from-violet-400 via-purple-400 to-fuchsia-300' },
-    { path: '/products/centrepieces', label: 'Centre Pieces', icon: Crown, iconBg: 'bg-amber-500', gradient: 'from-amber-400 via-yellow-400 to-orange-300' },
-    { path: '/gift-cards', label: 'Gift Cards', icon: Gift, iconBg: 'bg-pink-500', gradient: 'from-pink-400 via-rose-400 to-red-300' }
+    { path: 'https://tjs-landing-page.stagingsite.duckdns.org/', label: 'Home', external: true },
+    { path: 'https://tjs-landing-page.stagingsite.duckdns.org/#services', label: 'Services', external: true },
+    { path: '/', label: 'Shop Now', external: false },
+    { path: 'https://tjs-landing-page.stagingsite.duckdns.org/#portfolio', label: 'Portfolio', external: true },
+    { path: 'https://tjs-landing-page.stagingsite.duckdns.org/#contact', label: 'Contact', external: true },
+    { path: 'https://tjs-landing-page.stagingsite.duckdns.org/#testimonials', label: 'Testimonials', external: true }
   ]
 
   return (
-    <header className="bg-gradient-to-tl from-purple-50 via-violet-100 to-fuchsia-200 backdrop-blur-xl border-b border-gray-200/50 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <header className="relative backdrop-blur-xl bg-transparent sticky top-0 z-50">
+      <div className="relative max-w-7xl mx-auto px-1 sm:px-2 lg:px-3 py-4">
         <div className="flex justify-between items-center h-24 py-4">
           <Link to="/" className="flex items-center group">
             <div className="relative">
@@ -39,53 +42,70 @@ const Header: React.FC = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-6 text-xl">
+          <nav className="hidden md:flex space-x-6">
             {menuItems.map((item) => {
-              const isActive = location.pathname.includes(item.path.split('/')[2])
+              const isActive = !item.external && (location.pathname === item.path || (item.label === 'Shop Now' && location.pathname !== '/'))
               return (
                 <div key={item.path}>
-                  <Link
-                     to={item.path}
-                     className={`flex items-center space-x-3 px-4 py-3 rounded-xl font-dosis font-medium group whitespace-nowrap ${
-                       isActive
-                         ? 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-700 font-bold shadow-lg shadow-purple-300/60'
-                         : 'text-purple-600'
-                     }`}
-                   >
-                    <div
-                       className={`w-8 h-8 ${item.iconBg} rounded-lg flex items-center justify-center shadow-md ${
-                         isActive ? 'shadow-lg' : ''
-                       }`}
-                     >
-                       <item.icon className="h-4 w-4 text-white" />
-                     </div>
-                     <span>{item.label}</span>
-                    
-                    {/* Subtle sparkle effect for active items */}
-                    {isActive && (
-                      <div>
-                        <Sparkles className="h-3 w-3 text-yellow-400" />
-                      </div>
-                    )}
-                  </Link>
+                  {item.external ? (
+                    <a
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative px-4 py-3 font-dosis whitespace-nowrap transition-colors duration-200 group text-white hover:text-[#d9a66c]"
+                      style={{fontSize: '17px', lineHeight: '22px', fontWeight: 700}}
+                    >
+                      <span>{item.label}</span>
+                      {/* Hover underline */}
+                      <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-[#d9a66c] transition-all duration-200 opacity-0 group-hover:opacity-100"></div>
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className={`relative px-4 py-3 font-dosis whitespace-nowrap transition-colors duration-200 group ${
+                        isActive
+                          ? 'text-[#d9a66c]'
+                          : 'text-white hover:text-[#d9a66c]'
+                      }`}
+                      style={{fontSize: '17px', lineHeight: '22px', fontWeight: 700}}
+                    >
+                      <span>{item.label}</span>
+                      {/* Hover/Active underline */}
+                      <div className={`absolute bottom-0 left-4 right-4 h-0.5 bg-[#d9a66c] transition-all duration-200 ${
+                        isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                      }`}></div>
+                    </Link>
+                  )}
                 </div>
               )
             })}
           </nav>
 
-          <div className="flex items-center space-x-3">
-            {/* Desktop Admin Link */}
-            <Link
-              to="/admin"
-              className="hidden md:block p-3 text-purple-500 rounded-xl"
-            >
-              <Settings className="h-6 w-6" />
-            </Link>
+          <div className="flex items-center space-x-6">
+            {/* Contact Information */}
+            <div className="hidden md:flex items-center space-x-6 text-[#D9A66C] ml-8">
+              <a 
+                href="https://wa.me/6583392574" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 hover:text-white transition-colors duration-200"
+              >
+                <FaWhatsapp className="h-6 w-6" />
+                <span className="font-medium">+65 8339 2574</span>
+              </a>
+              <a 
+                href="mailto:sales@twinklejingle.net" 
+                className="flex items-center space-x-2 hover:text-white transition-colors duration-200"
+              >
+                <MdEmail className="h-6 w-6" />
+                <span className="font-medium">sales@twinklejingle.net</span>
+              </a>
+            </div>
             
             {/* Mobile Hamburger Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-3 text-purple-600 rounded-xl"
+              className="md:hidden p-3 text-white hover:text-[#d9a66c] transition-colors duration-200"
             >
               <div>
                 {isMobileMenuOpen ? (
@@ -101,71 +121,64 @@ const Header: React.FC = () => {
       
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-gradient-to-br from-purple-50 via-violet-100 to-fuchsia-200 backdrop-blur-xl border-b border-gray-200/50 shadow-xl z-40">
+        <div className="md:hidden absolute top-full left-0 right-0 backdrop-blur-xl bg-transparent shadow-xl z-40">
             <div className="max-w-7xl mx-auto px-4 py-6">
               <div className="space-y-4">
                 {menuItems.map((item, index) => {
-                  const isActive = location.pathname.includes(item.path.split('/')[2])
+                  const isActive = !item.external && (location.pathname === item.path || (item.label === 'Shop Now' && location.pathname !== '/'))
                   return (
                     <div key={item.path}>
-                      <Link
-                        to={item.path}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`flex items-center space-x-4 p-4 rounded-2xl font-dosis font-medium group ${
-                          isActive
-                            ? 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-700 font-bold shadow-lg shadow-purple-300/60'
-                            : 'text-purple-600'
-                        }`}
-                      >
-                        <div className={`w-12 h-12 ${item.iconBg} rounded-2xl flex items-center justify-center shadow-lg`}>
-                          <item.icon className="h-6 w-6 text-white" />
-                        </div>
-                        
-                        <div className="flex-1">
-                          <span className="text-lg font-semibold">{item.label}</span>
-                          <div
-                            className={`h-0.5 bg-gradient-to-r from-purple-400 to-violet-400 rounded-full mt-1 ${
-                              isActive ? 'w-full' : 'w-0'
-                            }`}
-                          />
-                        </div>
-                        
-                        {/* Cute sparkle animation for active items */}
-                        {isActive && (
-                          <div>
-                            <Sparkles className="h-5 w-5 text-yellow-400" />
+                      {item.external ? (
+                        <a
+                          href={item.path}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="relative flex items-center p-4 font-dosis group transition-colors duration-200 text-white hover:text-[#d9a66c]"
+                          style={{fontSize: '17px', lineHeight: '22px', fontWeight: 700}}
+                        >
+                          <div className="flex-1">
+                            <span>{item.label}</span>
+                            <div className="h-0.5 bg-[#d9a66c] mt-1 transition-all duration-200 w-0 group-hover:w-full" />
                           </div>
-                        )}
-                        
-                        {/* Cute arrow indicator */}
-                        <div className="text-purple-400">
-                          →
-                        </div>
-                      </Link>
+                          
+                          {/* Arrow indicator */}
+                          <div className="transition-colors duration-200 text-white group-hover:text-[#d9a66c]">
+                            →
+                          </div>
+                        </a>
+                      ) : (
+                        <Link
+                          to={item.path}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`relative flex items-center p-4 font-dosis group transition-colors duration-200 ${
+                            isActive
+                              ? 'text-[#d9a66c]'
+                              : 'text-white hover:text-[#d9a66c]'
+                          }`}
+                          style={{fontSize: '17px', lineHeight: '22px', fontWeight: 700}}
+                        >
+                          <div className="flex-1">
+                            <span>{item.label}</span>
+                            <div
+                              className={`h-0.5 bg-[#d9a66c] mt-1 transition-all duration-200 ${
+                                isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                              }`}
+                            />
+                          </div>
+                          
+                          {/* Arrow indicator */}
+                          <div className={`transition-colors duration-200 ${
+                            isActive ? 'text-[#d9a66c]' : 'text-white group-hover:text-[#d9a66c]'
+                          }`}>
+                            →
+                          </div>
+                        </Link>
+                      )}
                     </div>
                   )
                 })}
-                
-                {/* Mobile Admin Link */}
-                <div>
-                  <Link
-                    to="/admin"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center space-x-4 p-4 rounded-2xl font-dosis font-medium text-purple-600 group"
-                  >
-                    <div className="w-12 h-12 bg-gray-500 rounded-2xl flex items-center justify-center shadow-lg">
-                      <Settings className="h-6 w-6 text-white" />
-                    </div>
-                    
-                    <div className="flex-1">
-                      <span className="text-lg font-semibold">Admin</span>
-                    </div>
-                    
-                    <div className="text-purple-400">
-                      →
-                    </div>
-                  </Link>
-                </div>
+
               </div>
             </div>
           </div>

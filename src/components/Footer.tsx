@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Modal from './ui/Modal'
 
 const Footer: React.FC = () => {
@@ -38,6 +39,12 @@ const Footer: React.FC = () => {
               >
                 Terms and Conditions
               </button>
+              <Link
+                to="/admin"
+                className="text-purple-600 hover:text-purple-800 font-medium underline"
+              >
+                Admin
+              </Link>
             </div>
             
             {/* Copyright */}
