@@ -1,15 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Star, Gift, Heart, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { CATEGORY_CONFIGS } from '../utils/categories'
+import './CategorySelection.css'
 
 const CategorySelection: React.FC = () => {
 
   const floatingElements = [
-    { icon: Star, delay: 0, x: '10%', y: '20%' },
-    { icon: Gift, delay: 0.5, x: '80%', y: '15%' },
-    { icon: Heart, delay: 1, x: '15%', y: '70%' },
-    { icon: Sparkles, delay: 1.5, x: '85%', y: '75%' },
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 0, x: '31%', y: '35%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object1.png', delay: 0.5, x: '80%', y: '9%', size: 183 },
+    { image: '/assets/images/Vector-Smart-Object-2.png', delay: 1.5, x: '2%', y: '75%', size: 100 },
+    { image: '/assets/images/plush.png', delay: 1.2, x: '85%', y: '45%', size: 63 },
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 1.7, x: '40%', y: '80%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object2-1-ss.png', delay: 0.3, x: '13%', y: '16%', size: 81 },
+    { image: '/assets/images/sircle2.png', delay: 0.8, x: '80%', y: '67%', size: 66 },
   ]
 
   return (
@@ -18,15 +22,29 @@ const CategorySelection: React.FC = () => {
       {floatingElements.map((element, index) => (
         <div
           key={index}
-          className="absolute opacity-10 dark:opacity-5"
-          style={{ left: element.x, top: element.y }}
+          className="absolute transition-all duration-700 ease-in-out z-20"
+          style={{ 
+            left: element.x, 
+            top: element.y,
+            transform: element.image.includes('Vector-Smart-Object2-1-ss.png') ? 'rotate(256deg)' : 
+                      element.image.includes('Vector-Smart-Object1.png') ? 'rotate(260deg)' : 
+                      element.image.includes('plush.png') ? 'rotate(76deg)' : 
+                      `rotate(${index * 45}deg)`
+          }}
         >
-          <element.icon className="h-16 w-16 text-[#F7B541]" />
+          <img 
+            src={element.image} 
+            alt="Decorative element" 
+            style={{ 
+              width: `${element.size}px`, 
+              height: 'auto' 
+            }} 
+          />
         </div>
       ))}
 
       {/* Categories Section */}
-      <section className="py-20 px-4 relative z-10">
+      <section className="py-20 px-4 relative z-0">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
@@ -77,10 +95,10 @@ const CategorySelection: React.FC = () => {
                     </div>
 
                     {/* Decorative Elements */}
-                    <div className="absolute top-4 right-4 opacity-20">
+                    <div className="absolute top-4 right-4">
                       <div className={`w-16 h-16 bg-gradient-to-r ${category.gradient} rounded-full blur-xl`} />
                     </div>
-                    <div className="absolute bottom-4 left-4 opacity-20">
+                    <div className="absolute bottom-4 left-4">
                       <div className={`w-12 h-12 bg-gradient-to-r ${category.gradient} rounded-full blur-lg`} />
                     </div>
                   </div>
