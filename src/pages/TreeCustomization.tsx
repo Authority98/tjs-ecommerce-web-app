@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import { Ruler, TreePine, Calendar, Palette } from 'lucide-react'
-import './TreeCustomization.css'
+// Import CSS directly in the component instead of as a separate file
 import { Toaster } from 'react-hot-toast'
 import { showSuccessToast, TOAST_MESSAGES } from '../utils/toast'
 import { supabase } from '../lib/supabase'
@@ -15,6 +15,15 @@ import TreeSizeSelection from '../components/TreeSizeSelection'
 import TreeTypeSelection from '../components/TreeTypeSelection'
 import RentalPeriodSelection from '../components/RentalPeriodSelection'
 import DecorationLevelSelection from '../components/DecorationLevelSelection'
+
+// Add the CSS styles directly in the component
+const treeCustomizationStyles = `
+  /* Add hover effects for the decorative elements */
+  .absolute img:hover {
+    filter: brightness(1.2);
+    transition: all 0.3s ease;
+  }
+`;
 
 const TreeCustomization: React.FC = () => {
   const { productId } = useParams<{ productId: string }>()
@@ -159,6 +168,8 @@ const TreeCustomization: React.FC = () => {
   if (!product) {
     return (
       <div className="min-h-screen relative overflow-hidden">
+        {/* Apply the CSS styles */}
+        <style dangerouslySetInnerHTML={{ __html: treeCustomizationStyles }} />
         {/* Floating Background Elements */}
         {floatingElements.map((element, index) => (
           <div
@@ -220,6 +231,8 @@ const TreeCustomization: React.FC = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Apply the CSS styles */}
+      <style dangerouslySetInnerHTML={{ __html: treeCustomizationStyles }} />
       {/* Floating Background Elements */}
       {floatingElements.map((element, index) => (
         <div
