@@ -136,15 +136,54 @@ const GiftCardPage: React.FC = () => {
     setActiveStep(Math.min(steps.length - 1, nextStep))
   }
 
+  const floatingElements = [
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 0, x: '31%', y: '35%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object1.png', delay: 0.5, x: '80%', y: '9%', size: 183 },
+    { image: '/assets/images/Vector-Smart-Object-2.png', delay: 1.5, x: '2%', y: '75%', size: 100 },
+    { image: '/assets/images/plush.png', delay: 1.2, x: '85%', y: '45%', size: 63 },
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 1.7, x: '40%', y: '80%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object2-1-ss.png', delay: 0.3, x: '13%', y: '16%', size: 81 },
+    { image: '/assets/images/sircle2.png', delay: 0.8, x: '80%', y: '67%', size: 66 },
+  ]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-red-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Floating Background Elements */}
+      {floatingElements.map((element, index) => (
+        <div
+          key={index}
+          className="absolute transition-all duration-700 ease-in-out z-10"
+          style={{ 
+            left: element.x, 
+            top: element.y,
+            transform: element.image.includes('Vector-Smart-Object2-1-ss.png') ? 'rotate(256deg)' : 
+                      element.image.includes('Vector-Smart-Object1.png') ? 'rotate(260deg)' : 
+                      element.image.includes('plush.png') ? 'rotate(76deg)' : 
+                      `rotate(${index * 45}deg)`
+          }}
+        >
+          <img 
+            src={element.image} 
+            alt="Decorative element" 
+            className="hover:filter hover:brightness-125 transition-all duration-300"
+            style={{ 
+              width: `${element.size}px`, 
+              height: 'auto'
+            }} 
+          />
+        </div>
+      ))}
+      
+      <div className="max-w-7xl mx-auto px-4 py-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            🎁 <span className="text-purple-700">eGift Cards</span>
+        <div className="text-center mb-16">
+          <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
+            Gift Someone Special
           </h1>
-          <p className="text-xl text-gray-600">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-dosis">
+            🎁 <span className="text-amber-400">eGift Cards</span>
+          </h2>
+          <p className="text-xl text-white max-w-3xl mx-auto">
             The perfect gift for any occasion
           </p>
         </div>
@@ -161,7 +200,7 @@ const GiftCardPage: React.FC = () => {
 
           {/* Step-by-Step Configuration */}
           <div className="lg:col-span-2">
-              <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-white/20">
+              <div className="bg-white/80 dark:bg-purple-950/20 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 dark:border-gray-700/30">
                 {/* Step Navigation */}
                 <div className="mb-8 relative">
                   <StepNavigation

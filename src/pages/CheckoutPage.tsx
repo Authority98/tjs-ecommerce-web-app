@@ -6,6 +6,7 @@ import OrderSummaryComponent from '../components/OrderSummary'
 import CustomerDetailsForm from '../components/CustomerDetailsForm'
 import SchedulingForm from '../components/SchedulingForm'
 import LoadingSpinner from '../components/LoadingSpinner'
+import './CheckoutPage.css'
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate()
@@ -166,15 +167,49 @@ const CheckoutPage: React.FC = () => {
 
   if (!orderData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-violet-50 to-fuchsia-100 dark:from-purple-900 dark:via-violet-800 dark:to-fuchsia-900">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">No order data found</h2>
-          <button
-            onClick={() => navigate('/')}
-            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white rounded-xl"
+      <div className="min-h-screen relative overflow-hidden">
+        {/* Floating Background Elements */}
+        {floatingElements.map((element, index) => (
+          <div
+            key={index}
+            className="absolute transition-all duration-700 ease-in-out z-10"
+            style={{ 
+              left: element.x, 
+              top: element.y,
+              transform: element.image.includes('Vector-Smart-Object2-1-ss.png') ? 'rotate(256deg)' : 
+                        element.image.includes('Vector-Smart-Object1.png') ? 'rotate(260deg)' : 
+                        element.image.includes('plush.png') ? 'rotate(76deg)' : 
+                        `rotate(${index * 45}deg)`
+            }}
           >
-            Back to Home
-          </button>
+            <img 
+              src={element.image} 
+              alt="Decorative element" 
+              className="hover:filter hover:brightness-125 transition-all duration-300"
+              style={{ 
+                width: `${element.size}px`, 
+                height: 'auto'
+              }} 
+            />
+          </div>
+        ))}
+        
+        <div className="min-h-screen flex items-center justify-center pb-24 relative z-20">
+          <div className="text-center mb-16">
+            <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
+              Oops!
+            </h1>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-dosis">No Order Data Found</h2>
+            <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
+              We couldn't find any order information. Please return to the home page and try again.
+            </p>
+            <button
+              onClick={() => navigate('/')}
+              className="px-8 py-4 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white rounded-xl text-lg font-medium"
+            >
+              Back to Home
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -196,16 +231,57 @@ const CheckoutPage: React.FC = () => {
         { number: 3, title: 'Payment', completed: currentStep > 3 }
       ]
 
+  const floatingElements = [
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 0, x: '31%', y: '35%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object1.png', delay: 0.5, x: '80%', y: '9%', size: 183 },
+    { image: '/assets/images/Vector-Smart-Object-2.png', delay: 1.5, x: '2%', y: '75%', size: 100 },
+    { image: '/assets/images/plush.png', delay: 1.2, x: '85%', y: '45%', size: 63 },
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 1.7, x: '40%', y: '80%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object2-1-ss.png', delay: 0.3, x: '13%', y: '16%', size: 81 },
+    { image: '/assets/images/sircle2.png', delay: 0.8, x: '80%', y: '67%', size: 66 },
+  ]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-fuchsia-100 dark:from-purple-900 dark:via-violet-800 dark:to-fuchsia-900">
-      <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Floating Background Elements */}
+      {floatingElements.map((element, index) => (
         <div
-          className="mb-8"
+          key={index}
+          className="absolute transition-all duration-700 ease-in-out z-10"
+          style={{ 
+            left: element.x, 
+            top: element.y,
+            transform: element.image.includes('Vector-Smart-Object2-1-ss.png') ? 'rotate(256deg)' : 
+                      element.image.includes('Vector-Smart-Object1.png') ? 'rotate(260deg)' : 
+                      element.image.includes('plush.png') ? 'rotate(76deg)' : 
+                      `rotate(${index * 45}deg)`
+          }}
         >
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">Complete Your Order</h1>
+          <img 
+            src={element.image} 
+            alt="Decorative element" 
+            className="hover:filter hover:brightness-125 transition-all duration-300"
+            style={{ 
+              width: `${element.size}px`, 
+              height: 'auto'
+            }} 
+          />
+        </div>
+      ))}
+      
+      <div className="max-w-7xl mx-auto px-4 py-12 pb-24 relative z-20">
+        <div className="text-center mb-16">
+          <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
+            Checkout
+          </h1>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-dosis">Complete Your Order</h2>
+          
+          <p className="text-xl text-white max-w-3xl mx-auto">
+            Review your order details and complete your purchase
+          </p>
           
           {/* Progress Steps */}
-          <div className="flex items-center space-x-4 mb-8">
+          <div className="flex items-center space-x-4 mt-8 mb-8">
             {steps.map((step, index) => (
               <div key={step.number} className="flex items-center">
                 <div
@@ -220,21 +296,21 @@ const CheckoutPage: React.FC = () => {
                 <span
                   className={`ml-2 font-medium font-dosis ${
                     step.completed || currentStep === step.number
-                      ? 'text-purple-600 dark:text-amber-400'
-                      : 'text-gray-500 dark:text-gray-400'
+                      ? 'text-white bg-purple-600/70 dark:bg-amber-500/70 px-3 py-1 rounded-lg'
+                      : 'text-white bg-gray-600/50 dark:bg-gray-700/50 px-3 py-1 rounded-lg'
                   }`}
                 >
                   {step.title}
                 </span>
                 {index < steps.length - 1 && (
-                  <div className="w-12 h-0.5 bg-gray-300 dark:bg-gray-600 mx-4" />
+                  <div className="w-12 h-1 bg-white/40 dark:bg-white/30 mx-4 rounded-full" />
                 )}
               </div>
             ))}
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-8 relative z-20">
           {/* Main Content */}
           <div className="lg:col-span-2">
             <div

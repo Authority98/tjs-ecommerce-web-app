@@ -101,18 +101,54 @@ const AdminPage: React.FC = () => {
     return <LoadingSpinner />
   }
 
+  const floatingElements = [
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 0, x: '31%', y: '35%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object1.png', delay: 0.5, x: '80%', y: '9%', size: 183 },
+    { image: '/assets/images/Vector-Smart-Object-2.png', delay: 1.5, x: '2%', y: '75%', size: 100 },
+    { image: '/assets/images/plush.png', delay: 1.2, x: '85%', y: '45%', size: 63 },
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 1.7, x: '40%', y: '80%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object2-1-ss.png', delay: 0.3, x: '13%', y: '16%', size: 81 },
+    { image: '/assets/images/sircle2.png', delay: 0.8, x: '80%', y: '67%', size: 66 },
+  ]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-violet-100 dark:from-purple-900 dark:via-fuchsia-900 dark:to-violet-800">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Floating Background Elements */}
+      {floatingElements.map((element, index) => (
         <div
-          className="flex justify-between items-center mb-8"
+          key={index}
+          className="absolute transition-all duration-700 ease-in-out z-10"
+          style={{ 
+            left: element.x, 
+            top: element.y,
+            transform: element.image.includes('Vector-Smart-Object2-1-ss.png') ? 'rotate(256deg)' : 
+                      element.image.includes('Vector-Smart-Object1.png') ? 'rotate(260deg)' : 
+                      element.image.includes('plush.png') ? 'rotate(76deg)' : 
+                      `rotate(${index * 45}deg)`
+          }}
         >
+          <img 
+            src={element.image} 
+            alt="Decorative element" 
+            className="hover:filter hover:brightness-125 transition-all duration-300"
+            style={{ 
+              width: `${element.size}px`, 
+              height: 'auto'
+            }} 
+          />
+        </div>
+      ))}
+      <div className="max-w-7xl mx-auto px-4 py-8 relative z-20">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-16">
           <div>
-            <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2 font-dosis">
-              Admin Dashboard
+            <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
+              Admin Panel
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 font-manrope">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4 font-dosis">
+              Admin Dashboard
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl">
               Manage your products and orders
             </p>
           </div>
