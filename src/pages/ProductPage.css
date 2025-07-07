@@ -1,0 +1,7 @@
+/* Float animation removed as requested */
+
+/* Add some hover effects for the decorative elements */
+.absolute img:hover {
+  filter: brightness(1.2);
+  transition: all 0.3s ease;
+}

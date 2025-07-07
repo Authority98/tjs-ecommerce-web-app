@@ -1,0 +1,8 @@
+.hover\:filter:hover {
+  filter: brightness(1.25);
+}
+
+.lg\:grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 110px;
+}
