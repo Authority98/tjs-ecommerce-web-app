@@ -66,8 +66,8 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd tjs-ecommerce
+   git clone https://github.com/Authority98/tjs-ecommerce-web-app.git
+   cd tjs-ecommerce-web-app
    ```
 
 2. **Install dependencies**
@@ -375,6 +375,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support, email support@twinklejingle.com or join our Slack channel.
+
+## 🚀 Live Repository
+
+This project is actively maintained and deployed on GitHub:
+- **Repository**: [https://github.com/Authority98/tjs-ecommerce-web-app](https://github.com/Authority98/tjs-ecommerce-web-app)
+- **Latest Commit**: Successfully pushed with latest features and improvements
+- **Status**: ✅ Up to date with all recent enhancements
 
 ## 🆕 Recent Updates (Latest Release)
 
