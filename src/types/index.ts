@@ -112,17 +112,82 @@ export const TREE_SIZES: TreeSize[] = [
   }
 ]
 
-export const TREE_TYPES = [
-  'Hyper-realistic Artificial Fir Tree',
-  'Live Balsam Fir',
-  'Live Blue Spruce',
-  'Live Caucasian/Nordmann Fir',
-  'Live Douglas Fir',
-  'Live Fraser Fir',
-  'Live Noble Fir',
-  'Live Scotch Pine',
-  'Live Virginia Pine',
-  'Live White Pine'
+export interface TreeType {
+  name: string
+  category: 'Live' | 'Artificial'
+  status: 'available' | 'unavailable' | 'custom'
+  description?: string
+}
+
+export const TREE_TYPES: TreeType[] = [
+  // Live Trees
+  {
+    name: 'Noble Fir',
+    category: 'Live',
+    status: 'available',
+    description: 'Price to be announced in October'
+  },
+  {
+    name: 'Nordmann Fir',
+    category: 'Live',
+    status: 'available',
+    description: 'Price to be announced in October'
+  },
+  {
+    name: 'Fraser Fir',
+    category: 'Live',
+    status: 'available',
+    description: 'Price to be announced in October'
+  },
+  {
+    name: 'Balsam Fir',
+    category: 'Live',
+    status: 'unavailable',
+    description: 'Unavailable for now'
+  },
+  {
+    name: 'Blue Spruce',
+    category: 'Live',
+    status: 'unavailable',
+    description: 'Unavailable for now'
+  },
+  {
+    name: 'Douglas Fir',
+    category: 'Live',
+    status: 'unavailable',
+    description: 'Unavailable for now'
+  },
+  {
+    name: 'Scotch Pine',
+    category: 'Live',
+    status: 'unavailable',
+    description: 'Unavailable for now'
+  },
+  {
+    name: 'Virginia Pine',
+    category: 'Live',
+    status: 'unavailable',
+    description: 'Unavailable for now'
+  },
+  {
+    name: 'White Pine',
+    category: 'Live',
+    status: 'unavailable',
+    description: 'Unavailable for now'
+  },
+  // Artificial Trees
+  {
+    name: 'Hyper-realistic Artificial Fir Tree',
+    category: 'Artificial',
+    status: 'available',
+    description: 'Premium quality artificial tree'
+  },
+  {
+    name: 'Custom Tree',
+    category: 'Artificial',
+    status: 'custom',
+    description: 'Price upon request'
+  }
 ]
 
 export const RENTAL_PERIODS = [
