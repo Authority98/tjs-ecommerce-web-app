@@ -6,7 +6,7 @@ import Input from './Input'
 interface ProductFormData {
   title: string
   description: string
-  price: number
+  price: number | null
   category: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
   decorated: boolean
 }
@@ -62,10 +62,9 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
             type="number"
             step="0.01"
             min="0"
-            value={formData.price}
-            onChange={(e) => handleInputChange('price', parseFloat(e.target.value) || 0)}
+            value={formData.price || ''}
+            onChange={(e) => handleInputChange('price', e.target.value ? parseFloat(e.target.value) : null)}
             className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#F7B541] focus:border-[#F7B541]"
-            required
             disabled={loading}
             placeholder="0.00"
           />

@@ -1,8 +1,9 @@
 import React, { useState, Fragment } from 'react'
-import { Ruler, TreePine, Calendar, Palette, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import { Ruler, TreePine, Calendar, Palette, ChevronLeft, ChevronRight, ZoomIn, Clock } from 'lucide-react'
 import { Product, TreeOptions } from '../types'
 import ProductTags from './ProductTags'
 import Lightbox from './ui/Lightbox'
+import PriceBadge from './ui/PriceBadge'
 
 interface ProductPreviewProps {
   product: Product
@@ -95,7 +96,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
             <div className="absolute top-4 right-4 z-10">
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl px-4 py-2 shadow-lg border border-white/20 dark:border-gray-700/30">
-                <span className="text-2xl font-bold text-pink-600 dark:text-rose-400">${totalPrice}</span>
+                <PriceBadge price={product.price !== null ? totalPrice : null} size="md" treeType={selectedOptions.type} />
               </div>
             </div>
           </div>

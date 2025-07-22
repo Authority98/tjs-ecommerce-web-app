@@ -198,14 +198,14 @@ const ThankYouPage: React.FC = () => {
                 <Phone className="h-6 w-6 text-amber-600 dark:text-amber-400" />
               </div>
               <div className="font-semibold text-gray-800 dark:text-white">Call Us</div>
-              <div className="text-gray-600 dark:text-gray-300">(555) 123-4567</div>
+              <div className="text-gray-600 dark:text-gray-300">+65 8339 2574</div>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Mail className="h-6 w-6 text-amber-600 dark:text-amber-400" />
               </div>
               <div className="font-semibold text-gray-800 dark:text-white">Email Us</div>
-              <div className="text-gray-600 dark:text-gray-300">support@twinklejingle.com</div>
+              <div className="text-gray-600 dark:text-gray-300">twinklejinglesservices@gmail.com</div>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-3">

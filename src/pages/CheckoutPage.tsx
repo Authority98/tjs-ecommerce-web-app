@@ -30,27 +30,12 @@ const CheckoutPage: React.FC = () => {
 
   const initializeCheckout = async () => {
     try {
-      // Check if coming from tree customization
-      const storedData = sessionStorage.getItem('checkoutData')
-      if (storedData) {
-        const checkoutData = JSON.parse(storedData)
-        setOrderData(checkoutData)
-        
-        // Auto-fill customer details for gift cards
-        if (checkoutData.type === 'giftcard' && checkoutData.giftCard?.senderName) {
-          setCustomerDetails(prev => ({
-            ...prev,
-            name: checkoutData.giftCard.senderName
-          }))
-        }
-        
-        setLoading(false)
-        return
-      }
-
       // Check if coming directly with productId (for decorations/ribbons)
       const productId = searchParams.get('productId')
       if (productId) {
+        // Clear any existing checkout data when adding a new product
+        sessionStorage.removeItem('checkoutData')
+
         const { data, error } = await supabase
           .from('products')
           .select('*')
@@ -63,6 +48,23 @@ const CheckoutPage: React.FC = () => {
           product: data,
           totalAmount: data.price
         })
+        setLoading(false)
+        return
+      }
+
+      // Check if coming from tree customization or gift card
+      const storedData = sessionStorage.getItem('checkoutData')
+      if (storedData) {
+        const checkoutData = JSON.parse(storedData)
+        setOrderData(checkoutData)
+        
+        // Auto-fill customer details for gift cards
+        if (checkoutData.type === 'giftcard' && checkoutData.giftCard?.senderName) {
+          setCustomerDetails(prev => ({
+            ...prev,
+            name: checkoutData.giftCard.senderName
+          }))
+        }
       }
     } catch (error) {
       console.error('Error initializing checkout:', error)

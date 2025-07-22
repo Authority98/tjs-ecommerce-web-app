@@ -2,10 +2,11 @@ import React, { useState, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Product } from '../types'
-import { Sparkles, TreePine, Gift, Star, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Sparkles, TreePine, Gift, Star, ZoomIn, ChevronLeft, ChevronRight, Clock } from 'lucide-react'
 import { getCategoryConfig, getCategoryGradient, getCategoryIcon } from '../utils/categories'
 import ProductTags from './ProductTags'
 import Lightbox from './ui/Lightbox'
+import PriceBadge from './ui/PriceBadge'
 
 interface ProductCardProps {
   product: Product
@@ -102,15 +103,11 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
 
         
         {/* Price Badge */}
-        {product.price && (
-          <div className="absolute top-6 right-6 z-10">
-            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl px-4 py-2 shadow-lg border border-white/20 dark:border-gray-700/30">
-              <span className="text-2xl font-bold text-purple-600 dark:text-amber-400">
-                ${product.price}
-              </span>
-            </div>
+        <div className="absolute bottom-4 right-4 z-10">
+          <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg border border-white/20 dark:border-gray-700/30">
+            <PriceBadge price={product.price} size="sm" treeType={product.title} />
           </div>
-        )}
+        </div>
 
         {/* Category Badge */}
         <div className="absolute top-6 left-6">

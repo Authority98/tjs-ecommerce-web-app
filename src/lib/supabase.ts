@@ -13,7 +13,7 @@ export type Database = {
           id: string
           title: string
           description: string
-          price: number
+          price: number | null
           images: string[]
           category: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
           color?: string
@@ -25,7 +25,7 @@ export type Database = {
           id?: string
           title: string
           description: string
-          price: number
+          price: number | null
           images: string[]
           category: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
           color?: string
@@ -37,7 +37,7 @@ export type Database = {
           id?: string
           title?: string
           description?: string
-          price?: number
+          price?: number | null
           images?: string[]
           category?: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
           color?: string

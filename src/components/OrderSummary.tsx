@@ -1,6 +1,7 @@
 import React from 'react'
 import { OrderSummary, RENTAL_PERIODS } from '../types'
 import { Package, Star, Shield, Clock } from 'lucide-react'
+import PriceBadge from './ui/PriceBadge'
 
 interface OrderSummaryProps {
   orderData: OrderSummary | any // Allow gift card data structure
@@ -57,9 +58,13 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                 <span className="text-sm text-gray-600 dark:text-gray-300">
                   {orderData.type === 'giftcard' ? 'Gift Card Value' : 'Base Price'}
                 </span>
-                <span className="text-xl font-bold text-pink-600 dark:text-rose-400">
-                  ${orderData.type === 'giftcard' ? orderData.giftCard?.amount || orderData.totalAmount : orderData.product?.price}
-                </span>
+                <PriceBadge 
+                  price={orderData.type === 'giftcard' 
+                    ? (orderData.giftCard?.amount || orderData.totalAmount) 
+                    : orderData.product?.price}
+                  size="md"
+                  treeType={orderData.treeOptions?.type}
+                />
               </div>
             </div>
           </div>
@@ -162,7 +167,12 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
           <div className="flex justify-between items-center">
             <div>
               <div className="text-pink-100 text-sm">Total Amount</div>
-              <div className="text-3xl font-bold">${finalTotal}</div>
+              <PriceBadge 
+                price={finalTotal || null} 
+                size="lg" 
+                className="text-white"
+                treeType={orderData.treeOptions?.type}
+              />
             </div>
             <div className="p-3 bg-white/20 rounded-xl">
               <Package className="h-8 w-8" />

@@ -57,7 +57,7 @@ export const useProductForm = ({ product, onSuccess }: UseProductFormProps = {})
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!formData.title.trim() || !formData.description.trim() || formData.price <= 0) {
+    if (!formData.title.trim() || !formData.description.trim()) {
       showNetworkError()
       return
     }
@@ -68,7 +68,7 @@ export const useProductForm = ({ product, onSuccess }: UseProductFormProps = {})
       const productData = {
         title: formData.title.trim(),
         description: formData.description.trim(),
-        price: formData.price,
+        price: formData.price || null,
         category: formData.category,
         color: selectedColors.length > 0 ? selectedColors.join(',') : null,
         decorated: formData.decorated,
