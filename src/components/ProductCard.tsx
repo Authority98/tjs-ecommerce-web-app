@@ -102,15 +102,15 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
 
         
         {/* Price Badge */}
-        <div
-          className="absolute top-6 right-6 z-10"
-        >
-          <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl px-4 py-2 shadow-lg border border-white/20 dark:border-gray-700/30">
-            <span className="text-2xl font-bold text-purple-600 dark:text-amber-400">
-              ${product.price}
-            </span>
+        {product.price && (
+          <div className="absolute top-6 right-6 z-10">
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl px-4 py-2 shadow-lg border border-white/20 dark:border-gray-700/30">
+              <span className="text-2xl font-bold text-purple-600 dark:text-amber-400">
+                ${product.price}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Category Badge */}
         <div className="absolute top-6 left-6">
