@@ -217,9 +217,9 @@ const CheckoutPage: React.FC = () => {
     )
   }
 
-  // Define steps based on order type - skip scheduling for gift cards and decoration/ribbon/centrepiece products
+  // Define steps based on order type - skip scheduling for gift cards and decoration/ribbon/centerpiece products
   const isGiftCard = orderData?.type === 'giftcard'
-  const isDecorationOrRibbon = orderData?.product?.category === 'decorations' || orderData?.product?.category === 'ribbons' || orderData?.product?.category === 'centrepieces'
+  const isDecorationOrRibbon = orderData?.product?.category === 'decorations' || orderData?.product?.category === 'ribbons' || orderData?.product?.category === 'centerpieces'
   const skipScheduling = isGiftCard || isDecorationOrRibbon
   
   const steps = skipScheduling 

@@ -47,9 +47,9 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
     hoverShadow: ''
   },
   {
-    id: 'centrepieces',
-    title: 'Centre Pieces',
-    description: 'Stunning centrepieces and table decorations to create the perfect focal point for your holiday gatherings',
+    id: 'centerpieces',
+    title: 'Centerpieces',
+    description: 'Stunning centerpieces and table decorations to create the perfect focal point for your holiday gatherings',
     icon: Crown,
     gradient: 'from-amber-400 via-orange-400 to-yellow-300',
     bgGradient: 'from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15',

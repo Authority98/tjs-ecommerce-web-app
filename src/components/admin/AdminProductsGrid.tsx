@@ -30,7 +30,7 @@ const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
     { id: 'trees', label: 'Trees' },
     { id: 'decorations', label: 'Decorations' },
     { id: 'ribbons', label: 'Ribbons' },
-    { id: 'centrepieces', label: 'Centre Pieces' }
+    { id: 'centerpieces', label: 'Centerpieces' }
   ] as const
 
 

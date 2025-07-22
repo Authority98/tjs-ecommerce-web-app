@@ -16,7 +16,7 @@ interface Filters {
 
 const ProductPage: React.FC = () => {
   const { category } = useParams<{ category: string }>()
-  const validCategory = category as 'trees' | 'decorations' | 'ribbons' | 'centrepieces' | undefined
+  const validCategory = category as 'trees' | 'decorations' | 'ribbons' | 'centerpieces' | undefined
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
@@ -91,7 +91,7 @@ const ProductPage: React.FC = () => {
     let count = 0
     
     // Color filters for all categories that support colors
-    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centrepieces') && filters.colors.length > 0) {
+    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centerpieces') && filters.colors.length > 0) {
       count += filters.colors.length
     }
     
@@ -111,7 +111,7 @@ const ProductPage: React.FC = () => {
     let filtered = [...products]
 
     // Filter by colors (for all categories that support colors)
-    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centrepieces') && filters.colors.length > 0) {
+    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centerpieces') && filters.colors.length > 0) {
       filtered = filtered.filter(product => {
         if (!product.color) return false
         
@@ -254,7 +254,7 @@ const ProductPage: React.FC = () => {
             {categoryInfo.title}
           </h2>
           <p className="text-xl text-white max-w-3xl mx-auto">
-            Discover our premium collection of {validCategory === 'trees' ? 'Christmas trees' : validCategory === 'decorations' ? 'festive decorations' : validCategory === 'ribbons' ? 'elegant ribbons' : validCategory === 'centrepieces' ? 'stunning centerpieces' : 'products'} for your perfect holiday celebration
+            Discover our premium collection of {validCategory === 'trees' ? 'Christmas trees' : validCategory === 'decorations' ? 'festive decorations' : validCategory === 'ribbons' ? 'elegant ribbons' : validCategory === 'centerpieces' ? 'stunning centerpieces' : 'products'} for your perfect holiday celebration
           </p>
         </div>
         {/* Filter Button and Panel */}

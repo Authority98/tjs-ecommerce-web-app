@@ -479,7 +479,8 @@ This project is actively maintained and deployed on GitHub:
   - Streamlined codebase for better maintainability
 
 ### 🔧 Filter System Overhaul
-- **🎯 Universal Color Filters**: Color filtering now works correctly across all categories (trees, decorations, ribbons, centrepieces)
+- **🎯 Universal Color Filters**: Color filtering now works correctly across all categories (trees, decorations, ribbons, centerpieces)
+- **Centerpieces**: Color and price filters (previously missing)
 - **🏷️ Category-Specific Filters**: Decoration status filter properly restricted to trees category only
 - **🔄 Smart Filter Reset**: Filters automatically reset when switching between categories to prevent cross-contamination
 - **📊 Accurate Filter Counts**: Filter badge displays correct count of active filters per category
