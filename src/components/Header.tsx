@@ -142,11 +142,11 @@ const Header: React.FC = () => {
                 <span className="font-medium text-white" style={{fontSize: '17px'}}>+65 8339 2574</span>
               </a>
               <a 
-                href="mailto:sales@twinklejingle.net" 
+                href="mailto:twinklejinglesservices@gmail.com" 
                 className="flex items-center space-x-2 hover:text-[#D9A66C] transition-colors duration-200"
               >
                 <FaEnvelope className="text-[#D9A66C] text-[1.5em]" />
-                <span className="font-medium text-white" style={{fontSize: '17px'}}>sales@twinklejingle.net</span>
+                <span className="font-medium text-white" style={{fontSize: '17px'}}>twinklejinglesservices@gmail.com</span>
               </a>
             </div>
           </div>
