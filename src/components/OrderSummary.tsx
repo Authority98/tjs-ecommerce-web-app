@@ -103,11 +103,6 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                        <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
                          {orderData.treeOptions.type}
                        </span>
-                       {currentStep >= 2 && (rentalPeriod || orderData.treeOptions?.rentalPeriod) && (
-                         <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
-                           {rentalPeriod || orderData.treeOptions?.rentalPeriod} days
-                         </span>
-                       )}
                        <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
                          {orderData.treeOptions.decorLevel}% decor
                        </span>
@@ -175,6 +170,25 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+${charge.amount}</span>
                 </div>
               ))}
+              {/* Rental Period */}
+              {currentStep >= 2 && (rentalPeriod || orderData.treeOptions?.rentalPeriod) && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Rental Period ({rentalPeriod || orderData.treeOptions?.rentalPeriod} days)</span>
+                  <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">
+                      {(() => {
+                        const period = RENTAL_PERIODS.find(p => p.days === (rentalPeriod || orderData.treeOptions?.rentalPeriod));
+                        return period && period.additionalCost > 0 ? `+$${period.additionalCost}` : 'Included';
+                      })()}
+                    </span>
+                </div>
+              )}
+              {/* Rush Order */}
+              {rushOrder && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Rush Order</span>
+                  <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+$150</span>
+                </div>
+              )}
               {/* Delivery charges directly under service charges without highlighting */}
                {additionalCharges.find(charge => charge.name === 'Delivery') && (
                  <div className="flex items-center justify-between">
@@ -186,32 +200,20 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
           </div>
         )}
 
-        {/* Add-ons */}
-        {rushOrder && (
-          <div className="p-4 border-b border-gray-200/50 dark:border-gray-600/50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4 text-pink-600 dark:text-rose-400" />
-                <span className="font-medium text-gray-800 dark:text-white">Rush Order</span>
-              </div>
-              <span className="text-lg font-bold text-pink-600 dark:text-rose-400">+$150</span>
-            </div>
-            <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Priority scheduling within 48 hours</div>
-          </div>
-        )}
+
 
          {/* Total */}
         <div className="border-t-2 border-pink-200 dark:border-pink-700 pt-4 mt-4">
           <div>
-            <div className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</div>
-            <div className="flex items-center gap-3">
-              <div className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-fuchsia-400">${finalTotal}</div>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</div>
               {orderData.product?.category === 'trees' && (
                 <div className="text-xs bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded-lg text-amber-800 dark:text-amber-200 font-medium italic border border-amber-200/50 dark:border-amber-700/30">
-                  Final price to be determined after order is placed
-                </div>
+                   Final price upon order
+                 </div>
               )}
             </div>
+            <div className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-fuchsia-400">${finalTotal}</div>
           </div>
         </div>
 

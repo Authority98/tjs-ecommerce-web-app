@@ -11,16 +11,18 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 ## 📋 Latest Updates
 
 - **📦 Order Summary Optimization**: Enhanced order summary box layout for improved user experience
-  - Repositioned "Final price to be determined" notice next to total amount with reduced text size
+  - Repositioned "Final price upon order" notice next to total amount label
   - Moved discount code section below the total for better visual hierarchy
   - Applied gradient text styling to final price similar to thank you page
   - Made discount code input more minimal and space-efficient
   - Merged customization details into product div for compact display
   - Highlighted delivery charges under service charges section
-  - Added yellow background styling to "Final price to be determined" text
+  - Added amber background styling to final price notice
   - Removed trust badges section for cleaner layout
   - Decreased spacing between product title and customizations
-  - Only display rental period when actually selected (no "Rental TBD")
+  - Moved rental period display to service charges section with pricing
+  - Moved rush order display to service charges section
+  - Display rental period pricing (+$100 for 60 days, +$200 for 90 days, "Included" for 45 days)
   - Removed package icon from total amount section
   - Fixed customization div overflow with flex-wrap layout
 - **🔤 American English Spelling Update**: Updated "Centre pieces" to "Centerpieces" throughout the application
