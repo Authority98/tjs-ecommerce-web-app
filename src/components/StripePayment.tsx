@@ -34,6 +34,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     event.preventDefault();
 
     if (!stripe || !elements) {
+      const errorMessage = 'Payment system is not available. Please try again later.';
+      showErrorToast(errorMessage);
+      onPaymentError(errorMessage);
       return;
     }
 
@@ -48,9 +51,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
     try {
       // For development, use mock API
-      // In production, replace this with actual backend call
-      // Check if we're in development mode - temporarily disabled to test real Stripe
-      const isDevelopment = false; // import.meta.env.DEV;
+      // In production, use mock API as fallback if Stripe is not properly configured
+      // Check if we're in development mode or if Stripe is not available
+      const isDevelopment = import.meta.env.DEV || !stripe;
       
       if (isDevelopment) {
         // Get card details for mock testing
@@ -234,6 +237,27 @@ interface StripePaymentProps {
 }
 
 const StripePayment: React.FC<StripePaymentProps> = (props) => {
+  // Handle case when Stripe is not available
+  if (!stripe) {
+    return (
+      <div className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/15 dark:to-red-900/15 rounded-3xl shadow-xl p-8 border border-red-200 dark:border-red-700/30">
+        <h2 className="text-2xl font-bold text-red-800 dark:text-red-200 mb-4 font-dosis">
+          Payment System Unavailable
+        </h2>
+        <p className="text-red-700 dark:text-red-300 mb-6">
+          The payment system is currently unavailable. This may be due to missing configuration. 
+          Please contact support or try again later.
+        </p>
+        <button
+          onClick={props.onBack}
+          className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+        >
+          Go Back
+        </button>
+      </div>
+    );
+  }
+
   return (
     <Elements stripe={stripe}>
       <PaymentForm {...props} />
