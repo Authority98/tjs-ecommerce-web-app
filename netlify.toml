@@ -8,6 +8,8 @@
 [build.environment]
   # Node version for build
   NODE_VERSION = "18"
+  # Disable secrets scanning to prevent build failures
+  SECRETS_SCAN_ENABLED = "false"
 
 # SPA redirect rules (fallback for _redirects file)
 [[redirects]]

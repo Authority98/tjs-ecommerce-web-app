@@ -15,7 +15,7 @@ To deploy this application on Netlify, you need to configure the following envir
    - Description: Your Supabase anonymous key
 
 3. **VITE_STRIPE_PUBLISHABLE_KEY**
-   - Value: `pk_test_51Qq2h32mVgYTQr6L5PneEAkzrv9uKtFinWx0haeWCWDuSQwsJibIO9P6sjUwJpkkMvupO8vuuBPdeeY3oIPNongT00jR8LUmRX`
+   - Value: `your_stripe_publishable_key_here`
    - Description: Your Stripe publishable key (test mode)
 
 ## How to Set Environment Variables in Netlify
