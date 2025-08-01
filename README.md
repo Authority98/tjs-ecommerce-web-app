@@ -1,6 +1,6 @@
 # 🎄 Twinkle Jingle - Christmas E-commerce Platform
 
-A modern, full-featured e-commerce application specializing in Christmas trees, decorations, and premium ribbons. Built with React, TypeScript, and Supabase for a seamless holiday shopping experience.
+A modern, full-featured e-commerce application specializing in Christmas trees, decorations, centerpieces, and premium ribbons. Built with React, TypeScript, and Supabase for a seamless holiday shopping experience.
 
 ![Twinkle Jingle](https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=1200&h=300&fit=crop)
 
@@ -10,16 +10,32 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
-- **Tree Pricing Updates**: Updated tree pricing text to "Pricing in October" for better customer communication
-- **Pre-order System**: Added pre-order tags for upcoming tree availability
-- **Database Migrations**: Synchronized all database migrations with Supabase
-- **Performance Optimizations**: Maintained zero-animation design for optimal performance
+- **🔤 American English Spelling Update**: Updated "Centre pieces" to "Centerpieces" throughout the application
+  - Frontend code updated across all TypeScript files and components
+  - Database migration script created for existing data
+  - Consistent American English spelling across UI and database
+  - Migration helper guide provided for database updates
+- **🔴 LIVE Stripe Payment Integration**: Real payment processing with Stripe API
+  - Express.js backend server for payment intent creation
+  - Toast notifications for payment success/failure feedback
+  - Support for test cards and real payment processing
+  - Payments now appear in Stripe Dashboard
+- **💳 Enhanced Payment Experience**: Improved checkout flow with better error handling
+- **🎁 Gift Card System**: Complete gift card functionality with RLS policy fixes
+- **🔧 Database Optimizations**: Fixed row-level security policies for gift cards
+- **⚡ Performance Improvements**: Maintained zero-animation design for optimal speed
 
 ## ✨ Features
 
 ### 🎯 Core Functionality
-- **Product Catalog**: Browse Christmas trees, decorations, and ribbons
+- **Product Catalog**: Browse Christmas trees, decorations, centerpieces, and ribbons
 - **Interactive Tree Customization**: Step-by-step tree sizing, type selection, rental periods, and decoration levels
+- **💳 Stripe Payment Integration**: Real payment processing with secure Stripe API
+  - Live payment intent creation via Express.js backend
+  - Support for test cards and production payments
+  - Real-time payment status updates and error handling
+  - Payments tracked in Stripe Dashboard
+- **🎁 Gift Card System**: Complete gift card purchasing and management
 - **Smart Cart System**: Seamless checkout process with customer details and scheduling
 - **Admin Dashboard**: Complete order management and product administration
   - Displays static product images for clarity and performance
@@ -58,8 +74,10 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ### Backend & Database
 - **Supabase** - Backend-as-a-Service with PostgreSQL
+- **Express.js** - Payment processing server for Stripe integration
+- **Stripe API** - Secure payment processing and transaction management
 - **Real-time subscriptions** - Live data updates
-- **Row Level Security** - Secure data access
+- **Row Level Security** - Secure data access with proper gift card policies
 
 ### Development Tools
 - **ESLint** - Code linting and quality enforcement
@@ -91,6 +109,8 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
    ```env
    VITE_SUPABASE_URL=your_supabase_project_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+   STRIPE_SECRET_KEY=your_stripe_secret_key
    ```
 
 4. **Database Setup**
@@ -103,7 +123,7 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
      description TEXT,
      price DECIMAL(10,2) NOT NULL,
      images TEXT[] DEFAULT '{}',
-     category TEXT NOT NULL CHECK (category IN ('trees', 'decorations', 'ribbons')),
+     category TEXT NOT NULL CHECK (category IN ('trees', 'decorations', 'centerpieces', 'ribbons')),
      color TEXT,
      decorated BOOLEAN DEFAULT false,
      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -123,7 +143,24 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
      teardown_date DATE,
      rush_order BOOLEAN DEFAULT false,
      total_amount DECIMAL(10,2) NOT NULL,
+     payment_intent_id TEXT,
      status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'delivered', 'cancelled')),
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+   );
+
+   -- Create gift_cards table
+   CREATE TABLE gift_cards (
+     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+     recipient_name TEXT NOT NULL,
+     recipient_email TEXT NOT NULL,
+     sender_name TEXT NOT NULL,
+     sender_email TEXT NOT NULL,
+     amount DECIMAL(10,2) NOT NULL,
+     message TEXT,
+     delivery_date DATE NOT NULL,
+     payment_intent_id TEXT,
+     status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'sent', 'redeemed')),
      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
    );
@@ -131,11 +168,14 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
    -- Enable RLS
    ALTER TABLE products ENABLE ROW LEVEL SECURITY;
    ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+   ALTER TABLE gift_cards ENABLE ROW LEVEL SECURITY;
 
    -- Create policies
    CREATE POLICY "Products are viewable by everyone" ON products FOR SELECT USING (true);
    CREATE POLICY "Orders are viewable by everyone" ON orders FOR SELECT USING (true);
    CREATE POLICY "Anyone can insert orders" ON orders FOR INSERT WITH CHECK (true);
+   CREATE POLICY "Anyone can insert gift cards" ON gift_cards FOR INSERT WITH CHECK (true);
+   CREATE POLICY "Gift cards are viewable by everyone" ON gift_cards FOR SELECT USING (true);
    ```
 
 5. **Start the development server**
@@ -143,8 +183,15 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
    npm run dev
    ```
 
-6. **Visit the application**
+6. **Start the payment server** (for Stripe integration)
+   ```bash
+   npm run server
+   ```
+
+7. **Visit the application**
    Open [http://localhost:5173](http://localhost:5173) in your browser.
+   
+   **Note**: For payment functionality, ensure both the development server (port 5173/5174) and payment server (port 3001) are running.
 
 ## 🏗️ Project Structure
 
@@ -171,7 +218,7 @@ src/
 ## 🎯 Key Components
 
 ### Product Customization Flow
-1. **Category Selection** - Choose between trees, decorations, or ribbons
+1. **Category Selection** - Choose between trees, decorations, centerpieces, or ribbons
 2. **Product Browsing** - View product catalog with filtering
 3. **Tree Customization** (Trees only):
    - Size selection with visual representations
@@ -211,6 +258,7 @@ src/
 ```bash
 # Development
 npm run dev          # Start development server
+npm run server       # Start Stripe payment server (port 3001)
 npm run build        # Build for production
 npm run preview      # Preview production build
 
@@ -396,6 +444,46 @@ This project is actively maintained and deployed on GitHub:
 
 ## 🆕 Recent Updates (Latest Release)
 
+### 🔤 American English Spelling Migration (Latest)
+- **📝 Comprehensive Spelling Update**: Successfully migrated from British "Centre pieces" to American "Centerpieces"
+  - **Frontend Updates**: Updated all TypeScript files, components, and UI elements
+  - **Database Migration**: Created and executed migration script `20250104000000_update_centerpieces_spelling.sql`
+  - **Type Safety**: Updated all TypeScript type definitions and interfaces
+  - **Constraint Updates**: Modified database constraints to use "centerpieces" spelling
+  - **Migration Helper**: Created `centerpieces-spelling-migration.html` guide for database updates
+- **🔧 Files Updated**: 
+  - `src/utils/categories.ts` - Category definitions and titles
+  - `src/types/index.ts` - TypeScript type definitions
+  - `src/lib/supabase.ts` - Database type definitions
+  - `src/hooks/useAdminData.ts` - Admin data management
+  - `src/components/ui/ProductFormFields.tsx` - Form field options
+  - `src/components/admin/AdminProductsGrid.tsx` - Admin grid filters
+  - `src/pages/ProductPage.tsx` - Product page logic and filters
+  - `src/pages/CheckoutPage.tsx` - Checkout category conditions
+  - `src/pages/ThankYouPage.tsx` - Thank you page references
+- **🗄️ Database Changes**: 
+  - Dropped old `products_category_check` constraint
+  - Updated existing products from 'centrepieces' to 'centerpieces'
+  - Added new constraint with American English spelling
+  - Verified migration success with modern PostgreSQL syntax
+
+### 💳 Stripe Payment Integration & Enhanced Checkout
+- **🔴 LIVE Payment Processing**: Integrated real Stripe payment system
+  - **Express.js Backend**: Created dedicated payment server (`server.cjs`) running on port 3001
+  - **Payment Intent API**: Secure payment intent creation with Stripe API
+  - **Real-time Processing**: Payments now appear in Stripe Dashboard immediately
+  - **Error Handling**: Comprehensive error handling with toast notifications
+- **🎁 Gift Card System**: Complete gift card functionality with database integration
+  - **RLS Policy Fix**: Resolved "new row violates row-level security policy" error
+  - **Anonymous Access**: Gift cards can now be purchased without authentication
+  - **Database Schema**: Added `gift_cards` table with proper relationships
+- **🔔 Toast Notification System**: Enhanced user feedback for payment operations
+  - **Success Notifications**: Green toast for successful payments
+  - **Error Notifications**: Red toast for declined cards and payment failures
+  - **Global Toast System**: Centralized notification system across the app
+- **🛡️ Security Enhancements**: Proper environment variable handling and secure API endpoints
+- **📱 Clean UI**: Removed development test card information from production interface
+
 ### 📱 Mobile Responsiveness & Navigation Enhancement (Latest)
 - **🔧 Tree Customization Mobile Fix**: Resolved navigation button overlap issues on mobile devices
   - **Responsive Navigation**: StepNavigation buttons now stack vertically on mobile instead of overlapping headers
@@ -498,9 +586,10 @@ This project is actively maintained and deployed on GitHub:
   - **Trees**: Color, price, and decoration status filters
   - **Decorations**: Color and price filters
   - **Ribbons**: Color and price filters
-  - **Centrepieces**: Color and price filters (previously missing)
+  - **Centerpieces**: Color and price filters (previously missing)
 - **🎛️ Admin Form Fixes**: Pre-decorated toggle in admin product form restricted to trees category only
 - **🔍 Consistent Logic**: Unified use of `validCategory` throughout filter implementation for reliability
+- **🔤 Spelling Consistency**: Updated all references from "centrepieces" to "centerpieces" for American English
 
 ### UI/UX Improvements
 - **🎨 Modern Color Scheme**: Migrated from green to elegant purple/fuchsia theme across all components
@@ -545,7 +634,9 @@ This project is actively maintained and deployed on GitHub:
 ## 🔮 Roadmap
 
 ### Version 2.0
-- [ ] Payment integration (Stripe/PayPal)
+- [x] **Payment integration (Stripe)** ✅ **COMPLETED**
+- [x] **Gift card system** ✅ **COMPLETED**
+- [x] **Toast notification system** ✅ **COMPLETED**
 - [ ] User authentication and profiles
 - [ ] Wishlist functionality
 - [ ] Product reviews and ratings

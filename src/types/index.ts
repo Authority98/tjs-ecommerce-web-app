@@ -4,7 +4,7 @@ export interface Product {
   description: string
   price: number
   images: string[]
-  category: 'decorations' | 'ribbons' | 'trees' | 'centrepieces'
+  category: 'decorations' | 'ribbons' | 'trees' | 'centerpieces'
   color?: string
   decorated?: boolean
   created_at: string

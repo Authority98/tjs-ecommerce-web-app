@@ -1,17 +1,36 @@
 import React from 'react'
 import { OrderSummary, RENTAL_PERIODS } from '../types'
 import { Package, Star, Shield, Clock } from 'lucide-react'
+import DiscountCodeInput from './DiscountCodeInput'
 
 interface OrderSummaryProps {
   orderData: OrderSummary | any // Allow gift card data structure
   rushOrder: boolean
   finalTotal: number
+  additionalCharges?: Array<{ name: string; amount: number }>
+  appliedDiscount?: {
+    id: string
+    code: string
+    discount_type: 'percentage' | 'fixed'
+    discount_value: number
+    amount: number
+  } | null
+  onDiscountApplied?: (discount: {
+    id: string
+    code: string
+    discount_type: 'percentage' | 'fixed'
+    discount_value: number
+    amount: number
+  } | null) => void
 }
 
 const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
   orderData,
   rushOrder,
-  finalTotal
+  finalTotal,
+  additionalCharges = [],
+  appliedDiscount,
+  onDiscountApplied
 }) => {
   return (
     <div className="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/20 dark:to-rose-950/20 rounded-3xl shadow-xl p-8 sticky top-24 border border-white/20 dark:border-gray-700/30 relative">      
@@ -143,6 +162,24 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
           </div>
         )}
 
+        {/* Additional Charges */}
+        {additionalCharges.length > 0 && (
+          <div className="rounded-2xl p-4 border bg-gradient-to-r from-pink-100/80 via-rose-100/60 to-red-100/40 dark:from-pink-950/20 dark:via-rose-950/15 dark:to-red-950/10 border-rose-200/50 dark:border-rose-700/30">
+            <h4 className="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
+              <div className="w-2 h-2 rounded-full mr-2 bg-pink-500" />
+              Service Charges
+            </h4>
+            <div className="space-y-2">
+              {additionalCharges.map((charge, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{charge.name}</span>
+                  <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+${charge.amount}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Add-ons */}
         {rushOrder && (
           <div className="rounded-2xl p-4 border bg-gradient-to-r from-pink-100/80 via-rose-100/60 to-red-100/40 dark:from-pink-950/20 dark:via-rose-950/15 dark:to-red-950/10 border-rose-200/50 dark:border-rose-700/30">
@@ -157,7 +194,16 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
           </div>
         )}
 
-        {/* Total */}
+        {/* Discount Code Input - Only show for products, not gift cards */}
+         {orderData.type !== 'giftcard' && (
+           <DiscountCodeInput
+             orderData={orderData}
+             appliedDiscount={appliedDiscount}
+             onDiscountApplied={onDiscountApplied}
+           />
+         )}
+
+         {/* Total */}
         <div className="rounded-2xl p-6 text-white shadow-xl bg-gradient-to-r from-pink-500 via-rose-500 to-red-400">
           <div className="flex justify-between items-center">
             <div>

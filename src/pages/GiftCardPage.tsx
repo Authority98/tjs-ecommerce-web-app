@@ -174,7 +174,7 @@ const GiftCardPage: React.FC = () => {
         </div>
       ))}
       
-      <div className="max-w-7xl mx-auto px-4 py-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
@@ -188,28 +188,30 @@ const GiftCardPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Gift Card Preview */}
-          <GiftCardPreview
-            selectedAmount={selectedAmount}
-            recipientName={giftCardData.recipientName}
-            senderName={giftCardData.senderName}
-            personalMessage={giftCardData.personalMessage}
-            isForSelf={giftCardData.isForSelf}
-          />
+          <div className="order-2 lg:order-1">
+            <GiftCardPreview
+              selectedAmount={selectedAmount}
+              recipientName={giftCardData.recipientName}
+              senderName={giftCardData.senderName}
+              personalMessage={giftCardData.personalMessage}
+              isForSelf={giftCardData.isForSelf}
+            />
+          </div>
 
           {/* Step-by-Step Configuration */}
-          <div className="lg:col-span-2">
-              <div className="relative bg-gradient-to-br from-purple-50 to-fuchsia-50 dark:from-purple-950/20 dark:to-fuchsia-950/20 rounded-3xl p-8 shadow-xl border border-white/20 dark:border-gray-700/30 overflow-hidden">
+          <div className="lg:col-span-2 order-1 lg:order-2">
+              <div className="relative bg-gradient-to-br from-purple-50 to-fuchsia-50 dark:from-purple-950/20 dark:to-fuchsia-950/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white/20 dark:border-gray-700/30 overflow-hidden">
                 {/* Decorative Elements */}
-                <div className="absolute top-4 right-4">
-                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-violet-400 rounded-full blur-xl z-0 opacity-40"></div>
+                <div className="absolute top-2 sm:top-4 right-2 sm:right-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-violet-400 rounded-full blur-xl z-0 opacity-40"></div>
                 </div>
-                <div className="absolute bottom-4 left-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-violet-400 rounded-full blur-lg z-0 opacity-40"></div>
+                <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4">
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-violet-400 rounded-full blur-lg z-0 opacity-40"></div>
                 </div>
                 {/* Step Navigation */}
-                <div className="mb-8 relative">
+                <div className="mb-6 sm:mb-8 relative">
                   <StepNavigation
                     activeStep={activeStep}
                     totalSteps={steps.length}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Migration Helper - Add payment_intent_id</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .step {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3ecf8e;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #1a1a1a;
+        }
+        .sql-code {
+            background: #1a1a1a;
+            color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 15px 0;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #3ecf8e;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background: #2db574;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #c3e6cb;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ffeaa7;
+            margin: 20px 0;
+        }
+        .link {
+            color: #3ecf8e;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Supabase Migration Helper</h1>
+        <p class="subtitle">Add payment_intent_id column to orders table for Stripe integration</p>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> This migration adds the payment_intent_id column needed for Stripe payment tracking.
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Open Supabase Dashboard</h3>
+            <p>Go to your <a href="https://supabase.com/dashboard" target="_blank" class="link">Supabase Dashboard</a> and select your project.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Navigate to SQL Editor</h3>
+            <p>In your project dashboard, click on <strong>"SQL Editor"</strong> in the left sidebar.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Run the Migration SQL</h3>
+            <p>Copy and paste the following SQL into the SQL Editor and click <strong>"Run"</strong>:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copySQL()">Copy SQL</button>
+                <pre id="sql-content">-- Add payment_intent_id column to orders table for Stripe integration
+ALTER TABLE orders 
+ADD COLUMN payment_intent_id text;
+
+-- Add comment to document the column purpose
+COMMENT ON COLUMN orders.payment_intent_id IS 'Stripe payment intent ID for tracking payment status';</pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Verify the Migration</h3>
+            <p>After running the SQL, you can verify it worked by running this query:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyVerifySQL()">Copy SQL</button>
+                <pre id="verify-sql">-- Verify the column was added
+SELECT column_name, data_type, is_nullable 
+FROM information_schema.columns 
+WHERE table_name = 'orders' AND column_name = 'payment_intent_id';</pre>
+            </div>
+        </div>
+
+        <div class="success" id="success-message" style="display: none;">
+            ✅ SQL copied to clipboard! Now paste it in your Supabase SQL Editor.
+        </div>
+
+        <div class="step">
+            <h3>Step 5: Test Your Application</h3>
+            <p>Once the migration is complete, your TJS e-commerce application will be able to store Stripe payment intent IDs with orders.</p>
+        </div>
+    </div>
+
+    <script>
+        function copySQL() {
+            const sqlContent = document.getElementById('sql-content').textContent;
+            navigator.clipboard.writeText(sqlContent).then(() => {
+                showSuccess();
+            });
+        }
+
+        function copyVerifySQL() {
+            const verifySql = document.getElementById('verify-sql').textContent;
+            navigator.clipboard.writeText(verifySql).then(() => {
+                showSuccess();
+            });
+        }
+
+        function showSuccess() {
+            const successMsg = document.getElementById('success-message');
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

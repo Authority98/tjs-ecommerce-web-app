@@ -5,7 +5,7 @@ import { useAdminData } from '../hooks/useAdminData'
 import ProductForm from '../components/ProductForm'
 import LoadingSpinner from '../components/LoadingSpinner'
 import AdminLogin from '../components/AdminLogin'
-import { AdminStats, AdminProductsGrid, AdminOrdersTable } from '../components/admin'
+import { AdminStats, AdminProductsGrid, AdminOrdersTable, DiscountCodesManager } from '../components/admin'
 import Button from '../components/ui/Button'
 import { supabase } from '../lib/supabase'
 
@@ -41,8 +41,22 @@ const AdminPage: React.FC = () => {
 
   const [showForm, setShowForm] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
-  const [activeTab, setActiveTab] = useState<'products' | 'orders'>('products')
+  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'discounts'>('products')
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+
+  // Handle body scroll lock when modals are open
+  useEffect(() => {
+    if (showForm || selectedOrder) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [showForm, selectedOrder])
 
   const handleAddProduct = () => {
     setEditingProduct(null)
@@ -117,7 +131,7 @@ const AdminPage: React.FC = () => {
       {floatingElements.map((element, index) => (
         <div
           key={index}
-          className="absolute transition-all duration-700 ease-in-out z-10"
+          className="fixed z-10"
           style={{ 
             left: element.x, 
             top: element.y,
@@ -130,7 +144,7 @@ const AdminPage: React.FC = () => {
           <img 
             src={element.image} 
             alt="Decorative element" 
-            className="hover:filter hover:brightness-125 transition-all duration-300"
+            className="hover:filter hover:brightness-125 transition-filter duration-300"
             style={{ 
               width: `${element.size}px`, 
               height: 'auto'
@@ -167,10 +181,10 @@ const AdminPage: React.FC = () => {
         <AdminStats stats={stats} />
 
         {/* Tabs */}
-        <div className="flex space-x-4 mb-6">
+        <div className="flex flex-wrap gap-2 sm:gap-4 mb-6">
           <button
             onClick={() => setActiveTab('products')}
-            className={`px-6 py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 ${
+            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
               activeTab === 'products'
                 ? 'bg-gradient-to-r from-purple-500 to-violet-500 text-white shadow-xl scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
@@ -180,13 +194,23 @@ const AdminPage: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('orders')}
-            className={`px-6 py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 ${
+            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
               activeTab === 'orders'
                 ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-xl scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
             Orders ({orders.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('discounts')}
+            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
+              activeTab === 'discounts'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl scale-105'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Discount Codes
           </button>
         </div>
 
@@ -227,6 +251,12 @@ const AdminPage: React.FC = () => {
               onUpdateOrderStatus={updateOrderStatus}
               onViewOrder={handleViewOrder}
             />
+          </div>
+        )}
+
+        {activeTab === 'discounts' && (
+          <div>
+            <DiscountCodesManager />
           </div>
         )}
 

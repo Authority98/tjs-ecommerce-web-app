@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Elements } from '@stripe/react-stripe-js'
 import { supabase } from '../lib/supabase'
+import { stripe } from '../lib/stripe'
 import { Product, OrderSummary, CustomerDetails } from '../types'
 import OrderSummaryComponent from '../components/OrderSummary'
 import CustomerDetailsForm from '../components/CustomerDetailsForm'
 import SchedulingForm from '../components/SchedulingForm'
+import StripePayment from '../components/StripePayment'
 import LoadingSpinner from '../components/LoadingSpinner'
 import './CheckoutPage.css'
 
@@ -23,6 +26,14 @@ const CheckoutPage: React.FC = () => {
   const [installationDate, setInstallationDate] = useState('')
   const [teardownDate, setTeardownDate] = useState('')
   const [rushOrder, setRushOrder] = useState(false)
+  const [paymentProcessing, setPaymentProcessing] = useState(false)
+  const [appliedDiscount, setAppliedDiscount] = useState<{
+    id: string
+    code: string
+    discount_type: 'percentage' | 'fixed'
+    discount_value: number
+    amount: number
+  } | null>(null)
 
   useEffect(() => {
     initializeCheckout()
@@ -75,9 +86,32 @@ const CheckoutPage: React.FC = () => {
     if (!orderData) return 0
     
     let total = orderData.totalAmount
+    
+    // Add additional charges for products (not gift cards)
+    if (orderData.type !== 'giftcard') {
+      total += 10 // Assembling
+      total += 10 // Dismantling
+      total += 20 // Delivery
+    }
+    
     if (rushOrder) total += 150 // Rush order fee
     
-    return total
+    // Apply discount if available (only for products, not gift cards)
+    if (appliedDiscount && orderData.type !== 'giftcard') {
+      total -= appliedDiscount.amount
+    }
+    
+    return Math.max(0, total) // Ensure total doesn't go below 0
+  }
+
+  const getAdditionalCharges = () => {
+    if (orderData?.type === 'giftcard') return []
+    
+    return [
+      { name: 'Assembling', amount: 10 },
+      { name: 'Dismantling', amount: 10 },
+      { name: 'Delivery', amount: 20 }
+    ]
   }
 
   const generateOrderNumber = () => {
@@ -86,7 +120,18 @@ const CheckoutPage: React.FC = () => {
     return `TJ-${timestamp}-${random}`
   }
 
-  const handleSubmitOrder = async () => {
+  const handlePaymentSuccess = async (paymentIntentId: string) => {
+    setPaymentProcessing(true)
+    await handleSubmitOrder(paymentIntentId)
+    setPaymentProcessing(false)
+  }
+
+  const handlePaymentError = (error: string) => {
+    console.error('Payment error:', error)
+    alert(`Payment failed: ${error}`)
+  }
+
+  const handleSubmitOrder = async (paymentIntentId?: string) => {
     if (!orderData || !customerDetails.name || !customerDetails.email) return
 
     try {
@@ -124,6 +169,7 @@ const CheckoutPage: React.FC = () => {
         customer_phone: customerDetails.phone,
         delivery_address: customerDetails.deliveryAddress,
         order_type: isGiftCard ? 'giftcard' : 'product',
+        payment_intent_id: paymentIntentId,
         ...(isGiftCard ? {
           gift_card_id: giftCardId,
           product_id: null
@@ -140,6 +186,8 @@ const CheckoutPage: React.FC = () => {
           rush_order: rushOrder
         }),
         total_amount: calculateFinalTotal(),
+        discount_code_id: appliedDiscount?.id || null,
+        discount_amount: appliedDiscount?.amount || 0,
         status: 'pending' as const
       };
 
@@ -164,6 +212,32 @@ const CheckoutPage: React.FC = () => {
   if (loading) {
     return <LoadingSpinner />
   }
+
+  // Define steps based on order type - skip scheduling for gift cards and decoration/ribbon/centrepiece products
+  const isGiftCard = orderData?.type === 'giftcard'
+  const isDecorationOrRibbon = orderData?.product?.category === 'decorations' || orderData?.product?.category === 'ribbons' || orderData?.product?.category === 'centerpieces'
+  const skipScheduling = isGiftCard || isDecorationOrRibbon
+  
+  const steps = skipScheduling 
+    ? [
+        { number: 1, title: 'Customer Details', completed: currentStep > 1 },
+        { number: 2, title: 'Payment', completed: currentStep > 2 }
+      ]
+    : [
+        { number: 1, title: 'Customer Details', completed: currentStep > 1 },
+        { number: 2, title: 'Scheduling', completed: currentStep > 2 },
+        { number: 3, title: 'Payment', completed: currentStep > 3 }
+      ]
+
+  const floatingElements = [
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 0, x: '31%', y: '35%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object1.png', delay: 0.5, x: '80%', y: '9%', size: 183 },
+    { image: '/assets/images/Vector-Smart-Object-2.png', delay: 1.5, x: '2%', y: '75%', size: 100 },
+    { image: '/assets/images/plush.png', delay: 1.2, x: '85%', y: '45%', size: 63 },
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 1.7, x: '40%', y: '80%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object2-1-ss.png', delay: 0.3, x: '13%', y: '16%', size: 81 },
+    { image: '/assets/images/sircle2.png', delay: 0.8, x: '80%', y: '67%', size: 66 },
+  ]
 
   if (!orderData) {
     return (
@@ -194,18 +268,18 @@ const CheckoutPage: React.FC = () => {
           </div>
         ))}
         
-        <div className="min-h-screen flex items-center justify-center pb-24 relative z-20">
-          <div className="text-center mb-16">
-            <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
+        <div className="min-h-screen flex items-center justify-center pb-16 sm:pb-24 relative z-20 px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-16">
+            <h1 className="text-white mb-4 sm:mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '24px', lineHeight: '32px', color: '#d9a66c'}}>
               Oops!
             </h1>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-dosis">No Order Data Found</h2>
-            <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 font-dosis">No Order Data Found</h2>
+            <p className="text-lg sm:text-xl text-white mb-6 sm:mb-8 max-w-3xl mx-auto">
               We couldn't find any order information. Please return to the home page and try again.
             </p>
             <button
               onClick={() => navigate('/')}
-              className="px-8 py-4 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-white rounded-xl text-lg font-medium hover:shadow-lg hover:shadow-amber-400/30 transition-all duration-300"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-white rounded-xl text-base sm:text-lg font-medium hover:shadow-lg hover:shadow-amber-400/30 transition-all duration-300"
             >
               Back to Home
             </button>
@@ -215,218 +289,133 @@ const CheckoutPage: React.FC = () => {
     )
   }
 
-  // Define steps based on order type - skip scheduling for gift cards and decoration/ribbon/centrepiece products
-  const isGiftCard = orderData?.type === 'giftcard'
-  const isDecorationOrRibbon = orderData?.product?.category === 'decorations' || orderData?.product?.category === 'ribbons' || orderData?.product?.category === 'centrepieces'
-  const skipScheduling = isGiftCard || isDecorationOrRibbon
-  
-  const steps = skipScheduling 
-    ? [
-        { number: 1, title: 'Customer Details', completed: currentStep > 1 },
-        { number: 2, title: 'Payment', completed: currentStep > 2 }
-      ]
-    : [
-        { number: 1, title: 'Customer Details', completed: currentStep > 1 },
-        { number: 2, title: 'Scheduling', completed: currentStep > 2 },
-        { number: 3, title: 'Payment', completed: currentStep > 3 }
-      ]
-
-  const floatingElements = [
-    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 0, x: '31%', y: '35%', size: 54 },
-    { image: '/assets/images/Vector-Smart-Object1.png', delay: 0.5, x: '80%', y: '9%', size: 183 },
-    { image: '/assets/images/Vector-Smart-Object-2.png', delay: 1.5, x: '2%', y: '75%', size: 100 },
-    { image: '/assets/images/plush.png', delay: 1.2, x: '85%', y: '45%', size: 63 },
-    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 1.7, x: '40%', y: '80%', size: 54 },
-    { image: '/assets/images/Vector-Smart-Object2-1-ss.png', delay: 0.3, x: '13%', y: '16%', size: 81 },
-    { image: '/assets/images/sircle2.png', delay: 0.8, x: '80%', y: '67%', size: 66 },
-  ]
-
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Floating Background Elements */}
-      {floatingElements.map((element, index) => (
-        <div
-          key={index}
-          className="absolute transition-all duration-700 ease-in-out z-10"
-          style={{ 
-            left: element.x, 
-            top: element.y,
-            transform: element.image.includes('Vector-Smart-Object2-1-ss.png') ? 'rotate(256deg)' : 
-                      element.image.includes('Vector-Smart-Object1.png') ? 'rotate(260deg)' : 
-                      element.image.includes('plush.png') ? 'rotate(76deg)' : 
-                      `rotate(${index * 45}deg)`
-          }}
-        >
-          <img 
-            src={element.image} 
-            alt="Decorative element" 
-            className="hover:filter hover:brightness-125 transition-all duration-300"
+    <Elements stripe={stripe}>
+      <div className="min-h-screen relative overflow-hidden">
+        {/* Floating Background Elements */}
+        {floatingElements.map((element, index) => (
+          <div
+            key={index}
+            className="absolute transition-all duration-700 ease-in-out z-10"
             style={{ 
-              width: `${element.size}px`, 
-              height: 'auto'
-            }} 
-          />
-        </div>
-      ))}
-      
-      <div className="max-w-7xl mx-auto px-4 py-12 pb-24 relative z-20">
-        <div className="text-center mb-16">
-          <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
-            Checkout
-          </h1>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-dosis">Complete Your Order</h2>
-          
-          <p className="text-xl text-white max-w-3xl mx-auto">
-            Review your order details and complete your purchase
-          </p>
-          
-          {/* Progress Steps */}
-          <div className="flex items-center space-x-4 mt-8 mb-8">
-            {steps.map((step, index) => (
-              <div key={step.number} className="flex items-center">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
-                    step.completed || currentStep === step.number
-                      ? 'bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-white shadow-amber-400/50'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
-                  }`}
-                >
-                  {step.number}
-                </div>
-                <span
-                  className={`ml-2 font-medium font-dosis ${
-                    step.completed || currentStep === step.number
-                      ? 'text-white bg-amber-500/70 dark:bg-amber-500/70 px-3 py-1 rounded-lg'
-                      : 'text-white bg-gray-600/50 dark:bg-gray-700/50 px-3 py-1 rounded-lg'
-                  }`}
-                >
-                  {step.title}
-                </span>
-                {index < steps.length - 1 && (
-                  <div className="w-12 h-1 bg-white/40 dark:bg-white/30 mx-4 rounded-full" />
-                )}
-              </div>
-            ))}
+              left: element.x, 
+              top: element.y,
+              transform: element.image.includes('Vector-Smart-Object2-1-ss.png') ? 'rotate(256deg)' : 
+                        element.image.includes('Vector-Smart-Object1.png') ? 'rotate(260deg)' : 
+                        element.image.includes('plush.png') ? 'rotate(76deg)' : 
+                        `rotate(${index * 45}deg)`
+            }}
+          >
+            <img 
+              src={element.image} 
+              alt="Decorative element" 
+              className="hover:filter hover:brightness-125 transition-all duration-300"
+              style={{ 
+                width: `${element.size}px`, 
+                height: 'auto'
+              }} 
+            />
           </div>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8 relative z-20">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            <div
-              key={currentStep}
-            >
-              {currentStep === 1 && (
-                <CustomerDetailsForm
-                  customerDetails={customerDetails}
-                  setCustomerDetails={setCustomerDetails}
-                  onNext={() => setCurrentStep(2)}
-                  nextButtonText={skipScheduling ? 'Continue to Payment' : 'Continue to Scheduling'}
-                  isGiftCard={isGiftCard}
-                />
-              )}
-              
-              {currentStep === 2 && !skipScheduling && (
-                <SchedulingForm
-                  installationDate={installationDate}
-                  setInstallationDate={setInstallationDate}
-                  teardownDate={teardownDate}
-                  setTeardownDate={setTeardownDate}
-                  rushOrder={rushOrder}
-                  setRushOrder={setRushOrder}
-                  onNext={() => setCurrentStep(3)}
-                  onBack={() => setCurrentStep(1)}
-                  isTreeOrder={!!orderData.treeOptions}
-                />
-              )}
-              
-              {((currentStep === 3 && !skipScheduling) || (currentStep === 2 && skipScheduling)) && (
-                <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15 rounded-3xl shadow-xl p-8 border border-white/20 dark:border-gray-700/30 relative">
-                  {/* Decorative Elements */}
-                  <div className="absolute top-4 right-4">
-                    <div className="w-16 h-16 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 rounded-full blur-xl z-0 opacity-40"></div>
+        ))}
+      
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-16 sm:pb-24 relative z-20">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
+              Checkout
+            </h1>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 font-dosis">Complete Your Order</h2>
+            
+            <p className="text-lg sm:text-xl text-white max-w-3xl mx-auto px-4">
+              Review your order details and complete your purchase
+            </p>
+            
+            {/* Progress Steps */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-2 mt-8 mb-8 px-4">
+              {steps.map((step, index) => (
+                <div key={step.number} className="flex items-center w-full sm:w-auto justify-center">
+                  <div
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                      step.completed || currentStep === step.number
+                        ? 'bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-white shadow-amber-400/50'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                    }`}
+                  >
+                    {step.number}
                   </div>
-                  <div className="absolute bottom-4 left-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 rounded-full blur-lg z-0 opacity-40"></div>
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">Payment Information</h2>
-                  
-                  <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
-                    <p className="text-yellow-800 dark:text-yellow-200">
-                      <strong>Demo Mode:</strong> This is a demonstration. No actual payment will be processed.
-                      In production, integrate with Stripe or another payment processor.
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-4 mb-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Card Number
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="4111 1111 1111 1111"
-                        className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                        disabled
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Expiry Date
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="MM/YY"
-                          className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                          disabled
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          CVV
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="123"
-                          className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                          disabled
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex space-x-4">
-                    <button
-                      onClick={() => setCurrentStep(skipScheduling ? 1 : 2)}
-                      className="px-6 py-3 border border-amber-200 dark:border-amber-700/30 text-amber-700 dark:text-amber-300 bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 rounded-lg hover:shadow-md transition-all duration-300"
-                    >
-                      Back
-                    </button>
-                    <button
-                      onClick={handleSubmitOrder}
-                      className="flex-1 py-3 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-amber-400/30 transition-all duration-300"
-                    >
-                      Place Order - ${calculateFinalTotal()}
-                    </button>
-                  </div>
+                  <span
+                    className={`ml-2 font-medium font-dosis text-sm sm:text-base ${
+                      step.completed || currentStep === step.number
+                        ? 'text-white bg-amber-500/70 dark:bg-amber-500/70 px-2 sm:px-3 py-1 rounded-lg'
+                        : 'text-white bg-gray-600/50 dark:bg-gray-700/50 px-2 sm:px-3 py-1 rounded-lg'
+                    }`}
+                  >
+                    {step.title}
+                  </span>
+                  {index < steps.length - 1 && (
+                    <div className="hidden sm:block w-8 lg:w-12 h-1 bg-white/40 dark:bg-white/30 mx-2 lg:mx-4 rounded-full" />
+                  )}
                 </div>
-              )}
+              ))}
             </div>
           </div>
 
-          {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <OrderSummaryComponent
-              orderData={orderData}
-              rushOrder={rushOrder}
-              finalTotal={calculateFinalTotal()}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 relative z-20">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-6 lg:space-y-8">
+              <div
+                key={currentStep}
+              >
+                {currentStep === 1 && (
+                  <CustomerDetailsForm
+                    customerDetails={customerDetails}
+                    setCustomerDetails={setCustomerDetails}
+                    onNext={() => setCurrentStep(2)}
+                    nextButtonText={skipScheduling ? 'Continue to Payment' : 'Continue to Scheduling'}
+                    isGiftCard={isGiftCard}
+                  />
+                )}
+                
+                {currentStep === 2 && !skipScheduling && (
+                  <SchedulingForm
+                    installationDate={installationDate}
+                    setInstallationDate={setInstallationDate}
+                    teardownDate={teardownDate}
+                    setTeardownDate={setTeardownDate}
+                    rushOrder={rushOrder}
+                    setRushOrder={setRushOrder}
+                    onNext={() => setCurrentStep(3)}
+                    onBack={() => setCurrentStep(1)}
+                    isTreeOrder={!!orderData.treeOptions}
+                  />
+                )}
+                
+                {((currentStep === 3 && !skipScheduling) || (currentStep === 2 && skipScheduling)) && (
+                  <StripePayment
+                    amount={calculateFinalTotal()}
+                    onPaymentSuccess={handlePaymentSuccess}
+                    onPaymentError={handlePaymentError}
+                    onBack={() => setCurrentStep(skipScheduling ? 1 : 2)}
+                    loading={paymentProcessing}
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* Order Summary */}
+            <div className="lg:col-span-1 order-first lg:order-last">
+              <OrderSummaryComponent
+                orderData={orderData}
+                rushOrder={rushOrder}
+                finalTotal={calculateFinalTotal()}
+                additionalCharges={getAdditionalCharges()}
+                appliedDiscount={appliedDiscount}
+                onDiscountApplied={setAppliedDiscount}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Elements>
   )
 }
 

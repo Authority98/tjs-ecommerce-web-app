@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 
 import ProductPage from './pages/ProductPage'
 import TreeCustomization from './pages/TreeCustomization'
@@ -32,6 +33,7 @@ function App() {
           </main>
           <Footer />
         </div>
+        <Toaster />
       </div>
     </Router>
   )

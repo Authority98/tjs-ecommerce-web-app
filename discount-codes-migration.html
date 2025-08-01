@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discount Codes Migration - Supabase</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #4c1d95;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .warning {
+            background: #fef3cd;
+            border: 1px solid #fbbf24;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .step {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #8b5cf6;
+        }
+        .sql-code {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background: #7c3aed;
+        }
+        .success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            color: #065f46;
+        }
+        .link {
+            color: #8b5cf6;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎟️ Discount Codes Migration</h1>
+        <p class="subtitle">Add discount codes functionality to your e-commerce store</p>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> This migration adds the discount_codes table and updates the orders table to support discount codes.
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Open Supabase Dashboard</h3>
+            <p>Go to your <a href="https://supabase.com/dashboard" target="_blank" class="link">Supabase Dashboard</a> and select your project.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Navigate to SQL Editor</h3>
+            <p>In your project dashboard, click on <strong>"SQL Editor"</strong> in the left sidebar.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Run the Migration SQL</h3>
+            <p>Copy the SQL below and paste it into the SQL Editor, then click <strong>"Run"</strong>:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyMigrationSQL()">Copy SQL</button>
+                <pre id="migration-sql">-- ========================================
+-- DISCOUNT CODES MIGRATION
+-- ========================================
+-- This script creates the discount_codes table and updates orders table
+
+-- Create discount_codes table
+CREATE TABLE IF NOT EXISTS discount_codes (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code text NOT NULL UNIQUE,
+  description text,
+  discount_type text NOT NULL CHECK (discount_type IN ('percentage', 'fixed')),
+  discount_value numeric NOT NULL CHECK (discount_value > 0),
+  min_order_amount numeric DEFAULT 0 CHECK (min_order_amount >= 0),
+  max_uses integer CHECK (max_uses > 0),
+  used_count integer DEFAULT 0 CHECK (used_count >= 0),
+  is_active boolean DEFAULT true,
+  valid_from timestamptz DEFAULT now(),
+  valid_until timestamptz,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_discount_codes_code ON discount_codes(code);
+CREATE INDEX IF NOT EXISTS idx_discount_codes_active ON discount_codes(is_active);
+
+-- Enable RLS on discount_codes table
+ALTER TABLE discount_codes ENABLE ROW LEVEL SECURITY;
+
+-- Allow authenticated users to manage discount codes
+CREATE POLICY "Authenticated users can manage discount codes"
+  ON discount_codes
+  FOR ALL
+  TO authenticated
+  USING (true)
+  WITH CHECK (true);
+
+-- Allow anonymous users to read active discount codes (for validation)
+CREATE POLICY "Anonymous users can read active discount codes"
+  ON discount_codes
+  FOR SELECT
+  TO anon
+  USING (is_active = true);
+
+-- Add discount columns to orders table
+DO $$
+BEGIN
+  -- Add discount_code_id column
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'orders' AND column_name = 'discount_code_id'
+  ) THEN
+    ALTER TABLE orders ADD COLUMN discount_code_id uuid REFERENCES discount_codes(id) ON DELETE SET NULL;
+  END IF;
+  
+  -- Add discount_amount column
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'orders' AND column_name = 'discount_amount'
+  ) THEN
+    ALTER TABLE orders ADD COLUMN discount_amount numeric DEFAULT 0 CHECK (discount_amount >= 0);
+  END IF;
+END $$;
+
+-- Create function to update discount code usage
+CREATE OR REPLACE FUNCTION increment_discount_code_usage()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.discount_code_id IS NOT NULL THEN
+    UPDATE discount_codes 
+    SET used_count = used_count + 1,
+        updated_at = now()
+    WHERE id = NEW.discount_code_id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger to automatically increment usage count
+DROP TRIGGER IF EXISTS trigger_increment_discount_usage ON orders;
+CREATE TRIGGER trigger_increment_discount_usage
+  AFTER INSERT ON orders
+  FOR EACH ROW
+  EXECUTE FUNCTION increment_discount_code_usage();</pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Verify the Migration</h3>
+            <p>After running the SQL, you can verify it worked by running this query:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyVerifySQL()">Copy SQL</button>
+                <pre id="verify-sql">-- Verify the discount_codes table was created
+SELECT table_name, column_name, data_type 
+FROM information_schema.columns 
+WHERE table_name = 'discount_codes'
+ORDER BY ordinal_position;
+
+-- Verify orders table was updated
+SELECT column_name, data_type, is_nullable 
+FROM information_schema.columns 
+WHERE table_name = 'orders' AND column_name IN ('discount_code_id', 'discount_amount');</pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 5: Test with Sample Data (Optional)</h3>
+            <p>You can create a test discount code to verify everything works:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyTestSQL()">Copy SQL</button>
+                <pre id="test-sql">-- Create a test discount code
+INSERT INTO discount_codes (
+  code, 
+  description, 
+  discount_type, 
+  discount_value, 
+  min_order_amount,
+  is_active
+) VALUES (
+  'WELCOME20',
+  '20% off for new customers',
+  'percentage',
+  20,
+  50,
+  true
+);</pre>
+            </div>
+        </div>
+
+        <div class="success" id="success-message" style="display: none;">
+            ✅ SQL copied to clipboard! Now paste it in your Supabase SQL Editor.
+        </div>
+    </div>
+
+    <script>
+        function copyMigrationSQL() {
+            const sql = document.getElementById('migration-sql').textContent;
+            navigator.clipboard.writeText(sql).then(() => {
+                showSuccess();
+            });
+        }
+
+        function copyVerifySQL() {
+            const sql = document.getElementById('verify-sql').textContent;
+            navigator.clipboard.writeText(sql).then(() => {
+                showSuccess();
+            });
+        }
+
+        function copyTestSQL() {
+            const sql = document.getElementById('test-sql').textContent;
+            navigator.clipboard.writeText(sql).then(() => {
+                showSuccess();
+            });
+        }
+
+        function showSuccess() {
+            const successMsg = document.getElementById('success-message');
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

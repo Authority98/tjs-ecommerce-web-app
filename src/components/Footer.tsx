@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
         ></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 py-12 relative z-10">
-        <style jsx>{`
+        <style>{`
           .py-12 { 
             padding-top: 24px; 
             padding-bottom: 0rem; 
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
             top: -568px; 
           }
         `}</style>
-        <style jsx>{`
+        <style>{`
           @media (min-width: 1024px) {
             .lg\:px-0 {
               padding-left: 0rem;
@@ -74,7 +74,7 @@ const Footer: React.FC = () => {
             <div className="md:col-span-2" style={{ width: '242px' }}>
               <h3 className="font-dosis font-bold text-white text-xl leading-[26px] mb-4">Quick Links</h3>
               <ul className="custom-space-y">
-              <style jsx>{`
+              <style>{`
                 .custom-space-y > :not([hidden]) ~ :not([hidden]) {
                   --tw-space-y-reverse: 0;
                   margin-top: calc(13px * calc(1 - var(--tw-space-y-reverse)));
@@ -170,7 +170,7 @@ const Footer: React.FC = () => {
                   <FaLinkedinIn className="text-white" size={18} />
                 </a>
               </div>
-              <style jsx>{`
+              <style>{`
                 .social-icon {
                   transition: transform 0.3s ease-in-out;
                 }

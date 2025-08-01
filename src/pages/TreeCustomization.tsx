@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 
 import { Ruler, TreePine, Calendar, Palette } from 'lucide-react'
 // Import CSS directly in the component instead of as a separate file
-import { Toaster } from 'react-hot-toast'
+
 import { showSuccessToast, TOAST_MESSAGES } from '../utils/toast'
 import { supabase } from '../lib/supabase'
 import { Product, TreeOptions, TREE_SIZES, TREE_TYPES, RENTAL_PERIODS, DECOR_LEVELS } from '../types'
@@ -346,7 +346,6 @@ const TreeCustomization: React.FC = () => {
           </div>
         </div>
       </div>
-      <Toaster />
     </div>
   )
 }

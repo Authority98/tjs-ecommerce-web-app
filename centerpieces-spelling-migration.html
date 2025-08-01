@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centerpieces Spelling Migration</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1e293b;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #475569;
+            margin-top: 30px;
+        }
+        .step {
+            background: #f1f5f9;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .sql-code {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .copy-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .copy-btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Centerpieces Spelling Migration</h1>
+        
+        <p>This migration updates the spelling from British English "centrepieces" to American English "centerpieces" throughout the database.</p>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> This migration will update existing data in your database. Make sure to backup your data before proceeding.
+        </div>
+
+        <h2>📋 Migration Steps</h2>
+
+        <div class="step">
+            <strong>Step 1:</strong> Go to your Supabase Dashboard → SQL Editor
+        </div>
+
+        <div class="step">
+            <strong>Step 2:</strong> Copy and paste the following SQL script:
+        </div>
+
+        <div class="sql-code" id="migrationSQL">-- Migration: Update "centrepieces" to "centerpieces" for American English spelling
+-- Date: 2025-01-04
+
+-- Step 1: Drop the old constraint first to allow updates
+ALTER TABLE products DROP CONSTRAINT IF EXISTS products_category_check;
+
+-- Step 2: Update existing products with centrepieces category to centerpieces
+UPDATE products 
+SET category = 'centerpieces' 
+WHERE category = 'centrepieces';
+
+-- Step 3: Add the new constraint with updated spelling
+ALTER TABLE products ADD CONSTRAINT products_category_check 
+CHECK (category IN ('decorations', 'ribbons', 'trees', 'centerpieces'));</div>
+
+        <button class="copy-btn" onclick="copyToClipboard('migrationSQL')">📋 Copy SQL</button>
+
+        <div class="step">
+            <strong>Step 3:</strong> Click "Run" to execute the migration
+        </div>
+
+        <div class="step">
+            <strong>Step 4:</strong> Verify the migration was successful by running the verification queries below
+        </div>
+
+        <h2>✅ Verification Queries</h2>
+        
+        <p>Run these queries to confirm the migration was successful:</p>
+
+        <div class="sql-code" id="verificationSQL">-- Check that no products have the old spelling
+SELECT COUNT(*) as old_spelling_count 
+FROM products 
+WHERE category = 'centrepieces';
+-- Should return 0
+
+-- Check products with new spelling
+SELECT COUNT(*) as new_spelling_count 
+FROM products 
+WHERE category = 'centerpieces';
+
+-- Verify the constraint is updated (modern PostgreSQL syntax)
+SELECT 
+    conname as constraint_name,
+    pg_get_constraintdef(oid) as constraint_definition
+FROM pg_constraint 
+WHERE conname = 'products_category_check';</div>
+
+        <button class="copy-btn" onclick="copyToClipboard('verificationSQL')">📋 Copy Verification SQL</button>
+
+        <div class="success">
+            <strong>✅ Success Indicators:</strong>
+            <ul>
+                <li>old_spelling_count should be 0</li>
+                <li>new_spelling_count should show your centerpieces products</li>
+                <li>The constraint should include 'centerpieces' instead of 'centrepieces'</li>
+            </ul>
+        </div>
+
+        <h2>🔄 What This Migration Does</h2>
+        <ul>
+            <li>Removes the old database constraint that only allowed "centrepieces"</li>
+            <li>Updates all existing products from "centrepieces" to "centerpieces"</li>
+            <li>Adds a new database constraint to use American English spelling</li>
+            <li>Ensures consistency with the updated frontend code</li>
+        </ul>
+
+        <div class="warning">
+            <strong>Note:</strong> After running this migration, your application will use "Centerpieces" (American English) throughout the site.
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#10b981';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#3b82f6';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
