@@ -138,29 +138,29 @@ const DiscountCodeInput: React.FC<DiscountCodeInputProps> = ({
 
   if (appliedDiscount) {
     return (
-      <div className="rounded-2xl p-4 border bg-gradient-to-r from-green-100/80 via-emerald-100/60 to-teal-100/40 dark:from-green-950/20 dark:via-emerald-950/15 dark:to-teal-950/10 border-green-200/50 dark:border-green-700/30">
+      <div className="rounded-lg p-2.5 border bg-gradient-to-r from-green-50/50 via-emerald-50/30 to-teal-50/20 dark:from-green-950/10 dark:via-emerald-950/8 dark:to-teal-950/5 border-green-200/30 dark:border-green-700/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="w-2 h-2 rounded-full mr-2 bg-green-500" />
+            <div className="w-1.5 h-1.5 rounded-full mr-2 bg-green-500" />
             <div>
-              <h4 className="font-bold text-gray-800 dark:text-white">
+              <span className="text-sm font-medium text-gray-800 dark:text-white">
                 Discount Applied
-              </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              </span>
+              <p className="text-xs text-gray-600 dark:text-gray-300">
                 Code: <span className="font-mono font-semibold">{appliedDiscount.code}</span>
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-lg font-bold text-green-600 dark:text-green-400">
+          <div className="flex items-center space-x-1.5">
+            <span className="text-sm font-bold text-green-600 dark:text-green-400">
               -${appliedDiscount.amount.toFixed(2)}
             </span>
             <button
               onClick={removeDiscount}
-              className="p-1 text-red-500 hover:bg-red-100 rounded-full transition-colors"
+              className="p-0.5 text-red-500 hover:bg-red-100 rounded-full transition-colors"
               title="Remove discount"
             >
-              <X size={16} />
+              <X size={12} />
             </button>
           </div>
         </div>
@@ -169,11 +169,11 @@ const DiscountCodeInput: React.FC<DiscountCodeInputProps> = ({
   }
 
   return (
-    <div className="rounded-2xl p-4 border bg-gradient-to-r from-blue-100/80 via-indigo-100/60 to-purple-100/40 dark:from-blue-950/20 dark:via-indigo-950/15 dark:to-purple-950/10 border-blue-200/50 dark:border-blue-700/30">
-      <h4 className="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
-        <Tag className="w-4 h-4 mr-2 text-blue-500" />
-        Discount Code
-      </h4>
+    <div className="rounded-lg p-3 border bg-gradient-to-r from-blue-50/50 via-indigo-50/30 to-purple-50/20 dark:from-blue-950/10 dark:via-indigo-950/8 dark:to-purple-950/5 border-blue-200/30 dark:border-blue-700/20">
+      <div className="flex items-center mb-2">
+        <Tag className="w-3 h-3 mr-1.5 text-blue-500" />
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Discount Code</span>
+      </div>
       
       <div className="flex space-x-2">
         <input
@@ -181,30 +181,26 @@ const DiscountCodeInput: React.FC<DiscountCodeInputProps> = ({
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}
           onKeyPress={(e) => e.key === 'Enter' && validateAndApplyDiscount()}
-          placeholder="Enter discount code"
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-mono"
+          placeholder="Enter code"
+          className="flex-1 px-2 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-xs font-mono"
           disabled={loading}
         />
         <button
           onClick={validateAndApplyDiscount}
           disabled={loading || !code.trim()}
-          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-md text-xs font-medium hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
         >
           {loading ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            <Check size={16} />
+            <Check size={12} />
           )}
         </button>
       </div>
       
       {error && (
-        <p className="text-red-500 text-xs mt-2">{error}</p>
+        <p className="text-red-500 text-xs mt-1">{error}</p>
       )}
-      
-      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-        Enter a valid discount code to save on your order
-      </p>
     </div>
   )
 }

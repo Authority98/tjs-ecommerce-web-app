@@ -11,12 +11,18 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 ## 📋 Latest Updates
 
 - **📦 Order Summary Optimization**: Enhanced order summary box layout for improved user experience
-  - Consolidated all content into a single white background area for cleaner appearance
-  - Reduced overall height by removing individual colored backgrounds and borders
-  - Implemented subtle border separators between sections for better organization
-  - Hidden price display for Christmas tree products (price determined after order placement)
-  - Removed "Final price to be determined after order is placed" text for tree products
-  - Streamlined layout with reduced padding and optimized spacing
+  - Repositioned "Final price to be determined" notice next to total amount with reduced text size
+  - Moved discount code section below the total for better visual hierarchy
+  - Applied gradient text styling to final price similar to thank you page
+  - Made discount code input more minimal and space-efficient
+  - Merged customization details into product div for compact display
+  - Highlighted delivery charges under service charges section
+  - Added yellow background styling to "Final price to be determined" text
+  - Removed trust badges section for cleaner layout
+  - Decreased spacing between product title and customizations
+  - Only display rental period when actually selected (no "Rental TBD")
+  - Removed package icon from total amount section
+  - Fixed customization div overflow with flex-wrap layout
 - **🔤 American English Spelling Update**: Updated "Centre pieces" to "Centerpieces" throughout the application
   - Frontend code updated across all TypeScript files and components
   - Database migration script created for existing data

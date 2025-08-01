@@ -76,7 +76,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                 </div>
             </div>
             <div className="flex-1">
-              <h4 className="font-bold text-gray-800 dark:text-white line-clamp-2 mb-2">
+              <h4 className="font-bold text-gray-800 dark:text-white line-clamp-2 mb-0.5">
                 {orderData.type === 'giftcard' ? '🎄 Twinkle Jingle eGift Card' : orderData.product?.title}
               </h4>
               {orderData.product?.category !== 'trees' && (
@@ -89,6 +89,31 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   </span>
                 </div>
               )}
+               
+               {/* Tree Customizations - Merged into product div, single line */}
+                 {orderData.treeOptions && (
+                   <div className="mt-1.5 pt-1.5 border-t border-gray-200/30 dark:border-gray-600/30">
+                     <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Customizations</div>
+                     <div className="flex flex-wrap gap-1 text-xs">
+                       {orderData.treeOptions.height && (
+                         <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                           {orderData.treeOptions.height}
+                         </span>
+                       )}
+                       <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                         {orderData.treeOptions.type}
+                       </span>
+                       {currentStep >= 2 && (rentalPeriod || orderData.treeOptions?.rentalPeriod) && (
+                         <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                           {rentalPeriod || orderData.treeOptions?.rentalPeriod} days
+                         </span>
+                       )}
+                       <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                         {orderData.treeOptions.decorLevel}% decor
+                       </span>
+                     </div>
+                   </div>
+                 )}
             </div>
           </div>
         </div>
@@ -134,62 +159,10 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
           </div>
         )}
 
-        {/* Tree Options */}
-        {orderData.treeOptions && (
-          <div className="p-4 border-b border-gray-200/50 dark:border-gray-600/50">
-            <h4 className="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
-              <div className="w-2 h-2 rounded-full mr-2 bg-pink-500" />
-              Customizations
-            </h4>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              {orderData.treeOptions.height && (
-                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-2">
-                  <div className="text-gray-500 dark:text-gray-400 text-xs">Size</div>
-                  <div className="font-medium text-gray-800 dark:text-white">{orderData.treeOptions.height}</div>
-                </div>
-              )}
-              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-2">
-                <div className="text-gray-500 dark:text-gray-400 text-xs">Type</div>
-                <div className="font-medium text-gray-800 dark:text-white">{orderData.treeOptions.type}</div>
-              </div>
-              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-2">
-                <div className="text-gray-500 dark:text-gray-400 text-xs">Rental</div>
-                <div className="font-medium text-gray-800 dark:text-white">
-                  {currentStep >= 2 && (rentalPeriod || orderData.treeOptions?.rentalPeriod) ? (
-                    <>
-                      {rentalPeriod || orderData.treeOptions?.rentalPeriod} days
-                      {(() => {
-                        const period = RENTAL_PERIODS.find(p => p.days === (rentalPeriod || orderData.treeOptions?.rentalPeriod));
-                        const additionalCost = period?.additionalCost || 0;
-                        return additionalCost > 0 ? ` (+$${additionalCost})` : '';
-                      })()}
-                    </>
-                  ) : (
-                    <div className="flex justify-center space-x-1">
-                      {[0, 1, 2].map((i) => (
-                        <div
-                          key={i}
-                          className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-pulse"
-                          style={{
-                            animationDelay: `${i * 0.2}s`,
-                            animationDuration: '1s'
-                          }}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-2">
-                <div className="text-gray-500 dark:text-gray-400 text-xs">Decor</div>
-                <div className="font-medium text-gray-800 dark:text-white">{orderData.treeOptions.decorLevel}%</div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Tree Options section removed - merged into product div above */}
 
-        {/* Service Charges (excluding delivery) */}
-        {additionalCharges.filter(charge => charge.name !== 'Delivery').length > 0 && (
+        {/* Service & Delivery Charges */}
+        {additionalCharges.length > 0 && (
           <div className="p-4 border-b border-gray-200/50 dark:border-gray-600/50">
             <h4 className="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
               <div className="w-2 h-2 rounded-full mr-2 bg-pink-500" />
@@ -202,20 +175,13 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+${charge.amount}</span>
                 </div>
               ))}
-            </div>
-          </div>
-        )}
-
-        {/* Delivery Charges */}
-        {additionalCharges.find(charge => charge.name === 'Delivery') && (
-          <div className="p-4 border-b border-gray-200/50 dark:border-gray-600/50">
-            <h4 className="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
-              <div className="w-2 h-2 rounded-full mr-2 bg-blue-500" />
-              Delivery
-            </h4>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700 dark:text-gray-300">Delivery</span>
-              <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
+              {/* Delivery charges directly under service charges without highlighting */}
+               {additionalCharges.find(charge => charge.name === 'Delivery') && (
+                 <div className="flex items-center justify-between">
+                   <span className="text-sm text-gray-700 dark:text-gray-300">Delivery</span>
+                   <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
+                 </div>
+               )}
             </div>
           </div>
         )}
@@ -234,48 +200,33 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
           </div>
         )}
 
-        {/* Discount Code Input - Only show for products, not gift cards */}
-         {orderData.type !== 'giftcard' && (
-           <DiscountCodeInput
-             orderData={orderData}
-             appliedDiscount={appliedDiscount}
-             onDiscountApplied={onDiscountApplied}
-           />
-         )}
-
          {/* Total */}
         <div className="border-t-2 border-pink-200 dark:border-pink-700 pt-4 mt-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <div className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</div>
-              <div className="text-3xl font-bold text-pink-600 dark:text-pink-400">${finalTotal}</div>
+          <div>
+            <div className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</div>
+            <div className="flex items-center gap-3">
+              <div className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-fuchsia-400">${finalTotal}</div>
               {orderData.product?.category === 'trees' && (
-                <div className="text-gray-500 dark:text-gray-400 text-xs mt-2 italic">Final price to be determined after order is placed</div>
+                <div className="text-xs bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded-lg text-amber-800 dark:text-amber-200 font-medium italic border border-amber-200/50 dark:border-amber-700/30">
+                  Final price to be determined after order is placed
+                </div>
               )}
             </div>
-            <div className="p-3 bg-pink-100 dark:bg-pink-900/30 rounded-xl">
-              <Package className="h-8 w-8 text-pink-600 dark:text-pink-400" />
-            </div>
           </div>
         </div>
+
+        {/* Discount Code Input - Only show for products, not gift cards - Moved below total and made minimal */}
+         {orderData.type !== 'giftcard' && (
+           <div className="mt-3 pt-3 border-t border-gray-200/50 dark:border-gray-600/50">
+             <DiscountCodeInput
+               orderData={orderData}
+               appliedDiscount={appliedDiscount}
+               onDiscountApplied={onDiscountApplied}
+             />
+           </div>
+         )}
         
-        {/* Trust Badges */}
-        <div className="mt-6 pt-4 border-t border-gray-200/50 dark:border-gray-600/50">
-          <div className="flex flex-col space-y-3">
-            <div className="flex items-center p-2 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/30 dark:to-rose-900/30 rounded-xl border border-pink-200/50 dark:border-pink-700/30 shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="p-1.5 bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg mr-2 flex-shrink-0">
-                <Shield className="h-4 w-4 text-white" />
-              </div>
-              <span className="font-medium text-pink-800 dark:text-pink-200 text-xs">Secure Checkout</span>
-            </div>
-            <div className="flex items-center p-2 bg-gradient-to-r from-rose-50 to-red-50 dark:from-rose-900/30 dark:to-red-900/30 rounded-xl border border-rose-200/50 dark:border-rose-700/30 shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="p-1.5 bg-gradient-to-r from-rose-500 to-red-500 rounded-lg mr-2 flex-shrink-0">
-                <Star className="h-4 w-4 text-white" />
-              </div>
-              <span className="font-medium text-rose-800 dark:text-rose-200 text-xs">Satisfaction Guaranteed</span>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
     </div>
