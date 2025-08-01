@@ -4,6 +4,17 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ![Twinkle Jingle](https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=1200&h=300&fit=crop)
 
+## 🚀 Live Demo
+
+**Repository**: [GitHub - tjs-ecommerce-web-app](https://github.com/Authority98/tjs-ecommerce-web-app)
+
+## 📋 Latest Updates
+
+- **Tree Pricing Updates**: Updated tree pricing text to "Pricing in October" for better customer communication
+- **Pre-order System**: Added pre-order tags for upcoming tree availability
+- **Database Migrations**: Synchronized all database migrations with Supabase
+- **Performance Optimizations**: Maintained zero-animation design for optimal performance
+
 ## ✨ Features
 
 ### 🎯 Core Functionality
