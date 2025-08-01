@@ -637,6 +637,10 @@ This project is actively maintained and deployed on GitHub:
 - **⚡ Performance**: Optimized component rendering and reduced unnecessary re-renders
 - **📐 Responsive Design**: Enhanced mobile experience with adaptive sizing and spacing
 - **🔍 Filter Logic Optimization**: Streamlined filter application logic for better performance and maintainability
+- **🛒 Cart Category Switching**: Fixed bug where tree products remained in cart when switching to other categories
+  - Reordered checkout initialization logic to prioritize URL product parameters
+  - Added automatic session storage clearing when new products are selected
+  - Ensures proper "one category per cart" behavior across all product types
 
 ## 🔮 Roadmap
 

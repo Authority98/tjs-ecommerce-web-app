@@ -42,7 +42,30 @@ const CheckoutPage: React.FC = () => {
 
   const initializeCheckout = async () => {
     try {
-      // Check if coming from tree customization
+      // Check if coming directly with productId (for decorations/ribbons/centerpieces)
+      const productId = searchParams.get('productId')
+      if (productId) {
+        // Clear any existing session storage when switching to a different product
+        sessionStorage.removeItem('checkoutData')
+        
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('id', productId)
+          .single()
+
+        if (error) throw error
+
+        setOrderData({
+          product: data,
+          totalAmount: data.price
+        })
+        
+        setLoading(false)
+        return
+      }
+
+      // Check if coming from tree customization or gift card
       const storedData = sessionStorage.getItem('checkoutData')
       if (storedData) {
         const checkoutData = JSON.parse(storedData)
@@ -58,23 +81,6 @@ const CheckoutPage: React.FC = () => {
         
         setLoading(false)
         return
-      }
-
-      // Check if coming directly with productId (for decorations/ribbons)
-      const productId = searchParams.get('productId')
-      if (productId) {
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .eq('id', productId)
-          .single()
-
-        if (error) throw error
-
-        setOrderData({
-          product: data,
-          totalAmount: data.price
-        })
       }
     } catch (error) {
       console.error('Error initializing checkout:', error)
