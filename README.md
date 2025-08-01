@@ -10,6 +10,13 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **📦 Order Summary Optimization**: Enhanced order summary box layout for improved user experience
+  - Consolidated all content into a single white background area for cleaner appearance
+  - Reduced overall height by removing individual colored backgrounds and borders
+  - Implemented subtle border separators between sections for better organization
+  - Hidden price display for Christmas tree products (price determined after order placement)
+  - Removed "Final price to be determined after order is placed" text for tree products
+  - Streamlined layout with reduced padding and optimized spacing
 - **🔤 American English Spelling Update**: Updated "Centre pieces" to "Centerpieces" throughout the application
   - Frontend code updated across all TypeScript files and components
   - Database migration script created for existing data

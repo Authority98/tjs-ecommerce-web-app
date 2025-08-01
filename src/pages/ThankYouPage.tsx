@@ -8,7 +8,9 @@ const ThankYouPage: React.FC = () => {
   const orderNumber = searchParams.get('orderNumber')
   const total = searchParams.get('total')
   const orderType = searchParams.get('orderType') // 'giftcard' or 'product'
+  const category = searchParams.get('category') || ''
   const isGiftCard = orderType === 'giftcard'
+  const isTreeOrder = category === 'trees'
 
   useEffect(() => {
     // Scroll to top when component mounts
@@ -102,6 +104,12 @@ const ThankYouPage: React.FC = () => {
                   ${total || '299'}
                 </span>
               </div>
+              {/* Tree order pricing notice */}
+              {isTreeOrder && (
+                <div className="text-sm bg-amber-100/50 dark:bg-amber-900/30 p-3 rounded-xl text-amber-800 dark:text-amber-200 font-medium italic border border-amber-200/50 dark:border-amber-700/30">
+                  Final price to be determined after order is placed
+                </div>
+              )}
               <div className="text-sm bg-purple-100/50 dark:bg-purple-900/30 p-3 rounded-xl text-gray-700 dark:text-white font-medium">
                 A confirmation email has been sent to your inbox with all the details.
               </div>

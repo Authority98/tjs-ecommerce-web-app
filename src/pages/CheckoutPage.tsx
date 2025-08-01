@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Elements } from '@stripe/react-stripe-js'
 import { supabase } from '../lib/supabase'
 import { stripe } from '../lib/stripe'
-import { Product, OrderSummary, CustomerDetails } from '../types'
+import { Product, OrderSummary, CustomerDetails, RENTAL_PERIODS } from '../types'
 import OrderSummaryComponent from '../components/OrderSummary'
 import CustomerDetailsForm from '../components/CustomerDetailsForm'
 import SchedulingForm from '../components/SchedulingForm'
@@ -26,6 +26,7 @@ const CheckoutPage: React.FC = () => {
   const [installationDate, setInstallationDate] = useState('')
   const [teardownDate, setTeardownDate] = useState('')
   const [rushOrder, setRushOrder] = useState(false)
+  const [rentalPeriod, setRentalPeriod] = useState(45)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
   const [appliedDiscount, setAppliedDiscount] = useState<{
     id: string
@@ -86,6 +87,13 @@ const CheckoutPage: React.FC = () => {
     if (!orderData) return 0
     
     let total = orderData.totalAmount
+    
+    // Add rental period cost for tree orders
+    if (orderData.treeOptions) {
+      const period = RENTAL_PERIODS.find(p => p.days === rentalPeriod)
+      const rentalCost = period?.additionalCost || 0
+      total += rentalCost
+    }
     
     // Add additional charges for products (not gift cards)
     if (orderData.type !== 'giftcard') {
@@ -179,7 +187,7 @@ const CheckoutPage: React.FC = () => {
           tree_height: orderData.treeOptions?.height,
           tree_width: orderData.treeOptions?.width,
           tree_type: orderData.treeOptions?.type,
-          rental_period: orderData.treeOptions?.rentalPeriod,
+          rental_period: orderData.treeOptions ? rentalPeriod : null,
           decor_level: orderData.treeOptions?.decorLevel,
           installation_date: installationDate || null,
           teardown_date: teardownDate || null,
@@ -202,7 +210,8 @@ const CheckoutPage: React.FC = () => {
       
       // Navigate to thank you page with order number
       const orderType = orderData.giftCard ? 'giftcard' : 'product'
-      navigate(`/thank-you?orderNumber=${orderNumber}&total=${calculateFinalTotal()}&orderType=${orderType}`)
+      const category = orderData.product?.category || ''
+      navigate(`/thank-you?orderNumber=${orderNumber}&total=${calculateFinalTotal()}&orderType=${orderType}&category=${category}`)
     } catch (error) {
       console.error('Error submitting order:', error)
       alert('Error placing order. Please try again.')
@@ -383,6 +392,8 @@ const CheckoutPage: React.FC = () => {
                     setTeardownDate={setTeardownDate}
                     rushOrder={rushOrder}
                     setRushOrder={setRushOrder}
+                    rentalPeriod={rentalPeriod}
+                    setRentalPeriod={setRentalPeriod}
                     onNext={() => setCurrentStep(3)}
                     onBack={() => setCurrentStep(1)}
                     isTreeOrder={!!orderData.treeOptions}
@@ -407,6 +418,8 @@ const CheckoutPage: React.FC = () => {
                 orderData={orderData}
                 rushOrder={rushOrder}
                 finalTotal={calculateFinalTotal()}
+                rentalPeriod={orderData.treeOptions ? rentalPeriod : undefined}
+                currentStep={currentStep}
                 additionalCharges={getAdditionalCharges()}
                 appliedDiscount={appliedDiscount}
                 onDiscountApplied={setAppliedDiscount}

@@ -15,7 +15,7 @@ export interface TreeOptions {
   height: string
   width: string
   type: string
-  rentalPeriod: number
+  rentalPeriod?: number
   decorLevel: number
 }
 

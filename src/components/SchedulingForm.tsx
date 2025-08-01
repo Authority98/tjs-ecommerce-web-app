@@ -1,5 +1,6 @@
 import React from 'react'
-import { Calendar, Clock, Zap } from 'lucide-react'
+import { Calendar, Clock, Zap, Check } from 'lucide-react'
+import { RENTAL_PERIODS } from '../types'
 
 interface SchedulingFormProps {
   installationDate: string
@@ -8,6 +9,8 @@ interface SchedulingFormProps {
   setTeardownDate: (date: string) => void
   rushOrder: boolean
   setRushOrder: (rush: boolean) => void
+  rentalPeriod?: number
+  setRentalPeriod?: (period: number) => void
   onNext: () => void
   onBack: () => void
   isTreeOrder: boolean
@@ -20,6 +23,8 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   setTeardownDate,
   rushOrder,
   setRushOrder,
+  rentalPeriod = 45,
+  setRentalPeriod,
   onNext,
   onBack,
   isTreeOrder
@@ -54,6 +59,57 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
       </h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Rental Period Selection - Only for tree orders */}
+        {isTreeOrder && setRentalPeriod && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+              <div className="flex items-center space-x-2">
+                <Clock className="h-4 w-4" style={{color: '#F59E0B'}} />
+                <span>Rental Period *</span>
+              </div>
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+              {RENTAL_PERIODS.map((period) => (
+                <button
+                  key={period.days}
+                  type="button"
+                  onClick={() => setRentalPeriod(period.days)}
+                  className={`p-4 rounded-xl border-2 text-center transition-all duration-200 ${
+                    rentalPeriod === period.days
+                      ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 shadow-lg'
+                      : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-amber-300'
+                  }`}
+                >
+                  <div className="flex justify-center mb-2">
+                    <div className={`p-2 rounded-full ${
+                      rentalPeriod === period.days
+                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+                        : 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
+                    }`}>
+                      <Clock className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="font-bold text-lg text-gray-800 dark:text-white mb-1">
+                    {period.label}
+                  </div>
+                  {period.additionalCost > 0 && (
+                    <div className="text-sm text-amber-600 dark:text-amber-400 font-medium">
+                      +${period.additionalCost}
+                    </div>
+                  )}
+                  {rentalPeriod === period.days && (
+                    <div className="mt-2">
+                      <Check className="h-4 w-4 text-amber-500 mx-auto" />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
+              Choose how long you'd like to keep your decorated tree
+            </p>
+          </div>
+        )}
         <div>
           <label htmlFor="installationDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             <div className="flex items-center space-x-2">

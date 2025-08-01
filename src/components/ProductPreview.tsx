@@ -7,13 +7,11 @@ import Lightbox from './ui/Lightbox'
 interface ProductPreviewProps {
   product: Product
   selectedOptions: TreeOptions
-  totalPrice: number
 }
 
 const ProductPreview: React.FC<ProductPreviewProps> = ({
   product,
-  selectedOptions,
-  totalPrice
+  selectedOptions
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
@@ -93,11 +91,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
               </div>
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
-            <div className="absolute top-4 right-4 z-10">
-              <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl px-4 py-2 shadow-lg border border-white/20 dark:border-gray-700/30">
-                <span className="text-2xl font-bold text-pink-600 dark:text-rose-400">${totalPrice}</span>
-              </div>
-            </div>
+
           </div>
           
           <div className="p-4 sm:p-6 relative z-10">

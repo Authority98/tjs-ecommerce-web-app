@@ -46,7 +46,7 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
   return (
     <>
     <div
-      className={`relative bg-gradient-to-br ${categoryConfig.bgGradient} backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden border border-white/20 dark:border-gray-700/30 transition-all duration-300`}
+      className={`relative bg-gradient-to-br ${categoryConfig?.bgGradient || 'from-gray-50 to-gray-100 dark:from-gray-950/20 dark:to-gray-900/20'} backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden border border-white/20 dark:border-gray-700/30 transition-all duration-300`}
     >
       {/* Decorative Elements */}
       <div className="absolute -top-4 -right-16 w-24 h-24 bg-white/10 rounded-full blur-2xl z-0"></div>
@@ -101,16 +101,18 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
         
 
         
-        {/* Price Badge */}
-        <div
-          className="absolute top-6 right-6 z-10"
-        >
-          <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl px-4 py-2 shadow-lg border border-white/20 dark:border-gray-700/30">
-            <span className="text-2xl font-bold text-purple-600 dark:text-amber-400">
-              ${product.price}
-            </span>
+        {/* Price Badge - Hidden for trees */}
+        {product.category !== 'trees' && (
+          <div
+            className="absolute top-6 right-6 z-10"
+          >
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl px-4 py-2 shadow-lg border border-white/20 dark:border-gray-700/30">
+              <span className="text-2xl font-bold text-purple-600 dark:text-amber-400">
+                ${product.price}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Category Badge */}
         <div className="absolute top-6 left-6">
@@ -167,13 +169,17 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
 
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute top-4 right-4">
-        <div className={`w-16 h-16 bg-gradient-to-r ${categoryConfig.gradient} rounded-full blur-xl`} />
-      </div>
-      <div className="absolute bottom-4 left-4">
-        <div className={`w-12 h-12 bg-gradient-to-r ${categoryConfig.gradient} rounded-full blur-lg`} />
-      </div>
+      {/* Decorative Elements - Hidden for trees */}
+      {product.category !== 'trees' && (
+        <>
+          <div className="absolute top-4 right-4">
+            <div className={`w-16 h-16 bg-gradient-to-r ${categoryConfig?.gradient || 'from-gray-400 to-gray-500'} rounded-full blur-xl`} />
+          </div>
+          <div className="absolute bottom-4 left-4">
+            <div className={`w-12 h-12 bg-gradient-to-r ${categoryConfig?.gradient || 'from-gray-400 to-gray-500'} rounded-full blur-lg`} />
+          </div>
+        </>
+      )}
     </div>
     
     {/* Lightbox - Moved outside the card container */}

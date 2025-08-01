@@ -31,18 +31,25 @@ const TreeCustomization: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeStep, setActiveStep] = useState(0)
-  const [selectedOptions, setSelectedOptions] = useState<TreeOptions>({
+const [selectedOptions, setSelectedOptions] = useState<TreeOptions>({
     height: '',
     width: '',
     type: '',
-    rentalPeriod: 0,
     decorLevel: 0
   })
+  const floatingElements = [
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 0, x: '31%', y: '35%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object1.png', delay: 0.5, x: '80%', y: '9%', size: 183 },
+    { image: '/assets/images/Vector-Smart-Object-2.png', delay: 1.5, x: '2%', y: '75%', size: 100 },
+    { image: '/assets/images/plush.png', delay: 1.2, x: '85%', y: '45%', size: 63 },
+    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 1.7, x: '40%', y: '80%', size: 54 },
+    { image: '/assets/images/Vector-Smart-Object2-1-ss.png', delay: 0.3, x: '13%', y: '16%', size: 81 },
+    { image: '/assets/images/sircle2.png', delay: 0.8, x: '80%', y: '67%', size: 66 },
+  ]
 
   const steps = [
     { id: 'size', title: 'Tree Size', icon: Ruler, description: 'Choose the perfect dimensions' },
     { id: 'type', title: 'Tree Type', icon: TreePine, description: 'Select your preferred variety' },
-    { id: 'rental', title: 'Rental Period', icon: Calendar, description: 'How long do you need it?' },
     { id: 'decor', title: 'Decoration Level', icon: Palette, description: 'Customize your style' }
   ]
 
@@ -88,8 +95,9 @@ const TreeCustomization: React.FC = () => {
     if (!product) return 0
     
     const basePrice = product.price
-    const rentalPeriod = RENTAL_PERIODS.find(p => p.days === selectedOptions.rentalPeriod)
-    const rentalCost = rentalPeriod?.additionalCost || 0
+    // Use default 45-day rental period for price calculation during customization
+    const defaultRentalPeriod = RENTAL_PERIODS.find(p => p.days === 45)
+    const rentalCost = defaultRentalPeriod?.additionalCost || 0
     
     return basePrice + rentalCost
   }
@@ -104,16 +112,7 @@ const TreeCustomization: React.FC = () => {
     }, 800)
   }
 
-  const handlePeriodSelect = (days: number) => {
-    setSelectedOptions({ ...selectedOptions, rentalPeriod: days })
-    const period = RENTAL_PERIODS.find(p => p.days === days)
-    showSuccessToast(TOAST_MESSAGES.RENTAL_SELECTED(period?.label || ''))
-    setTimeout(() => {
-      if (activeStep < steps.length - 1) {
-        setActiveStep(activeStep + 1)
-      }
-    }, 800)
-  }
+
 
   const handleDecorLevelSelect = (level: number) => {
     setSelectedOptions({ ...selectedOptions, decorLevel: level })
@@ -137,8 +136,7 @@ const TreeCustomization: React.FC = () => {
     switch (stepIndex) {
       case 0: return !!(selectedOptions.height && selectedOptions.width)
       case 1: return !!selectedOptions.type
-      case 2: return selectedOptions.rentalPeriod >= 0
-      case 3: return !!selectedOptions.decorLevel
+      case 2: return !!selectedOptions.decorLevel
       default: return false
     }
   }
@@ -219,16 +217,6 @@ const TreeCustomization: React.FC = () => {
 
 
 
-  const floatingElements = [
-    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 0, x: '31%', y: '35%', size: 54 },
-    { image: '/assets/images/Vector-Smart-Object1.png', delay: 0.5, x: '80%', y: '9%', size: 183 },
-    { image: '/assets/images/Vector-Smart-Object-2.png', delay: 1.5, x: '2%', y: '75%', size: 100 },
-    { image: '/assets/images/plush.png', delay: 1.2, x: '85%', y: '45%', size: 63 },
-    { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 1.7, x: '40%', y: '80%', size: 54 },
-    { image: '/assets/images/Vector-Smart-Object2-1-ss.png', delay: 0.3, x: '13%', y: '16%', size: 81 },
-    { image: '/assets/images/sircle2.png', delay: 0.8, x: '80%', y: '67%', size: 66 },
-  ]
-
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Apply the CSS styles */}
@@ -278,7 +266,6 @@ const TreeCustomization: React.FC = () => {
           <ProductPreview
             product={product}
             selectedOptions={selectedOptions}
-            totalPrice={calculateTotalPrice()}
           />
 
           {/* Customization Panel - Now on Right */}
@@ -329,13 +316,6 @@ const TreeCustomization: React.FC = () => {
                 )}
 
                 {activeStep === 2 && (
-                  <RentalPeriodSelection
-                    selectedOptions={selectedOptions}
-                    onPeriodSelect={handlePeriodSelect}
-                  />
-                )}
-
-                {activeStep === 3 && (
                   <DecorationLevelSelection
                     selectedOptions={selectedOptions}
                     onDecorLevelSelect={handleDecorLevelSelect}
