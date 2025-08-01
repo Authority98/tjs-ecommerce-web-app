@@ -50,12 +50,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     }
 
     try {
-      // For development, use mock API
-      // In production, use mock API as fallback if Stripe is not properly configured
-      // Check if we're in development mode or if Stripe is not available
-      const isDevelopment = import.meta.env.DEV || !stripe;
+      // Use mock API for all environments since no backend server is deployed
+      // This allows testing payment flows without a live server
+      const useMockPayments = true;
       
-      if (isDevelopment) {
+      if (useMockPayments) {
         // Get card details for mock testing
         const { error: tokenError, token } = await stripe.createToken(cardNumberElement);
         
