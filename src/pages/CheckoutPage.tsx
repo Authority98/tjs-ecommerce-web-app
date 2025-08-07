@@ -126,7 +126,7 @@ const CheckoutPage: React.FC = () => {
           } else {
             setDeliveryFee(0)
             setDeliveryError('Invalid postal code - delivery not available for this area')
-            showErrorToast('❌ Invalid postal code - delivery not available for this area')
+            showErrorToast('Invalid postal code')
           }
         }, 500)
         

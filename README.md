@@ -12,12 +12,13 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 - **🚚 Enhanced Delivery System**: Completely redesigned delivery validation and user experience
   - Removed 6-digit postal code restriction - now accepts postal codes of any length
-  - Replaced inline error messages with elegant toast notifications
+  - Replaced inline error messages with clean toast notifications (no emojis)
   - Added animated loading dots in delivery section until postal code is entered
   - Delivery section now always visible under service charges with real-time validation
   - Debounced postal code validation with 500ms delay for optimal performance
   - Success/error toast notifications for delivery availability feedback
   - Improved UX consistency matching tree customization page patterns
+  - Simplified error messages for better user experience
 - **📦 Order Summary Optimization**: Enhanced order summary box layout for improved user experience
   - Repositioned "Final price upon order" notice next to total amount label
   - Moved discount code section below the total for better visual hierarchy
