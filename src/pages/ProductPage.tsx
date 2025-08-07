@@ -16,7 +16,7 @@ interface Filters {
 
 const ProductPage: React.FC = () => {
   const { category } = useParams<{ category: string }>()
-  const validCategory = category as 'trees' | 'decorations' | 'ribbons' | 'centerpieces' | undefined
+  const validCategory = category as 'trees' | 'decorations' | 'ribbons' | undefined
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
@@ -91,7 +91,7 @@ const ProductPage: React.FC = () => {
     let count = 0
     
     // Color filters for all categories that support colors
-    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centerpieces') && filters.colors.length > 0) {
+    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons') && filters.colors.length > 0) {
       count += filters.colors.length
     }
     
@@ -111,7 +111,7 @@ const ProductPage: React.FC = () => {
     let filtered = [...products]
 
     // Filter by colors (for all categories that support colors)
-    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centerpieces') && filters.colors.length > 0) {
+    if ((validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons') && filters.colors.length > 0) {
       filtered = filtered.filter(product => {
         if (!product.color) return false
         
@@ -170,7 +170,7 @@ const ProductPage: React.FC = () => {
         }
       case 'ribbons':
         return {
-          title: 'Premium Ribbons',
+          title: 'Christmas Ribbons',
           gradient: 'from-violet-400 via-purple-400 to-fuchsia-300',
           bgGradient: 'from-violet-50/60 via-purple-50/40 to-fuchsia-50/30 dark:from-violet-950/15 dark:via-purple-950/10 dark:to-fuchsia-950/8',
           accentColor: 'violet'
@@ -181,13 +181,6 @@ const ProductPage: React.FC = () => {
           gradient: 'from-purple-600 via-violet-600 to-fuchsia-500',
           bgGradient: 'from-purple-50/80 via-violet-50/60 to-fuchsia-50/40 dark:from-purple-950/20 dark:via-violet-950/15 dark:to-fuchsia-950/10',
           accentColor: 'purple'
-        }
-      case 'centerpieces':
-        return {
-          title: 'Centerpieces',
-          gradient: 'from-amber-400 via-yellow-400 to-orange-300',
-          bgGradient: 'from-amber-50/80 via-yellow-50/60 to-orange-50/40 dark:from-amber-950/20 dark:via-yellow-950/15 dark:to-orange-950/10',
-          accentColor: 'amber'
         }
       default:
         return {
@@ -254,11 +247,11 @@ const ProductPage: React.FC = () => {
             {categoryInfo.title}
           </h2>
           <p className="text-xl text-white max-w-3xl mx-auto">
-            Discover our premium collection of {validCategory === 'trees' ? 'Christmas trees' : validCategory === 'decorations' ? 'festive decorations' : validCategory === 'ribbons' ? 'elegant ribbons' : validCategory === 'centerpieces' ? 'stunning centerpieces' : 'products'} for your perfect holiday celebration
+            Discover our premium collection of {validCategory === 'trees' ? 'Christmas trees' : validCategory === 'decorations' ? 'festive decorations' : validCategory === 'ribbons' ? 'elegant ribbons' : 'products'} for your perfect holiday celebration
           </p>
         </div>
         {/* Filter Button and Panel */}
-        {(validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centerpieces') && products.length > 0 && (
+        {(validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons') && products.length > 0 && (
           <div ref={filterContainerRef} className="relative mb-16 z-30">
             {/* Filter Toggle Button */}
             <button
@@ -286,8 +279,8 @@ const ProductPage: React.FC = () => {
                 </div>
                 
                 <div className="flex flex-col lg:flex-row gap-6">
-                  {/* Colors Filter - For trees, decorations, ribbons, and centerpieces */}
-                {(validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons' || validCategory === 'centerpieces') && (
+                  {/* Colors Filter - For trees, decorations, and ribbons */}
+                {(validCategory === 'trees' || validCategory === 'decorations' || validCategory === 'ribbons') && (
                     <div className="flex-1">
                       <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Colors</h3>
                       <div className="flex flex-wrap gap-2">

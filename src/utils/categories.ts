@@ -37,24 +37,13 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
   },
   {
     id: 'ribbons',
-    title: 'Premium Ribbons',
+    title: 'Christmas Ribbons',
     description: 'Luxurious ribbons and elegant bows crafted to add the perfect finishing touch to your holiday décor',
     icon: Ribbon,
     gradient: 'from-violet-400 via-purple-400 to-fuchsia-300',
     bgGradient: 'from-violet-50 to-purple-50 dark:from-violet-950/15 dark:to-purple-950/15',
     accent: 'violet',
     iconBg: 'bg-violet-500',
-    hoverShadow: ''
-  },
-  {
-    id: 'centerpieces',
-    title: 'Centerpieces',
-    description: 'Stunning centerpieces and table decorations to create the perfect focal point for your holiday gatherings',
-    icon: Crown,
-    gradient: 'from-amber-400 via-orange-400 to-yellow-300',
-    bgGradient: 'from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15',
-    accent: 'amber',
-    iconBg: 'bg-amber-500',
     hoverShadow: ''
   },
   {

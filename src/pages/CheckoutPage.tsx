@@ -3,7 +3,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Elements } from '@stripe/react-stripe-js'
 import { supabase } from '../lib/supabase'
 import { stripe } from '../lib/stripe'
-import { Product, OrderSummary, CustomerDetails, RENTAL_PERIODS } from '../types'
+import { Product, OrderSummary, CustomerDetails, RENTAL_PERIODS, DeliveryConfiguration, DEFAULT_DELIVERY_ZONES, DEFAULT_DELIVERY_ADDONS } from '../types'
+import { calculateDeliveryFee } from '../utils/deliveryCalculator'
+import { showErrorToast, showSuccessToast, showLoadingToast } from '../utils/toast'
 import OrderSummaryComponent from '../components/OrderSummary'
 import CustomerDetailsForm from '../components/CustomerDetailsForm'
 import SchedulingForm from '../components/SchedulingForm'
@@ -21,7 +23,11 @@ const CheckoutPage: React.FC = () => {
     name: '',
     email: '',
     phone: '',
-    deliveryAddress: ''
+    deliveryAddress: '',
+    unitNumber: '',
+    buildingName: '',
+    streetAddress: '',
+    postalCode: ''
   })
   const [installationDate, setInstallationDate] = useState('')
   const [teardownDate, setTeardownDate] = useState('')
@@ -35,14 +41,111 @@ const CheckoutPage: React.FC = () => {
     discount_value: number
     amount: number
   } | null>(null)
+  const [deliveryConfig, setDeliveryConfig] = useState<DeliveryConfiguration | null>(null)
+  const [deliveryFee, setDeliveryFee] = useState(20) // Default fallback
+  const [deliveryError, setDeliveryError] = useState<string | null>(null)
 
   useEffect(() => {
     initializeCheckout()
   }, [])
 
+  // Load delivery configuration
+  useEffect(() => {
+    const loadDeliveryConfig = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('delivery_configurations')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(1)
+
+      if (data && data.length > 0 && !error) {
+        // Convert database structure to match TypeScript interface
+        const configData = data[0]
+        const convertedConfig: DeliveryConfiguration = {
+          ...configData,
+          addOns: configData.add_ons || [],
+          isActive: configData.is_active,
+          zoneBasedConfig: configData.zones ? { zones: configData.zones } : undefined,
+          distanceBasedConfig: configData.distance_config
+        }
+        
+        setDeliveryConfig(convertedConfig)
+      } else {
+        // Use default configuration if none found in database
+        const defaultConfig: DeliveryConfiguration = {
+          model: 'zone',
+          zoneBasedConfig: {
+            zones: DEFAULT_DELIVERY_ZONES
+          },
+          addOns: DEFAULT_DELIVERY_ADDONS,
+          isActive: true
+        }
+
+        setDeliveryConfig(defaultConfig)
+      }
+    } catch (error) {
+      // Use default configuration on error
+      const defaultConfig: DeliveryConfiguration = {
+        model: 'zone',
+        zoneBasedConfig: {
+          zones: DEFAULT_DELIVERY_ZONES
+        },
+        addOns: DEFAULT_DELIVERY_ADDONS,
+        isActive: true
+      }
+      console.error('Error loading delivery config:', error)
+      setDeliveryConfig(defaultConfig)
+    }
+  }
+
+    loadDeliveryConfig()
+  }, [])
+
+  // Calculate delivery fee when config or customer details change
+  useEffect(() => {
+    if (deliveryConfig && customerDetails?.postalCode && orderData?.type !== 'giftcard') {
+      // Validate postal code if it has any digits
+      if (customerDetails.postalCode.length > 0) {
+        setDeliveryError(null)
+        
+        // Add a small delay to debounce the validation
+        const timeoutId = setTimeout(() => {
+          const result = calculateDeliveryFee(deliveryConfig, {
+            postalCode: customerDetails.postalCode,
+            // Only pass distance if using distance-based model
+            ...(deliveryConfig.model === 'distance' && { distance: 15 }),
+            selectedAddOns: [] // No add-ons selected by default
+          })
+          
+          if (!result.error) {
+            setDeliveryFee(result.totalFee)
+            setDeliveryError(null)
+            showSuccessToast(`✅ Delivery available for $${result.totalFee}`)
+          } else {
+            setDeliveryFee(0)
+            setDeliveryError('Invalid postal code - delivery not available for this area')
+            showErrorToast('❌ Invalid postal code - delivery not available for this area')
+          }
+        }, 500)
+        
+        return () => clearTimeout(timeoutId)
+      } else {
+        // Reset states when postal code is empty
+        setDeliveryError(null)
+        setDeliveryFee(0)
+      }
+    } else {
+      // Reset states when no config or postal code
+      setDeliveryError(null)
+      setDeliveryFee(0)
+    }
+  }, [deliveryConfig, customerDetails?.postalCode, orderData?.type])
+
   const initializeCheckout = async () => {
     try {
-      // Check if coming directly with productId (for decorations/ribbons/centerpieces)
+      // Check if coming directly with productId (for decorations/ribbons)
       const productId = searchParams.get('productId')
       if (productId) {
         // Clear any existing session storage when switching to a different product
@@ -105,7 +208,7 @@ const CheckoutPage: React.FC = () => {
     if (orderData.type !== 'giftcard') {
       total += 10 // Assembling
       total += 10 // Dismantling
-      total += 20 // Delivery
+      total += deliveryFee // Dynamic delivery fee
     }
     
     if (rushOrder) total += 150 // Rush order fee
@@ -121,11 +224,17 @@ const CheckoutPage: React.FC = () => {
   const getAdditionalCharges = () => {
     if (orderData?.type === 'giftcard') return []
     
-    return [
+    const charges = [
       { name: 'Assembling', amount: 10 },
-      { name: 'Dismantling', amount: 10 },
-      { name: 'Delivery', amount: 20 }
+      { name: 'Dismantling', amount: 10 }
     ]
+    
+    // Only add delivery charge if there's no delivery error
+    if (!deliveryError && deliveryFee > 0) {
+      charges.push({ name: 'Delivery', amount: deliveryFee })
+    }
+    
+    return charges
   }
 
   const generateOrderNumber = () => {
@@ -182,6 +291,10 @@ const CheckoutPage: React.FC = () => {
         customer_email: customerDetails.email,
         customer_phone: customerDetails.phone,
         delivery_address: customerDetails.deliveryAddress,
+        unit_number: customerDetails.unitNumber || null,
+        building_name: customerDetails.buildingName || null,
+        street_address: customerDetails.streetAddress || null,
+        postal_code: customerDetails.postalCode || null,
         order_type: isGiftCard ? 'giftcard' : 'product',
         payment_intent_id: paymentIntentId,
         ...(isGiftCard ? {
@@ -230,7 +343,7 @@ const CheckoutPage: React.FC = () => {
 
   // Define steps based on order type - skip scheduling for gift cards and decoration/ribbon/centrepiece products
   const isGiftCard = orderData?.type === 'giftcard'
-  const isDecorationOrRibbon = orderData?.product?.category === 'decorations' || orderData?.product?.category === 'ribbons' || orderData?.product?.category === 'centerpieces'
+  const isDecorationOrRibbon = orderData?.product?.category === 'decorations' || orderData?.product?.category === 'ribbons'
   const skipScheduling = isGiftCard || isDecorationOrRibbon
   
   const steps = skipScheduling 
@@ -261,7 +374,7 @@ const CheckoutPage: React.FC = () => {
         {floatingElements.map((element, index) => (
           <div
             key={index}
-            className="absolute transition-all duration-700 ease-in-out z-10"
+            className="absolute transition-all duration-700 ease-in-out z-0"
             style={{ 
               left: element.x, 
               top: element.y,
@@ -274,7 +387,7 @@ const CheckoutPage: React.FC = () => {
             <img 
               src={element.image} 
               alt="Decorative element" 
-              className="hover:filter hover:brightness-125 transition-all duration-300"
+              className="hover:filter hover:brightness-125 transition-all duration-300 pointer-events-none"
               style={{ 
                 width: `${element.size}px`, 
                 height: 'auto'
@@ -311,7 +424,7 @@ const CheckoutPage: React.FC = () => {
         {floatingElements.map((element, index) => (
           <div
             key={index}
-            className="absolute transition-all duration-700 ease-in-out z-10"
+            className="absolute transition-all duration-700 ease-in-out z-0"
             style={{ 
               left: element.x, 
               top: element.y,
@@ -324,7 +437,7 @@ const CheckoutPage: React.FC = () => {
             <img 
               src={element.image} 
               alt="Decorative element" 
-              className="hover:filter hover:brightness-125 transition-all duration-300"
+              className="hover:filter hover:brightness-125 transition-all duration-300 pointer-events-none"
               style={{ 
                 width: `${element.size}px`, 
                 height: 'auto'
@@ -386,7 +499,7 @@ const CheckoutPage: React.FC = () => {
                     setCustomerDetails={setCustomerDetails}
                     onNext={() => setCurrentStep(2)}
                     nextButtonText={skipScheduling ? 'Continue to Payment' : 'Continue to Scheduling'}
-                    isGiftCard={isGiftCard}
+                     isGiftCard={isGiftCard}
                   />
                 )}
                 
@@ -427,6 +540,7 @@ const CheckoutPage: React.FC = () => {
                 rentalPeriod={orderData.treeOptions ? rentalPeriod : undefined}
                 currentStep={currentStep}
                 additionalCharges={getAdditionalCharges()}
+                deliveryError={deliveryError || undefined}
                 appliedDiscount={appliedDiscount}
                 onDiscountApplied={setAppliedDiscount}
               />

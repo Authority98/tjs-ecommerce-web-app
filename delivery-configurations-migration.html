@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Configurations Migration</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .step {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .step h3 {
+            color: #1e293b;
+            margin-top: 0;
+        }
+        .sql-code {
+            position: relative;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background: #2563eb;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .link {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚚 Delivery Configurations Migration</h1>
+        <p class="subtitle">Add delivery charge configuration system to your e-commerce store</p>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> This migration adds the delivery_configurations table to support zone-based and distance-based delivery pricing.
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Open Supabase Dashboard</h3>
+            <p>Go to your <a href="https://supabase.com/dashboard" target="_blank" class="link">Supabase Dashboard</a> and select your project.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Navigate to SQL Editor</h3>
+            <p>In your project dashboard, click on <strong>"SQL Editor"</strong> in the left sidebar.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Run the Migration SQL</h3>
+            <p>Copy the SQL below and paste it into the SQL Editor, then click <strong>"Run"</strong>:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyMigrationSQL()">Copy SQL</button>
+                <pre id="migration-sql">-- ========================================
+-- DELIVERY CONFIGURATIONS MIGRATION
+-- ========================================
+-- This script creates the delivery_configurations table
+
+-- Create delivery_configurations table
+CREATE TABLE IF NOT EXISTS delivery_configurations (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  model text NOT NULL CHECK (model IN ('zone', 'distance')),
+  zones jsonb DEFAULT '[]'::jsonb,
+  distance_config jsonb DEFAULT '{}'::jsonb,
+  add_ons jsonb DEFAULT '[]'::jsonb,
+  is_active boolean DEFAULT true,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now()
+);
+
+-- Add RLS (Row Level Security)
+ALTER TABLE delivery_configurations ENABLE ROW LEVEL SECURITY;
+
+-- Create policy for authenticated users (admin access)
+CREATE POLICY "Enable all operations for authenticated users" ON delivery_configurations
+  FOR ALL USING (auth.role() = 'authenticated');
+
+-- Insert default configuration
+INSERT INTO delivery_configurations (
+  model,
+  zones,
+  distance_config,
+  add_ons,
+  is_active
+) VALUES (
+  'zone',
+  '[
+    {"name": "Central (CBD)", "postalRanges": ["01", "02", "03", "04", "05", "06"], "fee": 40},
+    {"name": "North", "postalRanges": ["72", "73", "75", "76", "77", "78", "79", "80"], "fee": 50},
+    {"name": "East", "postalRanges": ["46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57"], "fee": 45},
+    {"name": "West", "postalRanges": ["60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71"], "fee": 50},
+    {"name": "Sentosa", "postalRanges": ["09"], "fee": 80},
+    {"name": "Jurong Island", "postalRanges": ["62"], "fee": 120}
+  ]'::jsonb,
+  '{
+    "baseFee": 30,
+    "baseDistance": 10,
+    "additionalRate": 2,
+    "maxDistance": 30
+  }'::jsonb,
+  '[
+    {"name": "No lift access", "fee": 60, "enabled": true},
+    {"name": "Permit/licensing needed", "fee": 80, "enabled": true},
+    {"name": "Specific delivery timing", "fee": 50, "enabled": true}
+  ]'::jsonb,
+  true
+) ON CONFLICT DO NOTHING;
+
+-- Add comment to document the table purpose
+COMMENT ON TABLE delivery_configurations IS 'Configuration table for delivery charge calculation models';</pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Verify the Migration</h3>
+            <p>After running the SQL, you can verify it worked by running this query:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyVerifySQL()">Copy SQL</button>
+                <pre id="verify-sql">-- Verify the table was created and data inserted
+SELECT 
+  id,
+  model,
+  is_active,
+  created_at
+FROM delivery_configurations
+ORDER BY created_at DESC;</pre>
+            </div>
+        </div>
+
+        <div class="success" id="success-message" style="display: none;">
+            ✅ SQL copied to clipboard! Now paste it in your Supabase SQL Editor.
+        </div>
+
+        <div class="step">
+            <h3>Step 5: Update Database Types</h3>
+            <p>After the migration, you'll need to update your TypeScript types to include the new table. The delivery configuration system is now ready to use!</p>
+        </div>
+    </div>
+
+    <script>
+        function copyMigrationSQL() {
+            const sqlContent = document.getElementById('migration-sql').textContent;
+            navigator.clipboard.writeText(sqlContent).then(() => {
+                showSuccess();
+            });
+        }
+
+        function copyVerifySQL() {
+            const verifySql = document.getElementById('verify-sql').textContent;
+            navigator.clipboard.writeText(verifySql).then(() => {
+                showSuccess();
+            });
+        }
+
+        function showSuccess() {
+            const successMsg = document.getElementById('success-message');
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

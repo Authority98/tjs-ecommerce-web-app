@@ -188,7 +188,7 @@ const ThankYouPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Contact Information - Using Centerpieces Category Design */}
+        {/* Contact Information - Using Decorations Category Design */}
         <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15 rounded-3xl shadow-xl p-8 mb-12 border border-white/20 dark:border-gray-700/30 relative">
           {/* Decorative Elements */}
           <div className="absolute top-4 right-4">

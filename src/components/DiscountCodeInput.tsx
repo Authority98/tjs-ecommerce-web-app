@@ -38,7 +38,7 @@ const DiscountCodeInput: React.FC<DiscountCodeInputProps> = ({
     if (orderData.type !== 'giftcard') {
       total += 10 // Assembling
       total += 10 // Dismantling
-      total += 20 // Delivery
+      total += 20 // Delivery (using default for discount calculation)
     }
     
     return total

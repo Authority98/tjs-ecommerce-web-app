@@ -47,6 +47,11 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
             <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">
               {level.description}
             </div>
+            {level.notes && (
+              <div className="text-xs text-gray-500 dark:text-gray-400 italic mb-2">
+                {level.notes}
+              </div>
+            )}
             {selectedOptions.decorLevel === level.percentage && (
               <div className="mt-2">
                 <Check className="h-5 w-5 text-amber-500 mx-auto" />

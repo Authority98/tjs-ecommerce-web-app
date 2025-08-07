@@ -15,7 +15,7 @@ export type Database = {
           description: string
           price: number
           images: string[]
-          category: 'decorations' | 'ribbons' | 'trees' | 'centerpieces'
+          category: 'decorations' | 'ribbons' | 'trees'
           color?: string
           decorated?: boolean
           created_at: string
@@ -27,7 +27,7 @@ export type Database = {
           description: string
           price: number
           images: string[]
-          category: 'decorations' | 'ribbons' | 'trees' | 'centerpieces'
+          category: 'decorations' | 'ribbons' | 'trees'
           color?: string
           decorated?: boolean
           created_at?: string
@@ -39,7 +39,7 @@ export type Database = {
           description?: string
           price?: number
           images?: string[]
-          category?: 'decorations' | 'ribbons' | 'trees' | 'centerpieces'
+          category?: 'decorations' | 'ribbons' | 'trees'
           color?: string
           decorated?: boolean
           created_at?: string
@@ -139,6 +139,10 @@ export type Database = {
           customer_email: string
           customer_phone: string
           delivery_address: string
+          unit_number?: string
+          building_name?: string
+          street_address?: string
+          postal_code?: string
           product_id?: string
           gift_card_id?: string
           order_type: 'product' | 'giftcard'
@@ -165,6 +169,10 @@ export type Database = {
           customer_email: string
           customer_phone: string
           delivery_address: string
+          unit_number?: string
+          building_name?: string
+          street_address?: string
+          postal_code?: string
           product_id?: string
           gift_card_id?: string
           order_type?: 'product' | 'giftcard'
@@ -191,6 +199,10 @@ export type Database = {
           customer_email?: string
           customer_phone?: string
           delivery_address?: string
+          unit_number?: string
+          building_name?: string
+          street_address?: string
+          postal_code?: string
           product_id?: string
           gift_card_id?: string
           order_type?: 'product' | 'giftcard'
@@ -207,6 +219,38 @@ export type Database = {
           discount_code_id?: string
           discount_amount?: number
           status?: 'pending' | 'confirmed' | 'delivered' | 'completed'
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      delivery_configurations: {
+        Row: {
+          id: string
+          model: 'zone' | 'distance'
+          zones: any
+          distance_config: any
+          add_ons: any
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          model: 'zone' | 'distance'
+          zones?: any
+          distance_config?: any
+          add_ons?: any
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          model?: 'zone' | 'distance'
+          zones?: any
+          distance_config?: any
+          add_ons?: any
+          is_active?: boolean
           created_at?: string
           updated_at?: string
         }

@@ -10,6 +10,7 @@ interface OrderSummaryProps {
   rentalPeriod?: number
   currentStep?: number
   additionalCharges?: Array<{ name: string; amount: number }>
+  deliveryError?: string
   appliedDiscount?: {
     id: string
     code: string
@@ -33,6 +34,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
   rentalPeriod,
   currentStep = 1,
   additionalCharges = [],
+  deliveryError,
   appliedDiscount,
   onDiscountApplied
 }) => {
@@ -189,13 +191,21 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+$150</span>
                 </div>
               )}
-              {/* Delivery charges directly under service charges without highlighting */}
-               {additionalCharges.find(charge => charge.name === 'Delivery') && (
-                 <div className="flex items-center justify-between">
-                   <span className="text-sm text-gray-700 dark:text-gray-300">Delivery</span>
-                   <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
-                 </div>
-               )}
+              {/* Delivery section - always visible */}
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-700 dark:text-gray-300">Delivery</span>
+                {additionalCharges.find(charge => charge.name === 'Delivery') ? (
+                  <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
+                ) : (
+                  <div className="flex items-center space-x-1">
+                    <div className="flex space-x-1">
+                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

@@ -4,7 +4,7 @@ export interface Product {
   description: string
   price: number
   images: string[]
-  category: 'decorations' | 'ribbons' | 'trees' | 'centerpieces'
+  category: 'decorations' | 'ribbons' | 'trees'
   color?: string
   decorated?: boolean
   created_at: string
@@ -24,6 +24,11 @@ export interface CustomerDetails {
   email: string
   phone: string
   deliveryAddress: string
+  // Singapore-specific address fields
+  unitNumber?: string
+  buildingName?: string
+  streetAddress?: string
+  postalCode?: string
 }
 
 export interface OrderSummary {
@@ -197,9 +202,117 @@ export const RENTAL_PERIODS = [
 ]
 
 export const DECOR_LEVELS = [
-  { percentage: 100, label: 'Full Decor', description: '100%' },
+  { 
+    percentage: 100, 
+    label: 'All-Inclusive Premium Decor Package', 
+    description: '✨ Complete venue transformation with full decor setup, premium props, ambient lighting, elegant floral arrangements, and professional teardown service',
+    notes: '🎯 Perfect for clients seeking a luxurious, hands-off experience with zero stress and maximum impact'
+  },
   { percentage: 75, label: 'Two Third Decor', description: '75%' },
   { percentage: 50, label: 'Half Decor', description: '50%' }
+]
+
+// Delivery Configuration Types
+export interface DeliveryZone {
+  id: string
+  name: string
+  postalCodes: string[]
+  fee: number
+}
+
+export interface DistanceBasedConfig {
+  baseFee: number
+  baseDistance: number
+  additionalChargePerKm: number
+  maxRange: number
+}
+
+export interface DeliveryAddOn {
+  id: string
+  name: string
+  fee: number
+  enabled: boolean
+}
+
+export interface DeliveryConfiguration {
+  id?: string
+  model: 'zone' | 'distance'
+  zoneBasedConfig?: {
+    zones: DeliveryZone[]
+  }
+  distanceBasedConfig?: DistanceBasedConfig
+  addOns: DeliveryAddOn[]
+  isActive: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+// Default delivery configurations
+export const DEFAULT_DELIVERY_ZONES: DeliveryZone[] = [
+  {
+    id: 'central',
+    name: 'Central (CBD)',
+    postalCodes: [],
+    fee: 40
+  },
+  {
+    id: 'north',
+    name: 'North',
+    postalCodes: [],
+    fee: 50
+  },
+  {
+    id: 'east',
+    name: 'East',
+    postalCodes: [],
+    fee: 45
+  },
+  {
+    id: 'west',
+    name: 'West',
+    postalCodes: [],
+    fee: 50
+  },
+  {
+    id: 'sentosa',
+    name: 'Sentosa',
+    postalCodes: [],
+    fee: 80
+  },
+  {
+    id: 'jurong-island',
+    name: 'Jurong Island',
+    postalCodes: [],
+    fee: 120
+  }
+]
+
+export const DEFAULT_DISTANCE_CONFIG: DistanceBasedConfig = {
+  baseFee: 30,
+  baseDistance: 10,
+  additionalChargePerKm: 2,
+  maxRange: 30
+}
+
+export const DEFAULT_DELIVERY_ADDONS: DeliveryAddOn[] = [
+  {
+    id: 'no-lift',
+    name: 'No lift access',
+    fee: 60,
+    enabled: true
+  },
+  {
+    id: 'permits',
+    name: 'Permit/licensing needed',
+    fee: 80,
+    enabled: true
+  },
+  {
+    id: 'specific-timing',
+    name: 'Specific delivery timing',
+    fee: 50,
+    enabled: true
+  }
 ]
 
 export interface Order {

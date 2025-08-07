@@ -11,8 +11,8 @@ interface UseAdminDataReturn {
   loading: boolean
   
   // Filters
-  selectedCategory: 'all' | 'decorations' | 'ribbons' | 'trees' | 'centerpieces'
-  setSelectedCategory: (category: 'all' | 'decorations' | 'ribbons' | 'trees' | 'centerpieces') => void
+  selectedCategory: 'all' | 'decorations' | 'ribbons' | 'trees'
+  setSelectedCategory: (category: 'all' | 'decorations' | 'ribbons' | 'trees') => void
   searchQuery: string
   setSearchQuery: (query: string) => void
   
@@ -42,7 +42,7 @@ export const useAdminData = (): UseAdminDataReturn => {
   const [products, setProducts] = useState<Product[]>([])
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'decorations' | 'ribbons' | 'trees' | 'centerpieces'>('all')
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'decorations' | 'ribbons' | 'trees'>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [checkingAuth, setCheckingAuth] = useState(true)

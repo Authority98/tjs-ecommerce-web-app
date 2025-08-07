@@ -7,7 +7,7 @@ interface ProductFormData {
   title: string
   description: string
   price: number
-  category: 'decorations' | 'ribbons' | 'trees' | 'centerpieces'
+  category: 'decorations' | 'ribbons' | 'trees'
   decorated: boolean
 }
 
@@ -103,12 +103,11 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
           <option value="decorations">Decorations</option>
           <option value="ribbons">Ribbons</option>
           <option value="trees">Trees</option>
-          <option value="centerpieces">Centerpieces</option>
         </select>
       </div>
 
-      {/* Colors - For Trees, Decorations, Ribbons, and Centerpieces */}
-        {(formData.category === 'trees' || formData.category === 'decorations' || formData.category === 'ribbons' || formData.category === 'centerpieces') && (
+      {/* Colors - For Trees, Decorations, and Ribbons */}
+        {(formData.category === 'trees' || formData.category === 'decorations' || formData.category === 'ribbons') && (
         <div>
           <div className="flex items-center space-x-3 mb-4">
             <Palette className="h-5 w-5 text-[#511B7D] dark:text-[#F7B541]" />

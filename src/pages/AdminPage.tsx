@@ -5,7 +5,7 @@ import { useAdminData } from '../hooks/useAdminData'
 import ProductForm from '../components/ProductForm'
 import LoadingSpinner from '../components/LoadingSpinner'
 import AdminLogin from '../components/AdminLogin'
-import { AdminStats, AdminProductsGrid, AdminOrdersTable, DiscountCodesManager } from '../components/admin'
+import { AdminStats, AdminProductsGrid, AdminOrdersTable, DiscountCodesManager, DeliverySettings } from '../components/admin'
 import Button from '../components/ui/Button'
 import { supabase } from '../lib/supabase'
 
@@ -41,7 +41,7 @@ const AdminPage: React.FC = () => {
 
   const [showForm, setShowForm] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
-  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'discounts'>('products')
+  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'discounts' | 'settings'>('products')
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
 
   // Handle body scroll lock when modals are open
@@ -212,6 +212,16 @@ const AdminPage: React.FC = () => {
           >
             Discount Codes
           </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
+              activeTab === 'settings'
+                ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-xl scale-105'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Settings
+          </button>
         </div>
 
         {/* Content */}
@@ -257,6 +267,13 @@ const AdminPage: React.FC = () => {
         {activeTab === 'discounts' && (
           <div>
             <DiscountCodesManager />
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-6 font-dosis">Settings</h2>
+            <DeliverySettings />
           </div>
         )}
 
