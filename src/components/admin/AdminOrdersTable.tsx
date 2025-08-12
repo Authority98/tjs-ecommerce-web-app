@@ -65,10 +65,10 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
         </div>
         
         {/* Decorative Elements */}
-         <div className="absolute top-4 right-4">
+         <div className="absolute top-4 right-4 pointer-events-none">
            <div className="w-16 h-16 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-full blur-xl opacity-40" />
          </div>
-         <div className="absolute bottom-4 left-4">
+         <div className="absolute bottom-4 left-4 pointer-events-none">
            <div className="w-12 h-12 bg-gradient-to-r from-pink-400/30 to-orange-400/30 rounded-full blur-lg opacity-35" />
          </div>
       </Card>
@@ -218,10 +218,10 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
             </div>
 
              {/* Decorative Elements */}
-             <div className="absolute top-4 right-4">
+             <div className="absolute top-4 right-4 pointer-events-none">
                <div className="w-16 h-16 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-full blur-xl opacity-40" />
              </div>
-             <div className="absolute bottom-4 left-4">
+             <div className="absolute bottom-4 left-4 pointer-events-none">
                <div className="w-12 h-12 bg-gradient-to-r from-pink-400/30 to-orange-400/30 rounded-full blur-lg opacity-35" />
              </div>
            </Card>

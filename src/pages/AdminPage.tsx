@@ -334,6 +334,108 @@ const AdminPage: React.FC = () => {
                   </div>
                 </div>
                 
+                {/* Charges Breakdown */}
+                <div className="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-xl p-4 border border-orange-200 dark:border-orange-700">
+                  <h4 className="font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-3 flex items-center">
+                    <span className="text-2xl mr-2">💰</span>
+                    Charges Breakdown
+                  </h4>
+                  <div className="space-y-3">
+                    {/* Base Product/Service Cost */}
+                    {selectedOrder.order_type === 'giftcard' && selectedOrder.gift_cards ? (
+                      <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                        <span className="text-gray-600 dark:text-gray-300">Gift Card Amount</span>
+                        <span className="font-semibold text-gray-800 dark:text-white">${selectedOrder.gift_cards.amount}</span>
+                      </div>
+                    ) : selectedOrder.products ? (
+                      <>
+                        <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                          <span className="text-gray-600 dark:text-gray-300">Base Product Price</span>
+                          <span className="font-semibold text-gray-800 dark:text-white">
+                            {selectedOrder.products.price && selectedOrder.products.price > 0 ? `$${selectedOrder.products.price}` : 'To be determined'}
+                          </span>
+                        </div>
+                        {selectedOrder.tree_height && selectedOrder.rental_period && (
+                          <>
+                            {selectedOrder.rental_period > 45 && (
+                              <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                                <span className="text-gray-600 dark:text-gray-300">Extended Rental ({selectedOrder.rental_period} days)</span>
+                                <span className="font-semibold text-gray-800 dark:text-white">
+                                  ${selectedOrder.rental_period === 60 ? '100' : selectedOrder.rental_period === 90 ? '200' : '0'}
+                                </span>
+                              </div>
+                            )}
+                            {selectedOrder.decor_level && selectedOrder.decor_level < 100 && (
+                              <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                                <span className="text-gray-600 dark:text-gray-300">Decoration Level ({selectedOrder.decor_level}%)</span>
+                                <span className="font-semibold text-gray-800 dark:text-white">Included</span>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </>
+                    ) : null}
+                    
+                    {/* Delivery Charges */}
+                    {selectedOrder.order_type !== 'giftcard' && (
+                      <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                        <span className="text-gray-600 dark:text-gray-300">Delivery Fee</span>
+                        <span className="font-semibold text-gray-800 dark:text-white">+$26</span>
+                      </div>
+                    )}
+                    
+                    {/* Service Charges Breakdown */}
+                    {selectedOrder.order_type !== 'giftcard' && (
+                      <>
+                        <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                          <span className="text-gray-600 dark:text-gray-300">Service Charges:</span>
+                          <span className="font-semibold text-gray-800 dark:text-white"></span>
+                        </div>
+                        <div className="ml-4 space-y-1">
+                          <div className="flex justify-between items-center py-1 text-sm">
+                            <span className="text-gray-500 dark:text-gray-400">• Assembling</span>
+                            <span className="text-gray-600 dark:text-gray-300">+$10</span>
+                          </div>
+                          <div className="flex justify-between items-center py-1 text-sm">
+                            <span className="text-gray-500 dark:text-gray-400">• Dismantling</span>
+                            <span className="text-gray-600 dark:text-gray-300">+$10</span>
+                          </div>
+                          <div className="flex justify-between items-center py-1 text-sm">
+                            <span className="text-gray-500 dark:text-gray-400">• No lift access</span>
+                            <span className="text-gray-600 dark:text-gray-300">+$60</span>
+                          </div>
+                          <div className="flex justify-between items-center py-1 text-sm">
+                            <span className="text-gray-500 dark:text-gray-400">• Permit/licensing needed</span>
+                            <span className="text-gray-600 dark:text-gray-300">+$80</span>
+                          </div>
+                          <div className="flex justify-between items-center py-1 text-sm">
+                            <span className="text-gray-500 dark:text-gray-400">• Specific delivery timing</span>
+                            <span className="text-gray-600 dark:text-gray-300">+$50</span>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                          <span className="text-gray-600 dark:text-gray-300">Service Charges Subtotal</span>
+                          <span className="font-semibold text-gray-800 dark:text-white">$210</span>
+                        </div>
+                      </>
+                    )}
+                    
+                    {/* Rush Order */}
+                    {selectedOrder.rush_order && (
+                      <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                        <span className="text-gray-600 dark:text-gray-300">Rush Order Fee</span>
+                        <span className="font-semibold text-gray-800 dark:text-white">$150</span>
+                      </div>
+                    )}
+                    
+                    {/* Total */}
+                    <div className="flex justify-between items-center py-3 border-t-2 border-orange-300 dark:border-orange-600 mt-2">
+                      <span className="text-lg font-bold text-gray-800 dark:text-white">Total Amount</span>
+                      <span className="text-xl font-bold text-green-600 dark:text-green-400">${selectedOrder.total_amount}</span>
+                    </div>
+                  </div>
+                </div>
+                
                 {/* Order Type Specific Details */}
                 {selectedOrder.order_type === 'giftcard' && selectedOrder.gift_cards ? (
                   <div className="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-xl p-4 border border-purple-200 dark:border-purple-700">
@@ -403,7 +505,6 @@ const AdminPage: React.FC = () => {
                     Order Information
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                    <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Total Amount:</span> <span className="text-lg font-bold text-green-600 dark:text-green-400">${selectedOrder.total_amount}</span></p>
                     <p className="text-gray-600 dark:text-gray-300 flex items-center">
                       <span className="font-medium text-gray-800 dark:text-white mr-2">Status:</span> 
                       <span className={`px-3 py-1 rounded-full text-xs font-bold ${

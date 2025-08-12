@@ -10,6 +10,15 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🔧 Admin Interface Enhancements**: Comprehensive improvements to the admin order management system
+  - **Fixed Desktop Eye Icon Button**: Resolved pointer events issue where decorative elements were blocking the view order details button on desktop
+  - **Enhanced Order Details Modal**: Complete charges breakdown display matching checkout experience
+    - Detailed service charges breakdown (assembling, dismantling, no lift access, permit/licensing, specific delivery timing)
+    - Proper display of delivery fees, rush order fees, and extended rental charges
+    - "To be determined" display for unavailable base product prices
+    - Visual enhancements with indented sub-items and muted colors for service items
+    - Charges breakdown section repositioned to appear before product details for better information hierarchy
+  - **Improved Order Information Display**: Better organization and presentation of order data in admin interface
 - **🚚 Enhanced Delivery System**: Completely redesigned delivery validation and user experience
   - Removed 6-digit postal code restriction - now accepts postal codes of any length
   - Replaced inline error messages with clean toast notifications (no emojis)
