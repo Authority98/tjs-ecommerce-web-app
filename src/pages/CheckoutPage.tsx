@@ -44,6 +44,7 @@ const CheckoutPage: React.FC = () => {
   const [deliveryConfig, setDeliveryConfig] = useState<DeliveryConfiguration | null>(null)
   const [deliveryFee, setDeliveryFee] = useState(20) // Default fallback
   const [deliveryError, setDeliveryError] = useState<string | null>(null)
+  const [selectedDeliveryAddOns, setSelectedDeliveryAddOns] = useState<string[]>([])
 
   useEffect(() => {
     initializeCheckout()
@@ -116,7 +117,7 @@ const CheckoutPage: React.FC = () => {
             postalCode: customerDetails.postalCode,
             // Only pass distance if using distance-based model
             ...(deliveryConfig.model === 'distance' && { distance: 15 }),
-            selectedAddOns: [] // No add-ons selected by default
+            selectedAddOns: selectedDeliveryAddOns
           })
           
           if (!result.error) {
@@ -141,7 +142,7 @@ const CheckoutPage: React.FC = () => {
       setDeliveryError(null)
       setDeliveryFee(0)
     }
-  }, [deliveryConfig, customerDetails?.postalCode, orderData?.type])
+  }, [deliveryConfig, customerDetails?.postalCode, orderData?.type, selectedDeliveryAddOns])
 
   const initializeCheckout = async () => {
     try {
@@ -231,7 +232,29 @@ const CheckoutPage: React.FC = () => {
     
     // Only add delivery charge if there's no delivery error
     if (!deliveryError && deliveryFee > 0) {
-      charges.push({ name: 'Delivery', amount: deliveryFee })
+      // Calculate base delivery fee (without add-ons)
+      let baseDeliveryFee = deliveryFee
+      
+      // Subtract add-on fees from total to get base delivery fee
+      if (deliveryConfig && selectedDeliveryAddOns.length > 0) {
+        const addOnFees = selectedDeliveryAddOns.reduce((total, addOnId) => {
+          const addOn = deliveryConfig.addOns.find(a => a.id === addOnId)
+          return total + (addOn?.fee || 0)
+        }, 0)
+        baseDeliveryFee = deliveryFee - addOnFees
+      }
+      
+      charges.push({ name: 'Delivery', amount: baseDeliveryFee })
+      
+      // Add selected delivery add-ons as separate line items
+      if (deliveryConfig && selectedDeliveryAddOns.length > 0) {
+        selectedDeliveryAddOns.forEach(addOnId => {
+          const addOn = deliveryConfig.addOns.find(a => a.id === addOnId)
+          if (addOn) {
+            charges.push({ name: addOn.name, amount: addOn.fee })
+          }
+        })
+      }
     }
     
     return charges
@@ -516,6 +539,9 @@ const CheckoutPage: React.FC = () => {
                     onNext={() => setCurrentStep(3)}
                     onBack={() => setCurrentStep(1)}
                     isTreeOrder={!!orderData.treeOptions}
+                    deliveryConfig={deliveryConfig || undefined}
+                    selectedDeliveryAddOns={selectedDeliveryAddOns}
+                    setSelectedDeliveryAddOns={setSelectedDeliveryAddOns}
                   />
                 )}
                 

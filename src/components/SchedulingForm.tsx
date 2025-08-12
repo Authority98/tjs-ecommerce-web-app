@@ -1,6 +1,6 @@
 import React from 'react'
 import { Calendar, Clock, Zap, Check } from 'lucide-react'
-import { RENTAL_PERIODS } from '../types'
+import { RENTAL_PERIODS, DeliveryConfiguration, DeliveryAddOn } from '../types'
 
 interface SchedulingFormProps {
   installationDate: string
@@ -14,6 +14,9 @@ interface SchedulingFormProps {
   onNext: () => void
   onBack: () => void
   isTreeOrder: boolean
+  deliveryConfig?: DeliveryConfiguration
+  selectedDeliveryAddOns: string[]
+  setSelectedDeliveryAddOns: (addOns: string[]) => void
 }
 
 const SchedulingForm: React.FC<SchedulingFormProps> = ({
@@ -27,7 +30,10 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   setRentalPeriod,
   onNext,
   onBack,
-  isTreeOrder
+  isTreeOrder,
+  deliveryConfig,
+  selectedDeliveryAddOns,
+  setSelectedDeliveryAddOns
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,6 +50,18 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
     installDate.setDate(installDate.getDate() + 1)
     return installDate.toISOString().split('T')[0]
   }
+
+  // Handle delivery add-on selection
+  const handleDeliveryAddOnToggle = (addOnId: string) => {
+    if (selectedDeliveryAddOns.includes(addOnId)) {
+      setSelectedDeliveryAddOns(selectedDeliveryAddOns.filter(id => id !== addOnId))
+    } else {
+      setSelectedDeliveryAddOns([...selectedDeliveryAddOns, addOnId])
+    }
+  }
+
+  // Get enabled delivery add-ons
+  const enabledDeliveryAddOns = deliveryConfig?.addOns.filter(addOn => addOn.enabled) || []
 
   return (
     <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15 rounded-3xl shadow-xl p-8 border border-white/20 dark:border-gray-700/30 relative">
@@ -162,34 +180,77 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
             Add-on Services
           </h3>
           
-          <label
-            className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer ${
-              rushOrder
-                ? 'border-amber-500 bg-amber-100/50 dark:bg-amber-900/30 shadow-lg'
-                : 'border-gray-200 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40'
-            }`}
-          >
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={rushOrder}
-                onChange={(e) => setRushOrder(e.target.checked)}
-                className="sr-only"
-              />
-              <div className="flex items-center space-x-3">
-                <div className={`p-2 rounded-lg ${rushOrder ? 'bg-amber-500 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'}`}>
-                  <Clock className="h-4 w-4" />
-                </div>
-                <div>
-                  <span className="font-bold text-gray-800 dark:text-white">Rush Order</span>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    Priority scheduling within 48 hours
+          <div className="space-y-3">
+            {/* Rush Order */}
+            <label
+              className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer ${
+                rushOrder
+                  ? 'border-amber-500 bg-amber-100/50 dark:bg-amber-900/30 shadow-lg'
+                  : 'border-gray-200 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40'
+              }`}
+            >
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={rushOrder}
+                  onChange={(e) => setRushOrder(e.target.checked)}
+                  className="sr-only"
+                />
+                <div className="flex items-center space-x-3">
+                  <div className={`p-2 rounded-lg ${rushOrder ? 'bg-amber-500 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'}`}>
+                    <Clock className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <span className="font-bold text-gray-800 dark:text-white">Rush Order</span>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      Priority scheduling within 48 hours
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <span className="text-xl font-bold text-amber-600 dark:text-amber-400">+$150</span>
-          </label>
+              <span className="text-xl font-bold text-amber-600 dark:text-amber-400">+$150</span>
+            </label>
+
+            {/* Delivery Add-ons */}
+            {enabledDeliveryAddOns.length > 0 && (
+              <>
+                <div className="border-t border-amber-200/50 dark:border-amber-700/30 pt-3 mt-3">
+                  <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-3 text-sm">Delivery Add-ons</h4>
+                </div>
+                {enabledDeliveryAddOns.map((addOn) => {
+                  const isSelected = selectedDeliveryAddOns.includes(addOn.id)
+                  return (
+                    <label
+                      key={addOn.id}
+                      className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer ${
+                        isSelected
+                          ? 'border-amber-500 bg-amber-100/50 dark:bg-amber-900/30 shadow-lg'
+                          : 'border-gray-200 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40'
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleDeliveryAddOnToggle(addOn.id)}
+                          className="sr-only"
+                        />
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-2 rounded-lg ${isSelected ? 'bg-amber-500 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'}`}>
+                            <Check className="h-4 w-4" />
+                          </div>
+                          <div>
+                            <span className="font-bold text-gray-800 dark:text-white">{addOn.name}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-xl font-bold text-amber-600 dark:text-amber-400">+${addOn.fee}</span>
+                    </label>
+                  )
+                })}
+              </>
+            )}
+          </div>
         </div>
 
         <div className="flex space-x-4 pt-4">
