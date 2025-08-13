@@ -68,33 +68,35 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
           />
         </div>
 
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Email Address *
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={customerDetails.email}
-            onChange={(e) => updateField('email', e.target.value)}
-            className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            required
-          />
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Email Address *
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={customerDetails.email}
+              onChange={(e) => updateField('email', e.target.value)}
+              className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Phone Number *
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            value={customerDetails.phone}
-            onChange={(e) => updateField('phone', e.target.value)}
-            className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            placeholder="+65 XXXX XXXX"
-            required
-          />
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Phone Number *
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              value={customerDetails.phone}
+              onChange={(e) => updateField('phone', e.target.value)}
+              className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              placeholder="+65 XXXX XXXX"
+              required
+            />
+          </div>
         </div>
 
         {!isGiftCard && (

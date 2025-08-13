@@ -30,9 +30,13 @@ const CheckoutPage: React.FC = () => {
     postalCode: ''
   })
   const [installationDate, setInstallationDate] = useState('')
+  const [installationTime, setInstallationTime] = useState('')
   const [teardownDate, setTeardownDate] = useState('')
+  const [teardownTime, setTeardownTime] = useState('')
   const [rushOrder, setRushOrder] = useState(false)
   const [rentalPeriod, setRentalPeriod] = useState(45)
+  const [installationSelected, setInstallationSelected] = useState(false)
+  const [teardownSelected, setTeardownSelected] = useState(false)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
   const [appliedDiscount, setAppliedDiscount] = useState<{
     id: string
@@ -207,8 +211,15 @@ const CheckoutPage: React.FC = () => {
     
     // Add additional charges for products (not gift cards)
     if (orderData.type !== 'giftcard') {
-      total += 10 // Assembling
-      total += 10 // Dismantling
+      // Only add installation/teardown charges if services are selected
+      if (installationSelected) {
+        const timingSurcharge = calculateTotalSurcharge(installationDate, installationTime)
+        total += timingSurcharge
+      }
+      if (teardownSelected) {
+        const timingSurcharge = calculateTotalSurcharge(teardownDate, teardownTime)
+        total += timingSurcharge
+      }
       total += deliveryFee // Dynamic delivery fee
     }
     
@@ -222,13 +233,124 @@ const CheckoutPage: React.FC = () => {
     return Math.max(0, total) // Ensure total doesn't go below 0
   }
 
+  // Helper function to check if a date is weekend
+  const isWeekend = (dateString: string) => {
+    const date = new Date(dateString)
+    const day = date.getDay()
+    return day === 0 || day === 6 // Sunday or Saturday
+  }
+
+  // Helper function to get timing surcharge
+  const getTimingSurcharge = (time: string) => {
+    if (!time) return 0
+    const hour = parseInt(time.split(':')[0])
+    
+    if (hour >= 22) return 150 // Late-night (after 10pm)
+    if (hour >= 18) return 80  // Evening (6pm-10pm)
+    return 0
+  }
+
+  // Helper function to get day type surcharge
+  const getDayTypeSurcharge = (dateString: string) => {
+    if (!dateString) return 0
+    // For now, just check weekend. Public holiday logic would need a separate API/database
+    return isWeekend(dateString) ? 100 : 0
+  }
+
+  // Calculate total surcharge for a given date and time
+  const calculateTotalSurcharge = (dateString: string, time: string) => {
+    return getTimingSurcharge(time) + getDayTypeSurcharge(dateString)
+  }
+
+  // Function to determine if all required options are selected
+  const areAllOptionsSelected = () => {
+    if (!orderData) return false
+    
+    const isGiftCard = orderData.type === 'giftcard'
+    const isDecorationOrRibbon = orderData.product?.category === 'decorations' || orderData.product?.category === 'ribbons'
+    const skipScheduling = isGiftCard || isDecorationOrRibbon
+    
+    // Check customer details completion
+    const customerDetailsComplete = customerDetails.name && customerDetails.email && customerDetails.phone && 
+      (isGiftCard || (customerDetails.postalCode && customerDetails.streetAddress))
+    
+    // For products that skip scheduling, only need customer details
+    if (skipScheduling) {
+      return customerDetailsComplete
+    }
+    
+    // For products that require scheduling, must complete scheduling step
+    if (!skipScheduling) {
+      // Must be on step 2 or later AND have scheduling requirements met
+      if (currentStep < 2) {
+        return false // Still on customer details step
+      }
+      
+      // For tree orders, both installation and teardown services must be selected
+      if (orderData.treeOptions) {
+        const schedulingComplete = installationSelected && teardownSelected
+        return customerDetailsComplete && schedulingComplete
+      }
+      
+      // For other products that require scheduling, just need to be past step 1
+      return customerDetailsComplete
+    }
+    
+    return customerDetailsComplete
+  }
+
   const getAdditionalCharges = () => {
     if (orderData?.type === 'giftcard') return []
     
-    const charges = [
-      { name: 'Assembling', amount: 10 },
-      { name: 'Dismantling', amount: 10 }
-    ]
+    const charges = []
+    
+    // Add installation charges if selected
+    if (installationSelected) {
+      const timingSurcharge = calculateTotalSurcharge(installationDate, installationTime)
+      
+      // Build charge name with surcharge reasons
+      let chargeName = 'Installation'
+      if (timingSurcharge > 0 && installationDate && installationTime) {
+        const reasons = []
+        const timeType = installationTime >= '18:00' ? (installationTime >= '22:00' ? 'Late-night' : 'Evening') : null
+        if (timeType) reasons.push(timeType)
+        
+        const isWeekendDay = installationDate && isWeekend(installationDate)
+        if (isWeekendDay) reasons.push('Weekend')
+        
+        if (reasons.length > 0) {
+          chargeName += ` (${reasons.join(', ')})`
+        }
+      }
+      
+      if (timingSurcharge > 0) {
+        charges.push({ name: chargeName, amount: timingSurcharge })
+      }
+    }
+    
+    // Add teardown charges if selected
+    if (teardownSelected) {
+      const timingSurcharge = calculateTotalSurcharge(teardownDate, teardownTime)
+      
+      // Build charge name with surcharge reasons
+      let chargeName = 'Teardown'
+      if (timingSurcharge > 0 && teardownDate && teardownTime) {
+        const reasons = []
+        const timeType = teardownTime >= '18:00' ? (teardownTime >= '22:00' ? 'Late-night' : 'Evening') : null
+        if (timeType) reasons.push(timeType)
+        
+        const isWeekendDay = teardownDate && isWeekend(teardownDate)
+        if (isWeekendDay) reasons.push('Weekend')
+        
+        if (reasons.length > 0) {
+          chargeName += ` (${reasons.join(', ')})`
+        }
+      }
+      
+      if (timingSurcharge > 0) {
+        charges.push({ name: chargeName, amount: timingSurcharge })
+      }
+    }
     
     // Only add delivery charge if there's no delivery error
     if (!deliveryError && deliveryFee > 0) {
@@ -530,8 +652,12 @@ const CheckoutPage: React.FC = () => {
                   <SchedulingForm
                     installationDate={installationDate}
                     setInstallationDate={setInstallationDate}
+                    installationTime={installationTime}
+                    setInstallationTime={setInstallationTime}
                     teardownDate={teardownDate}
                     setTeardownDate={setTeardownDate}
+                    teardownTime={teardownTime}
+                    setTeardownTime={setTeardownTime}
                     rushOrder={rushOrder}
                     setRushOrder={setRushOrder}
                     rentalPeriod={rentalPeriod}
@@ -542,6 +668,10 @@ const CheckoutPage: React.FC = () => {
                     deliveryConfig={deliveryConfig || undefined}
                     selectedDeliveryAddOns={selectedDeliveryAddOns}
                     setSelectedDeliveryAddOns={setSelectedDeliveryAddOns}
+                    installationSelected={installationSelected}
+                    setInstallationSelected={setInstallationSelected}
+                    teardownSelected={teardownSelected}
+                    setTeardownSelected={setTeardownSelected}
                   />
                 )}
                 
@@ -569,6 +699,7 @@ const CheckoutPage: React.FC = () => {
                 deliveryError={deliveryError || undefined}
                 appliedDiscount={appliedDiscount}
                 onDiscountApplied={setAppliedDiscount}
+                isCalculatingTotal={!areAllOptionsSelected()}
               />
             </div>
           </div>

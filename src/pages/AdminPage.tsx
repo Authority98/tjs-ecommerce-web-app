@@ -5,7 +5,7 @@ import { useAdminData } from '../hooks/useAdminData'
 import ProductForm from '../components/ProductForm'
 import LoadingSpinner from '../components/LoadingSpinner'
 import AdminLogin from '../components/AdminLogin'
-import { AdminStats, AdminProductsGrid, AdminOrdersTable, DiscountCodesManager, DeliverySettings } from '../components/admin'
+import { AdminStats, AdminProductsGrid, AdminOrdersTable, DiscountCodesManager, DeliverySettings, InstallationChargesSettings, TimingSurchargesSettings } from '../components/admin'
 import Button from '../components/ui/Button'
 import { supabase } from '../lib/supabase'
 
@@ -42,6 +42,7 @@ const AdminPage: React.FC = () => {
   const [showForm, setShowForm] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
   const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'discounts' | 'settings'>('products')
+  const [activeSettingsTab, setActiveSettingsTab] = useState<'delivery' | 'installation' | 'timing'>('delivery')
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
 
   // Handle body scroll lock when modals are open
@@ -273,7 +274,45 @@ const AdminPage: React.FC = () => {
         {activeTab === 'settings' && (
           <div>
             <h2 className="text-2xl font-bold text-white mb-6 font-dosis">Settings</h2>
-            <DeliverySettings />
+            
+            {/* Settings Submenu */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              <button
+                onClick={() => setActiveSettingsTab('delivery')}
+                className={`px-4 py-2 rounded-xl font-medium border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm whitespace-nowrap ${
+                  activeSettingsTab === 'delivery'
+                    ? 'bg-gradient-to-r from-purple-500 to-violet-500 text-white shadow-lg'
+                    : 'bg-white/80 text-gray-700 hover:bg-white'
+                }`}
+              >
+                Delivery Settings
+              </button>
+              <button
+                onClick={() => setActiveSettingsTab('installation')}
+                className={`px-4 py-2 rounded-xl font-medium border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm whitespace-nowrap ${
+                  activeSettingsTab === 'installation'
+                    ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg'
+                    : 'bg-white/80 text-gray-700 hover:bg-white'
+                }`}
+              >
+                Installation/Teardown Charges
+              </button>
+              <button
+                onClick={() => setActiveSettingsTab('timing')}
+                className={`px-4 py-2 rounded-xl font-medium border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm whitespace-nowrap ${
+                  activeSettingsTab === 'timing'
+                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                    : 'bg-white/80 text-gray-700 hover:bg-white'
+                }`}
+              >
+                Timing Surcharges
+              </button>
+            </div>
+
+            {/* Settings Content */}
+            {activeSettingsTab === 'delivery' && <DeliverySettings />}
+            {activeSettingsTab === 'installation' && <InstallationChargesSettings />}
+            {activeSettingsTab === 'timing' && <TimingSurchargesSettings />}
           </div>
         )}
 
@@ -393,12 +432,12 @@ const AdminPage: React.FC = () => {
                         </div>
                         <div className="ml-4 space-y-1">
                           <div className="flex justify-between items-center py-1 text-sm">
-                            <span className="text-gray-500 dark:text-gray-400">• Assembling</span>
-                            <span className="text-gray-600 dark:text-gray-300">+$10</span>
+                            <span className="text-gray-500 dark:text-gray-400">• Installation</span>
+                            <span className="text-gray-600 dark:text-gray-300">Dynamic pricing</span>
                           </div>
                           <div className="flex justify-between items-center py-1 text-sm">
-                            <span className="text-gray-500 dark:text-gray-400">• Dismantling</span>
-                            <span className="text-gray-600 dark:text-gray-300">+$10</span>
+                            <span className="text-gray-500 dark:text-gray-400">• Teardown</span>
+                            <span className="text-gray-600 dark:text-gray-300">Dynamic pricing</span>
                           </div>
                           <div className="flex justify-between items-center py-1 text-sm">
                             <span className="text-gray-500 dark:text-gray-400">• No lift access</span>

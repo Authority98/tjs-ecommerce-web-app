@@ -34,10 +34,9 @@ const DiscountCodeInput: React.FC<DiscountCodeInputProps> = ({
   const calculateOrderTotal = () => {
     let total = orderData.totalAmount
     
-    // Add additional charges for products (not gift cards)
+    // Add delivery charge for products (not gift cards)
+    // Note: Assembling/dismantling charges are now dynamic and calculated in CheckoutPage
     if (orderData.type !== 'giftcard') {
-      total += 10 // Assembling
-      total += 10 // Dismantling
       total += 20 // Delivery (using default for discount calculation)
     }
     

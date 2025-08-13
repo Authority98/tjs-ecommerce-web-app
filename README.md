@@ -10,6 +10,16 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **💫 Enhanced Loading Animation System**: Improved user feedback during checkout process
+  - **Dynamic Total Display**: Loading animation for total amount that appears only after all mandatory details are completed
+  - **Service Selection Validation**: Total amount displays only after both installation and teardown services are selected for tree orders
+  - **Bouncing Dots Animation**: Elegant three-dot loading animation with staggered timing matching tree customization page
+  - **Smart State Management**: Loading state automatically adapts to different product types and validation requirements
+- **💰 Service Fee Structure Update**: Simplified and transparent pricing model
+  - **Removed Base Service Fee**: Eliminated $10 base fee from installation and teardown services
+  - **Direct Surcharge Display**: Service charges now directly reflect timing surcharges without additional fees
+  - **Updated Pricing**: Weekend service $100 (was $110), evening service $80 (was $90), late-night service $150 (was $160), standard time free (was $10)
+  - **Transparent Calculations**: Service charges only appear when timing surcharges apply
 - **🔧 Admin Interface Enhancements**: Comprehensive improvements to the admin order management system
   - **Fixed Desktop Eye Icon Button**: Resolved pointer events issue where decorative elements were blocking the view order details button on desktop
   - **Enhanced Order Details Modal**: Complete charges breakdown display matching checkout experience

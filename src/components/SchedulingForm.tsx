@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Calendar, Clock, Zap, Check } from 'lucide-react'
 import { RENTAL_PERIODS, DeliveryConfiguration, DeliveryAddOn } from '../types'
+import { showSuccessToast } from '../utils/toast'
 
 interface SchedulingFormProps {
   installationDate: string
   setInstallationDate: (date: string) => void
+  installationTime: string
+  setInstallationTime: (time: string) => void
   teardownDate: string
   setTeardownDate: (date: string) => void
+  teardownTime: string
+  setTeardownTime: (time: string) => void
   rushOrder: boolean
   setRushOrder: (rush: boolean) => void
   rentalPeriod?: number
@@ -17,13 +22,21 @@ interface SchedulingFormProps {
   deliveryConfig?: DeliveryConfiguration
   selectedDeliveryAddOns: string[]
   setSelectedDeliveryAddOns: (addOns: string[]) => void
+  installationSelected: boolean
+  setInstallationSelected: (selected: boolean) => void
+  teardownSelected: boolean
+  setTeardownSelected: (selected: boolean) => void
 }
 
 const SchedulingForm: React.FC<SchedulingFormProps> = ({
   installationDate,
   setInstallationDate,
+  installationTime,
+  setInstallationTime,
   teardownDate,
   setTeardownDate,
+  teardownTime,
+  setTeardownTime,
   rushOrder,
   setRushOrder,
   rentalPeriod = 45,
@@ -33,7 +46,11 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   isTreeOrder,
   deliveryConfig,
   selectedDeliveryAddOns,
-  setSelectedDeliveryAddOns
+  setSelectedDeliveryAddOns,
+  installationSelected,
+  setInstallationSelected,
+  teardownSelected,
+  setTeardownSelected
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -62,6 +79,85 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
 
   // Get enabled delivery add-ons
   const enabledDeliveryAddOns = deliveryConfig?.addOns.filter(addOn => addOn.enabled) || []
+
+  // Helper function to check if a date is weekend
+  const isWeekend = (dateString: string) => {
+    const date = new Date(dateString)
+    const day = date.getDay()
+    return day === 0 || day === 6 // Sunday or Saturday
+  }
+
+  // Helper function to get timing surcharge
+  const getTimingSurcharge = (time: string) => {
+    if (!time) return 0
+    const hour = parseInt(time.split(':')[0])
+    
+    if (hour >= 22) return 150 // Late-night (after 10pm)
+    if (hour >= 18) return 80  // Evening (6pm-10pm)
+    return 0
+  }
+
+  // Helper function to get day type surcharge
+  const getDayTypeSurcharge = (dateString: string) => {
+    if (!dateString) return 0
+    // For now, just check weekend. Public holiday logic would need a separate API/database
+    return isWeekend(dateString) ? 100 : 0
+  }
+
+  // Calculate total surcharge for a given date and time
+  const calculateTotalSurcharge = (dateString: string, time: string) => {
+    return getTimingSurcharge(time) + getDayTypeSurcharge(dateString)
+  }
+
+  // Auto-enable installation service when installation date and time are selected
+  useEffect(() => {
+    if (installationDate && installationTime && !installationSelected) {
+      setInstallationSelected(true)
+      const timeSurcharge = getTimingSurcharge(installationTime)
+      const daySurcharge = getDayTypeSurcharge(installationDate)
+      const totalSurcharge = timeSurcharge + daySurcharge
+      
+      let message = 'Installation service enabled'
+      if (totalSurcharge > 0) {
+        const charges = []
+        if (timeSurcharge > 0) {
+          const timeType = installationTime >= '18:00' ? (installationTime >= '22:00' ? 'late-night' : 'evening') : 'standard'
+          charges.push(`${timeType} time +$${timeSurcharge}`)
+        }
+        if (daySurcharge > 0) {
+          const dayType = isWeekend(installationDate) ? 'weekend' : 'holiday'
+          charges.push(`${dayType} +$${daySurcharge}`)
+        }
+        message += ` with ${charges.join(' and ')} (Total: +$${totalSurcharge})`
+      }
+      showSuccessToast(message)
+    }
+  }, [installationDate, installationTime])
+
+  // Auto-enable teardown service when teardown date and time are selected (for tree orders)
+  useEffect(() => {
+    if (isTreeOrder && teardownDate && teardownTime && !teardownSelected) {
+      setTeardownSelected(true)
+      const timeSurcharge = getTimingSurcharge(teardownTime)
+      const daySurcharge = getDayTypeSurcharge(teardownDate)
+      const totalSurcharge = timeSurcharge + daySurcharge
+      
+      let message = 'Teardown service enabled'
+      if (totalSurcharge > 0) {
+        const charges = []
+        if (timeSurcharge > 0) {
+          const timeType = teardownTime >= '18:00' ? (teardownTime >= '22:00' ? 'late-night' : 'evening') : 'standard'
+          charges.push(`${timeType} time +$${timeSurcharge}`)
+        }
+        if (daySurcharge > 0) {
+          const dayType = isWeekend(teardownDate) ? 'weekend' : 'holiday'
+          charges.push(`${dayType} +$${daySurcharge}`)
+        }
+        message += ` with ${charges.join(' and ')} (Total: +$${totalSurcharge})`
+      }
+      showSuccessToast(message)
+    }
+  }, [teardownDate, teardownTime, isTreeOrder])
 
   return (
     <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15 rounded-3xl shadow-xl p-8 border border-white/20 dark:border-gray-700/30 relative">
@@ -129,47 +225,76 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
           </div>
         )}
         <div>
-          <label htmlFor="installationDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             <div className="flex items-center space-x-2">
               <Calendar className="h-4 w-4" style={{color: '#F59E0B'}} />
-              <span>{isTreeOrder ? 'Installation Date' : 'Delivery Date'} {isTreeOrder && '*'}</span>
+              <span>{isTreeOrder ? 'Installation Date & Time' : 'Delivery Date & Time'} {isTreeOrder && '*'}</span>
             </div>
           </label>
-          <input
-            type="date"
-            id="installationDate"
-            value={installationDate}
-            onChange={(e) => setInstallationDate(e.target.value)}
-            min={today}
-            className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
-            required={isTreeOrder}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <input
+                type="date"
+                id="installationDate"
+                value={installationDate}
+                onChange={(e) => setInstallationDate(e.target.value)}
+                min={today}
+                className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
+                required={isTreeOrder}
+              />
+            </div>
+            <div>
+              <input
+                type="time"
+                id="installationTime"
+                value={installationTime}
+                onChange={(e) => setInstallationTime(e.target.value)}
+                className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
+              />
+            </div>
+          </div>
+
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
             {isTreeOrder 
-              ? 'Select your preferred date for tree installation and decoration'
-              : 'Select your preferred delivery date'
+              ? 'Select your preferred date and time for tree installation and decoration'
+              : 'Select your preferred delivery date and time'
             }
           </p>
         </div>
 
         {isTreeOrder && (
           <div>
-            <label htmlFor="teardownDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4" style={{color: '#F59E0B'}} />
-                <span>Teardown Date</span>
+                <span>Teardown Date & Time *</span>
               </div>
             </label>
-            <input
-              type="date"
-              id="teardownDate"
-              value={teardownDate}
-              onChange={(e) => setTeardownDate(e.target.value)}
-              min={getMinTeardownDate()}
-              className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <input
+                  type="date"
+                  id="teardownDate"
+                  value={teardownDate}
+                  onChange={(e) => setTeardownDate(e.target.value)}
+                  min={getMinTeardownDate()}
+                  className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="time"
+                  id="teardownTime"
+                  value={teardownTime}
+                  onChange={(e) => setTeardownTime(e.target.value)}
+                  className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
+                  required
+                />
+              </div>
+            </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
-              Optional: Schedule when you'd like us to remove the tree and decorations
+              Schedule when you'd like us to remove the tree and decorations
             </p>
           </div>
         )}
@@ -210,6 +335,8 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
               </div>
               <span className="text-xl font-bold text-amber-600 dark:text-amber-400">+$150</span>
             </label>
+
+
 
             {/* Delivery Add-ons */}
             {enabledDeliveryAddOns.length > 0 && (

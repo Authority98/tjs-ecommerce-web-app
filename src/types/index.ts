@@ -315,6 +315,29 @@ export const DEFAULT_DELIVERY_ADDONS: DeliveryAddOn[] = [
   }
 ]
 
+export interface InstallationCharge {
+  id: string
+  service_type: 'installation' | 'teardown'
+  base_charge: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface TimingSurcharge {
+  id: string
+  surcharge_type: 'time_based' | 'day_based'
+  name: string
+  description?: string
+  surcharge_amount: number
+  time_start?: string
+  time_end?: string
+  day_types?: string[]
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
 export interface Order {
   id: string
   order_number: string
@@ -331,8 +354,13 @@ export interface Order {
   rental_period?: number
   decor_level?: number
   installation_date?: string
+  installation_time?: string
   teardown_date?: string
+  teardown_time?: string
   rush_order?: boolean
+  installation_charges?: number
+  teardown_charges?: number
+  timing_surcharges?: number
   total_amount: number
   status: 'pending' | 'confirmed' | 'delivered' | 'completed'
   created_at: string

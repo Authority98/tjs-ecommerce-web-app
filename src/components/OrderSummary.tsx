@@ -25,6 +25,7 @@ interface OrderSummaryProps {
     discount_value: number
     amount: number
   } | null) => void
+  isCalculatingTotal?: boolean
 }
 
 const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
@@ -36,7 +37,8 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
   additionalCharges = [],
   deliveryError,
   appliedDiscount,
-  onDiscountApplied
+  onDiscountApplied,
+  isCalculatingTotal = false
 }) => {
   return (
     <div className="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/20 dark:to-rose-950/20 rounded-3xl shadow-xl p-4 sticky top-24 border border-white/20 dark:border-gray-700/30 relative">
@@ -223,7 +225,18 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                  </div>
               )}
             </div>
-            <div className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-fuchsia-400">${finalTotal}</div>
+            {isCalculatingTotal ? (
+              <div className="flex items-center space-x-2">
+                <span className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-fuchsia-400">$</span>
+                <div className="flex space-x-1 items-center">
+                  <div className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                  <div className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                  <div className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-fuchsia-400">${finalTotal}</div>
+            )}
           </div>
         </div>
 
