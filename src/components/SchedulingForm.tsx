@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Calendar, Clock, Zap, Check } from 'lucide-react'
 import { RENTAL_PERIODS, DeliveryConfiguration, DeliveryAddOn } from '../types'
 import { showSuccessToast } from '../utils/toast'
+import Tooltip from './ui/Tooltip'
 
 interface SchedulingFormProps {
   installationDate: string
@@ -172,6 +173,9 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
         {isTreeOrder ? 'Installation & Service Scheduling' : 'Delivery Scheduling'}
       </h2>
       
+      {/* Header separator */}
+      <div className="border-t border-gray-200 dark:border-gray-600 mb-6"></div>
+      
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Rental Period Selection - Only for tree orders */}
         {isTreeOrder && setRentalPeriod && (
@@ -180,6 +184,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4" style={{color: '#F59E0B'}} />
                 <span>Rental Period *</span>
+                <Tooltip content="Choose how long you'd like to keep your decorated tree" />
               </div>
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
@@ -188,197 +193,156 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
                   key={period.days}
                   type="button"
                   onClick={() => setRentalPeriod(period.days)}
-                  className={`p-4 rounded-xl border-2 text-center transition-all duration-200 ${
+                  className={`p-2 rounded-lg border text-center transition-all duration-200 text-sm ${
                     rentalPeriod === period.days
-                      ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 shadow-lg'
-                      : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-amber-300'
+                      ? 'border-amber-400 bg-amber-50/60 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'
+                      : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-amber-300'
                   }`}
                 >
-                  <div className="flex justify-center mb-2">
-                    <div className={`p-2 rounded-full ${
-                      rentalPeriod === period.days
-                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
-                        : 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
-                    }`}>
-                      <Clock className="h-4 w-4" />
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-gray-800 dark:text-white">
+                      {period.label}
+                    </span>
+                    <div className="flex items-center space-x-1">
+                      {period.additionalCost > 0 && (
+                        <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                          +${period.additionalCost}
+                        </span>
+                      )}
+                      {rentalPeriod === period.days && (
+                        <Check className="h-3 w-3 text-amber-500" />
+                      )}
                     </div>
                   </div>
-                  <div className="font-bold text-lg text-gray-800 dark:text-white mb-1">
-                    {period.label}
-                  </div>
-                  {period.additionalCost > 0 && (
-                    <div className="text-sm text-amber-600 dark:text-amber-400 font-medium">
-                      +${period.additionalCost}
-                    </div>
-                  )}
-                  {rentalPeriod === period.days && (
-                    <div className="mt-2">
-                      <Check className="h-4 w-4 text-amber-500 mx-auto" />
-                    </div>
-                  )}
                 </button>
               ))}
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
-              Choose how long you'd like to keep your decorated tree
-            </p>
+
           </div>
         )}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <div className="flex items-center space-x-2">
-              <Calendar className="h-4 w-4" style={{color: '#F59E0B'}} />
-              <span>{isTreeOrder ? 'Installation Date & Time' : 'Delivery Date & Time'} {isTreeOrder && '*'}</span>
-            </div>
-          </label>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <input
-                type="date"
-                id="installationDate"
-                value={installationDate}
-                onChange={(e) => setInstallationDate(e.target.value)}
-                min={today}
-                className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
-                required={isTreeOrder}
-              />
-            </div>
-            <div>
-              <input
-                type="time"
-                id="installationTime"
-                value={installationTime}
-                onChange={(e) => setInstallationTime(e.target.value)}
-                className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
-              />
-            </div>
-          </div>
-
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
-            {isTreeOrder 
-              ? 'Select your preferred date and time for tree installation and decoration'
-              : 'Select your preferred delivery date and time'
-            }
-          </p>
-        </div>
-
-        {isTreeOrder && (
+        
+        {/* Separator */}
+        <div className="border-t border-gray-200 dark:border-gray-600 my-6"></div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4" style={{color: '#F59E0B'}} />
-                <span>Teardown Date & Time *</span>
+                <span>{isTreeOrder ? 'Installation Date & Time' : 'Delivery Date & Time'} {isTreeOrder && '*'}</span>
+                <Tooltip content={isTreeOrder ? "Select your preferred date and time for tree installation and decoration" : "Select your preferred delivery date and time"} />
               </div>
             </label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <input
-                  type="date"
-                  id="teardownDate"
-                  value={teardownDate}
-                  onChange={(e) => setTeardownDate(e.target.value)}
-                  min={getMinTeardownDate()}
-                  className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  type="time"
-                  id="teardownTime"
-                  value={teardownTime}
-                  onChange={(e) => setTeardownTime(e.target.value)}
-                  className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg"
-                  required
-                />
-              </div>
+            <input
+              type="datetime-local"
+              id="installationDateTime"
+              value={installationDate && installationTime ? `${installationDate}T${installationTime}` : ''}
+              onChange={(e) => {
+                const [date, time] = e.target.value.split('T')
+                setInstallationDate(date || '')
+                setInstallationTime(time || '')
+              }}
+              min={`${today}T00:00`}
+              className="w-full p-2 border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm"
+              required={isTreeOrder}
+            />
+          </div>
+
+          {isTreeOrder && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <div className="flex items-center space-x-2">
+                  <Calendar className="h-4 w-4" style={{color: '#F59E0B'}} />
+                  <span>Teardown Date & Time *</span>
+                  <Tooltip content="Schedule when you'd like us to remove the tree and decorations" />
+                </div>
+              </label>
+              <input
+                 type="datetime-local"
+                 id="teardownDateTime"
+                 value={teardownDate && teardownTime ? `${teardownDate}T${teardownTime}` : ''}
+                 onChange={(e) => {
+                   const [date, time] = e.target.value.split('T')
+                   setTeardownDate(date || '')
+                   setTeardownTime(time || '')
+                 }}
+                 min={getMinTeardownDate() ? `${getMinTeardownDate()}T00:00` : ''}
+                 className="w-full p-2 border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm"
+                 required
+               />
+             </div>
+           )}
+         </div>
+
+        {/* Separator */}
+        <div className="border-t border-gray-200 dark:border-gray-600 my-6"></div>
+        
+        {/* Delivery Add-ons and Rush Order - positioned under teardown */}
+        {(enabledDeliveryAddOns.length > 0 || true) && (
+          <div className="mt-4">
+            <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-3 text-sm flex items-center">
+              <Check className="h-4 w-4 text-amber-600 dark:text-amber-400 mr-2" />
+              Delivery Add-ons
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* Rush Order */}
+              <button
+                type="button"
+                onClick={() => setRushOrder(!rushOrder)}
+                className={`p-2 rounded-lg border text-center transition-all duration-200 text-sm ${
+                  rushOrder
+                    ? 'border-amber-400 bg-amber-50/60 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'
+                    : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-amber-300'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-gray-800 dark:text-white">
+                    Rush Order
+                  </span>
+                  <div className="flex items-center space-x-1">
+                    <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                      +$150
+                    </span>
+                    {rushOrder && (
+                      <Check className="h-3 w-3 text-amber-500" />
+                    )}
+                  </div>
+                </div>
+              </button>
+              
+              {/* Other Delivery Add-ons */}
+              {enabledDeliveryAddOns.map((addOn) => {
+                const isSelected = selectedDeliveryAddOns.includes(addOn.id)
+                return (
+                  <button
+                    key={addOn.id}
+                    type="button"
+                    onClick={() => handleDeliveryAddOnToggle(addOn.id)}
+                    className={`p-2 rounded-lg border text-center transition-all duration-200 text-sm ${
+                      isSelected
+                        ? 'border-amber-400 bg-amber-50/60 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'
+                        : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-amber-300'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-gray-800 dark:text-white">
+                        {addOn.name}
+                      </span>
+                      <div className="flex items-center space-x-1">
+                        <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                          +${addOn.fee}
+                        </span>
+                        {isSelected && (
+                          <Check className="h-3 w-3 text-amber-500" />
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                )
+              })}
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 ml-1">
-              Schedule when you'd like us to remove the tree and decorations
-            </p>
           </div>
         )}
-
-        <div className="bg-gradient-to-r from-amber-50/80 to-orange-50/80 dark:from-amber-950/20 dark:to-orange-950/20 rounded-2xl p-6 border border-amber-200/50 dark:border-amber-700/30">
-          <h3 className="font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-            <Zap className="h-5 w-5 text-amber-600 dark:text-amber-400 mr-2" />
-            Add-on Services
-          </h3>
-          
-          <div className="space-y-3">
-            {/* Rush Order */}
-            <label
-              className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer ${
-                rushOrder
-                  ? 'border-amber-500 bg-amber-100/50 dark:bg-amber-900/30 shadow-lg'
-                  : 'border-gray-200 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40'
-              }`}
-            >
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={rushOrder}
-                  onChange={(e) => setRushOrder(e.target.checked)}
-                  className="sr-only"
-                />
-                <div className="flex items-center space-x-3">
-                  <div className={`p-2 rounded-lg ${rushOrder ? 'bg-amber-500 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'}`}>
-                    <Clock className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <span className="font-bold text-gray-800 dark:text-white">Rush Order</span>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      Priority scheduling within 48 hours
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <span className="text-xl font-bold text-amber-600 dark:text-amber-400">+$150</span>
-            </label>
-
-
-
-            {/* Delivery Add-ons */}
-            {enabledDeliveryAddOns.length > 0 && (
-              <>
-                <div className="border-t border-amber-200/50 dark:border-amber-700/30 pt-3 mt-3">
-                  <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-3 text-sm">Delivery Add-ons</h4>
-                </div>
-                {enabledDeliveryAddOns.map((addOn) => {
-                  const isSelected = selectedDeliveryAddOns.includes(addOn.id)
-                  return (
-                    <label
-                      key={addOn.id}
-                      className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer ${
-                        isSelected
-                          ? 'border-amber-500 bg-amber-100/50 dark:bg-amber-900/30 shadow-lg'
-                          : 'border-gray-200 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40'
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => handleDeliveryAddOnToggle(addOn.id)}
-                          className="sr-only"
-                        />
-                        <div className="flex items-center space-x-3">
-                          <div className={`p-2 rounded-lg ${isSelected ? 'bg-amber-500 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'}`}>
-                            <Check className="h-4 w-4" />
-                          </div>
-                          <div>
-                            <span className="font-bold text-gray-800 dark:text-white">{addOn.name}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <span className="text-xl font-bold text-amber-600 dark:text-amber-400">+${addOn.fee}</span>
-                    </label>
-                  )
-                })}
-              </>
-            )}
-          </div>
-        </div>
 
         <div className="flex space-x-4 pt-4">
           <button

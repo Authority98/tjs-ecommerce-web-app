@@ -10,6 +10,13 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **📝 Enhanced Scheduling Form UX**: Comprehensive improvements to the installation and service scheduling interface
+  - **Interactive Tooltips**: Added reusable tooltip component with helpful information for rental period, installation date/time, and teardown date/time
+  - **Streamlined Date/Time Inputs**: Combined separate date and time fields into single `datetime-local` inputs for better user experience
+  - **Improved Layout**: Side-by-side arrangement of installation and teardown fields with increased spacing for better visual hierarchy
+  - **Visual Separators**: Added horizontal borders to separate form sections (header, rental period, scheduling, delivery add-ons)
+  - **Minimal Design**: Removed redundant explanatory text and decorative borders for cleaner, more focused interface
+  - **Responsive Spacing**: Enhanced gap spacing between form elements for improved readability and touch interaction
 - **💫 Enhanced Loading Animation System**: Improved user feedback during checkout process
   - **Dynamic Total Display**: Loading animation for total amount that appears only after all mandatory details are completed
   - **Service Selection Validation**: Total amount displays only after both installation and teardown services are selected for tree orders

@@ -12,35 +12,33 @@ const RentalPeriodSelection: React.FC<RentalPeriodSelectionProps> = ({
   onPeriodSelect
 }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
       {RENTAL_PERIODS.map((period) => (
         <button
           key={period.days}
+          type="button"
           onClick={() => onPeriodSelect(period.days)}
-          className={`p-6 rounded-2xl border-2 text-center ${
+          className={`p-2 rounded-lg border text-center transition-all duration-200 text-sm ${
             selectedOptions.rentalPeriod === period.days
-              ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
-              : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+              ? 'border-amber-400 bg-amber-50/60 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'
+              : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-amber-300'
           }`}
         >
-          <div className="flex justify-center mb-3">
-            <div className={`p-3 rounded-full ${
-              selectedOptions.rentalPeriod === period.days
-                ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
-            }`}>
-              <Clock className="h-6 w-6" />
+          <div className="flex items-center justify-between">
+            <span className="font-medium text-gray-800 dark:text-white">
+              {period.label}
+            </span>
+            <div className="flex items-center space-x-1">
+              {period.additionalCost > 0 && (
+                <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                  +${period.additionalCost}
+                </span>
+              )}
+              {selectedOptions.rentalPeriod === period.days && (
+                <Check className="h-3 w-3 text-amber-500" />
+              )}
             </div>
           </div>
-          <div className="font-bold text-xl text-gray-800 dark:text-white mb-1">
-            {period.label}
-          </div>
-
-          {selectedOptions.rentalPeriod === period.days && (
-            <div className="mt-2">
-              <Check className="h-5 w-5 text-amber-500 mx-auto" />
-            </div>
-          )}
         </button>
       ))}
     </div>
