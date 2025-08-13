@@ -306,12 +306,6 @@ export const DEFAULT_DELIVERY_ADDONS: DeliveryAddOn[] = [
     name: 'Permit/licensing needed',
     fee: 80,
     enabled: true
-  },
-  {
-    id: 'specific-timing',
-    name: 'Specific delivery timing',
-    fee: 50,
-    enabled: true
   }
 ]
 

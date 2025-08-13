@@ -47,10 +47,14 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
   - Simplified error messages for better user experience
   - **NEW**: Delivery Add-ons feature in scheduling section
     - Dynamic display of delivery add-ons configured in admin area
-    - User-selectable add-ons (No lift access, Permit/licensing needed, Specific delivery timing)
+    - User-selectable add-ons (No lift access, Permit/licensing needed)
     - Real-time fee calculation including selected add-ons
     - Separate line items in order summary for transparency
     - Seamless integration with existing checkout flow
+  - **UPDATED**: Removed "Specific delivery timing" add-on
+    - Streamlined delivery options by removing the $50 specific timing add-on
+    - Updated frontend defaults and database configurations
+    - Applied database migration to remove from existing configurations
 - **📦 Order Summary Optimization**: Enhanced order summary box layout for improved user experience
   - Repositioned "Final price upon order" notice next to total amount label
   - Moved discount code section below the total for better visual hierarchy

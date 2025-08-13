@@ -431,14 +431,18 @@ const AdminPage: React.FC = () => {
                           <span className="font-semibold text-gray-800 dark:text-white"></span>
                         </div>
                         <div className="ml-4 space-y-1">
-                          <div className="flex justify-between items-center py-1 text-sm">
-                            <span className="text-gray-500 dark:text-gray-400">• Installation</span>
-                            <span className="text-gray-600 dark:text-gray-300">Dynamic pricing</span>
-                          </div>
-                          <div className="flex justify-between items-center py-1 text-sm">
-                            <span className="text-gray-500 dark:text-gray-400">• Teardown</span>
-                            <span className="text-gray-600 dark:text-gray-300">Dynamic pricing</span>
-                          </div>
+                          {selectedOrder.installation_charges !== undefined && selectedOrder.installation_charges > 0 && (
+                            <div className="flex justify-between items-center py-1 text-sm">
+                              <span className="text-gray-500 dark:text-gray-400">• Installation</span>
+                              <span className="text-gray-600 dark:text-gray-300">${selectedOrder.installation_charges}</span>
+                            </div>
+                          )}
+                          {selectedOrder.teardown_charges !== undefined && selectedOrder.teardown_charges > 0 && (
+                            <div className="flex justify-between items-center py-1 text-sm">
+                              <span className="text-gray-500 dark:text-gray-400">• Teardown</span>
+                              <span className="text-gray-600 dark:text-gray-300">${selectedOrder.teardown_charges}</span>
+                            </div>
+                          )}
                           <div className="flex justify-between items-center py-1 text-sm">
                             <span className="text-gray-500 dark:text-gray-400">• No lift access</span>
                             <span className="text-gray-600 dark:text-gray-300">+$60</span>

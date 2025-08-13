@@ -41,22 +41,9 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
   isCalculatingTotal = false
 }) => {
   return (
-    <div className="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/20 dark:to-rose-950/20 rounded-3xl shadow-xl p-4 sticky top-24 border border-white/20 dark:border-gray-700/30 relative">
-      {/* Decorative Elements */}
-      <div className="absolute top-4 right-4">
-        <div className="w-16 h-16 bg-gradient-to-r from-pink-400 via-rose-400 to-red-300 rounded-full blur-xl z-0 opacity-40"></div>
-      </div>
-      <div className="absolute bottom-4 left-4">
-        <div className="w-12 h-12 bg-gradient-to-r from-pink-400 via-rose-400 to-red-300 rounded-full blur-lg z-0 opacity-40"></div>
-      </div>
-      
-      {/* Main white content area */}
-      <div className="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-6 relative z-10">
-        <div className="flex items-center space-x-3 mb-6">
-          <div className="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-xl">
-            <Package className="h-6 w-6 text-pink-600 dark:text-rose-400" />
-          </div>
-          <h3 className="text-2xl font-bold text-gray-800 dark:text-white font-dosis">Order Summary</h3>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-24">
+        <div className="mb-6 pb-4 border-b border-gray-200/50 dark:border-gray-600/50">
+          <h3 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400">Order Summary</h3>
         </div>
         
         <div className="space-y-4">
@@ -75,9 +62,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   className="w-20 h-20 object-cover rounded-xl shadow-lg"
                 />
               )}
-              <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center bg-pink-500">
-                  <Star className="h-3 w-3 text-white" />
-                </div>
+
             </div>
             <div className="flex-1">
               <h4 className="font-bold text-gray-800 dark:text-white line-clamp-2 mb-0.5">
@@ -120,8 +105,8 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
         {/* Gift Card Details */}
         {orderData.type === 'giftcard' && orderData.giftCard && (
           <div className="p-4 border-b border-gray-200/50 dark:border-gray-600/50">
-            <h4 className="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
-              <div className="w-2 h-2 rounded-full mr-2 bg-pink-500" />
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
+              <div className="w-2 h-2 rounded-full mr-2 bg-pink-500"></div>
               Gift Card Details
             </h4>
             <div className="space-y-3 text-sm">
@@ -163,22 +148,22 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
         {/* Service & Delivery Charges */}
         {additionalCharges.length > 0 && (
           <div className="p-4 border-b border-gray-200/50 dark:border-gray-600/50">
-            <h4 className="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
-              <div className="w-2 h-2 rounded-full mr-2 bg-pink-500" />
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
+              <div className="w-2 h-2 rounded-full mr-2 bg-pink-500"></div>
               Service Charges
             </h4>
             <div className="space-y-2">
               {additionalCharges.filter(charge => charge.name !== 'Delivery').map((charge, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <span className="text-sm text-gray-700 dark:text-gray-300">{charge.name}</span>
-                  <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+${charge.amount}</span>
+                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">+${charge.amount}</span>
                 </div>
               ))}
               {/* Rental Period */}
               {currentStep >= 2 && (rentalPeriod || orderData.treeOptions?.rentalPeriod) && (
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-700 dark:text-gray-300">Rental Period ({rentalPeriod || orderData.treeOptions?.rentalPeriod} days)</span>
-                  <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">
+                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">
                       {(() => {
                         const period = RENTAL_PERIODS.find(p => p.days === (rentalPeriod || orderData.treeOptions?.rentalPeriod));
                         return period && period.additionalCost > 0 ? `+$${period.additionalCost}` : 'Included';
@@ -190,14 +175,14 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
               {rushOrder && (
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-700 dark:text-gray-300">Rush Order</span>
-                  <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+$150</span>
+                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">+$150</span>
                 </div>
               )}
               {/* Delivery section - always visible */}
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-700 dark:text-gray-300">Delivery</span>
                 {additionalCharges.find(charge => charge.name === 'Delivery') ? (
-                  <span className="text-sm font-semibold text-pink-600 dark:text-rose-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
+                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
                 ) : (
                   <div className="flex items-center space-x-1">
                     <div className="flex space-x-1">
@@ -215,34 +200,34 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
 
 
          {/* Total */}
-        <div className="border-t-2 border-pink-200 dark:border-pink-700 pt-4 mt-4">
+        <div className="pt-4 mt-4">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-2">
               <div className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</div>
               {orderData.product?.category === 'trees' && (
-                <div className="text-xs bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded-lg text-amber-800 dark:text-amber-200 font-medium italic border border-amber-200/50 dark:border-amber-700/30">
+                <div className="text-xs bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded text-amber-700 dark:text-amber-300">
                    Final price upon order
                  </div>
               )}
             </div>
             {isCalculatingTotal ? (
               <div className="flex items-center space-x-2">
-                <span className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-fuchsia-400">$</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400">$</span>
                 <div className="flex space-x-1 items-center">
-                  <div className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
-                  <div className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
-                  <div className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                  <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                  <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                  <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
                 </div>
               </div>
             ) : (
-              <div className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-fuchsia-400">${finalTotal}</div>
+              <div className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400">${finalTotal}</div>
             )}
           </div>
         </div>
 
         {/* Discount Code Input - Only show for products, not gift cards - Moved below total and made minimal */}
          {orderData.type !== 'giftcard' && (
-           <div className="mt-3 pt-3 border-t border-gray-200/50 dark:border-gray-600/50">
+           <div className="mt-4 pt-4">
              <DiscountCodeInput
                orderData={orderData}
                appliedDiscount={appliedDiscount}
@@ -251,9 +236,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
            </div>
          )}
         
-
-      </div>
-    </div>
+        </div>
     </div>
   )
 }

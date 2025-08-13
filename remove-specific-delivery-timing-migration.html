@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Specific Delivery Timing Migration</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .step {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .step h3 {
+            color: #1e293b;
+            margin-top: 0;
+        }
+        .sql-code {
+            position: relative;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            overflow-x: auto;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover {
+            background: #2563eb;
+        }
+        .success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .link {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚚 Remove Specific Delivery Timing Migration</h1>
+        <p class="subtitle">Remove the "Specific delivery timing" add-on from your delivery configurations</p>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> This migration removes the "Specific delivery timing" add-on from all delivery configurations in your database.
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Open Supabase Dashboard</h3>
+            <p>Go to your <a href="https://supabase.com/dashboard" target="_blank" class="link">Supabase Dashboard</a> and select your project.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Navigate to SQL Editor</h3>
+            <p>In your project dashboard, click on <strong>"SQL Editor"</strong> in the left sidebar.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Run the Migration SQL</h3>
+            <p>Copy the SQL below and paste it into the SQL Editor, then click <strong>"Run"</strong>:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyMigrationSQL()">Copy SQL</button>
+                <pre id="migration-sql">-- ========================================
+-- REMOVE SPECIFIC DELIVERY TIMING ADD-ON
+-- ========================================
+-- This script removes the "Specific delivery timing" add-on from delivery configurations
+
+-- Update delivery_configurations to remove "Specific delivery timing" add-on
+UPDATE delivery_configurations 
+SET add_ons = (
+  SELECT jsonb_agg(addon)
+  FROM jsonb_array_elements(add_ons) AS addon
+  WHERE addon->>'name' != 'Specific delivery timing'
+)
+WHERE add_ons IS NOT NULL;
+
+-- Add comment to document the change
+COMMENT ON TABLE delivery_configurations IS 'Configuration table for delivery charge calculation models - Updated to remove Specific delivery timing add-on';</pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Verify the Migration</h3>
+            <p>After running the SQL, you can verify it worked by running this query:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyVerifySQL()">Copy SQL</button>
+                <pre id="verify-sql">-- Verify the "Specific delivery timing" add-on was removed
+SELECT 
+  id,
+  model,
+  add_ons,
+  is_active,
+  created_at
+FROM delivery_configurations
+ORDER BY created_at DESC;</pre>
+            </div>
+        </div>
+
+        <div class="success" id="success-message" style="display: none;">
+            ✅ SQL copied to clipboard! Now paste it in your Supabase SQL Editor.
+        </div>
+
+        <div class="step">
+            <h3>Step 5: Frontend Changes Complete</h3>
+            <p>The frontend code has already been updated to remove the "Specific delivery timing" add-on from the default configuration. After running this migration, the add-on will be completely removed from both frontend and database.</p>
+        </div>
+    </div>
+
+    <script>
+        function copyMigrationSQL() {
+            const sqlContent = document.getElementById('migration-sql').textContent;
+            navigator.clipboard.writeText(sqlContent).then(() => {
+                showSuccess();
+            });
+        }
+
+        function copyVerifySQL() {
+            const verifySql = document.getElementById('verify-sql').textContent;
+            navigator.clipboard.writeText(verifySql).then(() => {
+                showSuccess();
+            });
+        }
+
+        function showSuccess() {
+            const successMessage = document.getElementById('success-message');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
