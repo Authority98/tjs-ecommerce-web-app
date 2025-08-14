@@ -1,18 +1,16 @@
-import { DeliveryConfiguration, DeliveryZone, DistanceBasedConfig, DeliveryAddOn } from '../types'
+import { DeliveryConfiguration, DeliveryZone, DeliveryAddOn } from '../types'
 
 export interface DeliveryCalculationResult {
   baseFee: number
   addOnFees: number
   totalFee: number
   zone?: string
-  distance?: number
   appliedAddOns: string[]
   error?: string
 }
 
 export interface DeliveryCalculationInput {
   postalCode?: string
-  distance?: number // in kilometers
   selectedAddOns?: string[] // array of add-on IDs
 }
 
@@ -31,35 +29,19 @@ export function calculateDeliveryFee(
   }
 
   try {
-    // Calculate base fee based on model
-    if (config.model === 'zone') {
-      if (!input.postalCode) {
-        result.error = 'Postal code is required for zone-based delivery'
-        return result
-      }
-      
-      const zoneResult = calculateZoneBasedFee(config.zoneBasedConfig?.zones || [], input.postalCode)
-      result.baseFee = zoneResult.fee
-      result.zone = zoneResult.zoneName
-      
-      if (zoneResult.error) {
-        result.error = zoneResult.error
-        return result
-      }
-    } else if (config.model === 'distance') {
-      if (input.distance === undefined) {
-        result.error = 'Distance is required for distance-based delivery'
-        return result
-      }
-      
-      const distanceResult = calculateDistanceBasedFee(config.distanceBasedConfig!, input.distance)
-      result.baseFee = distanceResult.fee
-      result.distance = input.distance
-      
-      if (distanceResult.error) {
-        result.error = distanceResult.error
-        return result
-      }
+    // Calculate base fee using zone-based model
+    if (!input.postalCode) {
+      result.error = 'Postal code is required for delivery'
+      return result
+    }
+    
+    const zoneResult = calculateZoneBasedFee(config.zoneBasedConfig?.zones || [], input.postalCode)
+    result.baseFee = zoneResult.fee
+    result.zone = zoneResult.zoneName
+    
+    if (zoneResult.error) {
+      result.error = zoneResult.error
+      return result
     }
 
     // Calculate add-on fees
@@ -105,27 +87,6 @@ function calculateZoneBasedFee(zones: DeliveryZone[], postalCode: string): { fee
     fee: matchingZone.fee,
     zoneName: matchingZone.name
   }
-}
-
-/**
- * Calculate distance-based delivery fee
- */
-function calculateDistanceBasedFee(config: DistanceBasedConfig, distance: number): { fee: number; error?: string } {
-  if (distance > config.maxRange) {
-    return {
-      fee: 0,
-      error: `Delivery not available beyond ${config.maxRange}km`
-    }
-  }
-  
-  let fee = config.baseFee
-  
-  if (distance > config.baseDistance) {
-    const extraDistance = distance - config.baseDistance
-    fee += extraDistance * config.additionalChargePerKm
-  }
-  
-  return { fee: Math.round(fee * 100) / 100 } // Round to 2 decimal places
 }
 
 /**

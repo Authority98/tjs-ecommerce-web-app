@@ -79,6 +79,36 @@ const AdminPage: React.FC = () => {
     setSelectedOrder(order)
   }
 
+  // Helper function to check if a date is weekend
+  const isWeekend = (dateString: string) => {
+    const date = new Date(dateString)
+    const day = date.getDay()
+    return day === 0 || day === 6 // Sunday or Saturday
+  }
+
+  // Helper function to get service charge label with timing reasons
+  const getServiceChargeLabel = (serviceType: string, dateString?: string, timeString?: string) => {
+    let label = serviceType
+    
+    if (dateString && timeString) {
+      const reasons = []
+      
+      // Check time type
+      const timeType = timeString >= '18:00' ? (timeString >= '22:00' ? 'Late-night' : 'Evening') : null
+      if (timeType) reasons.push(timeType)
+      
+      // Check if weekend
+      const isWeekendDay = isWeekend(dateString)
+      if (isWeekendDay) reasons.push('Weekend')
+      
+      if (reasons.length > 0) {
+        label += ` (${reasons.join(', ')})`
+      }
+    }
+    
+    return label
+  }
+
   const handleDeleteOrder = async (orderId: string) => {
     if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
       return
@@ -433,17 +463,25 @@ const AdminPage: React.FC = () => {
                         <div className="ml-4 space-y-1">
                           {selectedOrder.installation_charges !== undefined && selectedOrder.installation_charges > 0 && (
                             <div className="flex justify-between items-center py-1 text-sm">
-                              <span className="text-gray-500 dark:text-gray-400">• Installation</span>
+                              <span className="text-gray-500 dark:text-gray-400">• {getServiceChargeLabel('Installation', selectedOrder.installation_date, selectedOrder.installation_time)}</span>
                               <span className="text-gray-600 dark:text-gray-300">${selectedOrder.installation_charges}</span>
                             </div>
                           )}
                           {selectedOrder.teardown_charges !== undefined && selectedOrder.teardown_charges > 0 && (
                             <div className="flex justify-between items-center py-1 text-sm">
-                              <span className="text-gray-500 dark:text-gray-400">• Teardown</span>
+                              <span className="text-gray-500 dark:text-gray-400">• {getServiceChargeLabel('Teardown', selectedOrder.teardown_date, selectedOrder.teardown_time)}</span>
                               <span className="text-gray-600 dark:text-gray-300">${selectedOrder.teardown_charges}</span>
                             </div>
                           )}
-                          {/* Dynamic delivery add-ons would go here if stored in order data */}
+                          {/* Dynamic delivery add-ons */}
+                          {selectedOrder.selected_delivery_addons && selectedOrder.selected_delivery_addons.length > 0 && (
+                            selectedOrder.selected_delivery_addons.map((addOn) => (
+                              <div key={addOn.id} className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                                <span className="text-gray-600 dark:text-gray-300">{addOn.name}</span>
+                                <span className="text-gray-600 dark:text-gray-300">${addOn.fee}</span>
+                              </div>
+                            ))
+                          )}
                         </div>
                         {/* Service charges subtotal would be calculated dynamically */}
                         {((selectedOrder.installation_charges && selectedOrder.installation_charges > 0) || 
@@ -459,10 +497,10 @@ const AdminPage: React.FC = () => {
                     )}
                     
                     {/* Rush Order */}
-                    {selectedOrder.rush_order && (
+                    {selectedOrder.rush_order && selectedOrder.rush_order_fee && selectedOrder.rush_order_fee > 0 && (
                       <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
                         <span className="text-gray-600 dark:text-gray-300">Rush Order Fee</span>
-                        <span className="font-semibold text-gray-800 dark:text-white">$150</span>
+                        <span className="font-semibold text-gray-800 dark:text-white">${selectedOrder.rush_order_fee}</span>
                       </div>
                     )}
                     

@@ -223,7 +223,10 @@ const CheckoutPage: React.FC = () => {
       total += deliveryFee // Dynamic delivery fee
     }
     
-    if (rushOrder) total += 150 // Rush order fee
+    if (rushOrder) {
+      const rushOrderAddOn = deliveryConfig?.addOns.find(addOn => addOn.id === 'rush-order' && addOn.enabled)
+      total += rushOrderAddOn?.fee || 150 // Rush order fee (fallback to 150 if not configured)
+    }
     
     // Apply discount if available (only for products, not gift cards)
     if (appliedDiscount && orderData.type !== 'giftcard') {
@@ -454,12 +457,21 @@ const CheckoutPage: React.FC = () => {
           rental_period: orderData.treeOptions ? rentalPeriod : null,
           decor_level: orderData.treeOptions?.decorLevel,
           installation_date: installationDate || null,
+          installation_time: installationTime || null,
           teardown_date: teardownDate || null,
+          teardown_time: teardownTime || null,
           rush_order: rushOrder
         }),
         total_amount: calculateFinalTotal(),
         installation_charges: installationSelected ? calculateTotalSurcharge(installationDate, installationTime) : 0,
         teardown_charges: teardownSelected ? calculateTotalSurcharge(teardownDate, teardownTime) : 0,
+        selected_delivery_addons: deliveryConfig && selectedDeliveryAddOns.length > 0 
+          ? selectedDeliveryAddOns.map(addOnId => {
+              const addOn = deliveryConfig.addOns.find(a => a.id === addOnId)
+              return addOn ? { id: addOn.id, name: addOn.name, fee: addOn.fee, enabled: addOn.enabled } : null
+            }).filter(Boolean)
+          : [],
+        rush_order_fee: rushOrder ? (deliveryConfig?.addOns.find(addOn => addOn.id === 'rush-order' && addOn.enabled)?.fee || 150) : 0,
         discount_code_id: appliedDiscount?.id || null,
         discount_amount: appliedDiscount?.amount || 0,
         status: 'pending' as const

@@ -55,6 +55,13 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
     - Streamlined delivery options by removing the $50 specific timing add-on
     - Updated frontend defaults and database configurations
     - Applied database migration to remove from existing configurations
+  - **MAJOR UPDATE**: Removed distance-based delivery functionality
+    - Eliminated distance-based delivery model from admin interface
+    - Removed all distance-related configuration options and UI components
+    - Updated TypeScript types to enforce zone-based delivery only
+    - Simplified delivery calculator to handle zone-based calculations exclusively
+    - Applied database migration to remove distance_config column
+    - System now exclusively supports zone-based delivery with postal code validation
 - **📦 Order Summary Optimization**: Enhanced order summary box layout for improved user experience
   - Repositioned "Final price upon order" notice next to total amount label
   - Moved discount code section below the total for better visual hierarchy

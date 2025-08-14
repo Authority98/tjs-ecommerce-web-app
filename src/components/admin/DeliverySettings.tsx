@@ -3,10 +3,8 @@ import { Settings, Truck, MapPin, Clock, Plus, Trash2, Save } from 'lucide-react
 import { 
   DeliveryConfiguration, 
   DeliveryZone, 
-  DistanceBasedConfig, 
   DeliveryAddOn,
   DEFAULT_DELIVERY_ZONES,
-  DEFAULT_DISTANCE_CONFIG,
   DEFAULT_DELIVERY_ADDONS
 } from '../../types'
 import Button from '../ui/Button'
@@ -15,10 +13,7 @@ import { supabase } from '../../lib/supabase'
 const DeliverySettings: React.FC = () => {
   const [config, setConfig] = useState<DeliveryConfiguration>({
     model: 'zone',
-    zoneBasedConfig: {
-      zones: DEFAULT_DELIVERY_ZONES
-    },
-    distanceBasedConfig: DEFAULT_DISTANCE_CONFIG,
+    zoneBasedConfig: { zones: DEFAULT_DELIVERY_ZONES },
     addOns: DEFAULT_DELIVERY_ADDONS,
     isActive: true
   })
@@ -62,6 +57,7 @@ const DeliverySettings: React.FC = () => {
         const convertedData = {
           ...configData,
           id: configData.id, // Preserve the ID for updates
+          model: 'zone', // Force zone-based model
           addOns: configData.add_ons,
           isActive: configData.is_active,
           zoneBasedConfig: configData.zones ? { zones: configData.zones } : undefined,
@@ -94,11 +90,10 @@ const DeliverySettings: React.FC = () => {
       
       // Convert camelCase to snake_case for the database
       const dbConfig: any = {
-        model: config.model,
+        model: 'zone',
         add_ons: config.addOns,
         is_active: config.isActive,
-        zones: config.zoneBasedConfig?.zones || [],
-        distance_config: config.distanceBasedConfig || {}
+        zones: config.zoneBasedConfig?.zones || []
       }
       
       // Include ID if updating existing config
@@ -226,47 +221,16 @@ const DeliverySettings: React.FC = () => {
           </Button>
         </div>
 
-        {/* Delivery Model Selection */}
+        {/* Delivery Model Info */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Delivery Model</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button
-              onClick={() => setConfig({ ...config, model: 'zone' })}
-              className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-                config.model === 'zone'
-                  ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                  : 'border-gray-200 dark:border-gray-600 hover:border-purple-300'
-              }`}
-            >
-              <div className="flex items-center space-x-3 mb-2">
-                <MapPin className={`h-5 w-5 ${
-                  config.model === 'zone' ? 'text-purple-600' : 'text-gray-500'
-                }`} />
-                <span className="font-semibold text-gray-800 dark:text-white">Zone-Based Delivery</span>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Set delivery fees based on postal code zones
-              </p>
-            </button>
-
-            <button
-              onClick={() => setConfig({ ...config, model: 'distance' })}
-              className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-                config.model === 'distance'
-                  ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                  : 'border-gray-200 dark:border-gray-600 hover:border-purple-300'
-              }`}
-            >
-              <div className="flex items-center space-x-3 mb-2">
-                <Truck className={`h-5 w-5 ${
-                  config.model === 'distance' ? 'text-purple-600' : 'text-gray-500'
-                }`} />
-                <span className="font-semibold text-gray-800 dark:text-white">Distance-Based Delivery</span>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Calculate fees based on delivery distance
-              </p>
-            </button>
+          <div className="p-4 rounded-xl border-2 border-purple-500 bg-purple-50 dark:bg-purple-900/20">
+            <div className="flex items-center space-x-3 mb-2">
+              <MapPin className="h-5 w-5 text-purple-600" />
+              <span className="font-semibold text-gray-800 dark:text-white">Zone-Based Delivery</span>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Set delivery fees based on postal code zones
+            </p>
           </div>
         </div>
       </div>
@@ -401,90 +365,7 @@ const DeliverySettings: React.FC = () => {
         </div>
       )}
 
-      {/* Distance-Based Configuration */}
-      {config.model === 'distance' && config.distanceBasedConfig && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 border border-white/20 dark:border-gray-700/30">
-          <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-6">Distance-Based Settings</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Base Fee ($)
-              </label>
-              <input
-                type="number"
-                value={config.distanceBasedConfig.baseFee}
-                onChange={(e) => setConfig({
-                  ...config,
-                  distanceBasedConfig: {
-                    ...config.distanceBasedConfig!,
-                    baseFee: Number(e.target.value)
-                  }
-                })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 mt-1">Base fee for 0-{config.distanceBasedConfig.baseDistance}km</p>
-            </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Base Distance (km)
-              </label>
-              <input
-                type="number"
-                value={config.distanceBasedConfig.baseDistance}
-                onChange={(e) => setConfig({
-                  ...config,
-                  distanceBasedConfig: {
-                    ...config.distanceBasedConfig!,
-                    baseDistance: Number(e.target.value)
-                  }
-                })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Additional Charge per km ($)
-              </label>
-              <input
-                type="number"
-                step="0.1"
-                value={config.distanceBasedConfig.additionalChargePerKm}
-                onChange={(e) => setConfig({
-                  ...config,
-                  distanceBasedConfig: {
-                    ...config.distanceBasedConfig!,
-                    additionalChargePerKm: Number(e.target.value)
-                  }
-                })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 mt-1">Charge per km beyond base distance</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Maximum Range (km)
-              </label>
-              <input
-                type="number"
-                value={config.distanceBasedConfig.maxRange}
-                onChange={(e) => setConfig({
-                  ...config,
-                  distanceBasedConfig: {
-                    ...config.distanceBasedConfig!,
-                    maxRange: Number(e.target.value)
-                  }
-                })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 mt-1">Maximum delivery distance</p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Delivery Add-ons */}
       <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 border border-white/20 dark:border-gray-700/30">

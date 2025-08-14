@@ -286,29 +286,36 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Rush Order */}
-              <button
-                type="button"
-                onClick={() => setRushOrder(!rushOrder)}
-                className={`p-2 rounded-lg border text-center transition-all duration-200 text-sm ${
-                  rushOrder
-                    ? 'border-amber-400 bg-amber-50/60 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'
-                    : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-amber-300'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-800 dark:text-white">
-                    Rush Order
-                  </span>
-                  <div className="flex items-center space-x-1">
-                    <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
-                      +$150
-                    </span>
-                    {rushOrder && (
-                      <Check className="h-3 w-3 text-amber-500" />
-                    )}
-                  </div>
-                </div>
-              </button>
+              {(() => {
+                const rushOrderAddOn = deliveryConfig?.addOns.find(addOn => addOn.id === 'rush-order' && addOn.enabled)
+                if (!rushOrderAddOn) return null
+                
+                return (
+                  <button
+                    type="button"
+                    onClick={() => setRushOrder(!rushOrder)}
+                    className={`p-2 rounded-lg border text-center transition-all duration-200 text-sm ${
+                      rushOrder
+                        ? 'border-amber-400 bg-amber-50/60 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'
+                        : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-amber-300'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-gray-800 dark:text-white">
+                        {rushOrderAddOn.name}
+                      </span>
+                      <div className="flex items-center space-x-1">
+                        <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                          +${rushOrderAddOn.fee}
+                        </span>
+                        {rushOrder && (
+                          <Check className="h-3 w-3 text-amber-500" />
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                )
+              })()}
               
               {/* Other Delivery Add-ons */}
               {enabledDeliveryAddOns.map((addOn) => {

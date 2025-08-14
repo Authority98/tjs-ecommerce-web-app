@@ -220,13 +220,6 @@ export interface DeliveryZone {
   fee: number
 }
 
-export interface DistanceBasedConfig {
-  baseFee: number
-  baseDistance: number
-  additionalChargePerKm: number
-  maxRange: number
-}
-
 export interface DeliveryAddOn {
   id: string
   name: string
@@ -236,11 +229,10 @@ export interface DeliveryAddOn {
 
 export interface DeliveryConfiguration {
   id?: string
-  model: 'zone' | 'distance'
+  model: 'zone'
   zoneBasedConfig?: {
     zones: DeliveryZone[]
   }
-  distanceBasedConfig?: DistanceBasedConfig
   addOns: DeliveryAddOn[]
   isActive: boolean
   created_at?: string
@@ -287,13 +279,6 @@ export const DEFAULT_DELIVERY_ZONES: DeliveryZone[] = [
   }
 ]
 
-export const DEFAULT_DISTANCE_CONFIG: DistanceBasedConfig = {
-  baseFee: 30,
-  baseDistance: 10,
-  additionalChargePerKm: 2,
-  maxRange: 30
-}
-
 export const DEFAULT_DELIVERY_ADDONS: DeliveryAddOn[] = [
   {
     id: 'no-lift',
@@ -305,6 +290,12 @@ export const DEFAULT_DELIVERY_ADDONS: DeliveryAddOn[] = [
     id: 'permits',
     name: 'Permit/licensing needed',
     fee: 80,
+    enabled: true
+  },
+  {
+    id: 'rush-order',
+    name: 'Rush Order',
+    fee: 150,
     enabled: true
   }
 ]
@@ -355,6 +346,8 @@ export interface Order {
   installation_charges?: number
   teardown_charges?: number
   timing_surcharges?: number
+  selected_delivery_addons?: DeliveryAddOn[]
+  rush_order_fee?: number
   total_amount: number
   status: 'pending' | 'confirmed' | 'delivered' | 'completed'
   created_at: string
