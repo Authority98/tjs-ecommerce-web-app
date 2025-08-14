@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { MapPin, ChevronDown, Search } from 'lucide-react'
 import { DeliveryConfiguration } from '../types'
-import { calculateDeliveryFee } from '../utils/deliveryCalculator'
 
 interface ZoneSelectorProps {
   deliveryConfig?: DeliveryConfiguration
@@ -11,8 +10,7 @@ interface ZoneSelectorProps {
   className?: string
 }
 
-// Zone area mappings with representative postal codes
-// Based on Singapore's 5 official regions: Central, North, Northeast, East, West
+// Static zone configuration with areas and fees
 const ZONE_AREAS = {
   'central': {
     name: 'Central (CBD)',
@@ -147,44 +145,43 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
   const handleZoneSelect = (zoneId: string) => {
     setCurrentZone(zoneId)
     setCurrentArea('') // Reset area when zone changes
+    setZoneSearchTerm('')
     setIsZoneOpen(false)
-    setIsAreaOpen(false)
+    
+    // Calculate delivery fee immediately when zone is selected
+    const fee = ZONE_AREAS[zoneId as keyof typeof ZONE_AREAS]?.fee || 0
+    onZoneChange(zoneId, '', '', fee)
   }
 
   const handleAreaSelect = (area: string) => {
     setCurrentArea(area)
+    setAreaSearchTerm('')
     setIsAreaOpen(false)
     
-    // Get zone info and trigger callback
-    const zoneInfo = ZONE_AREAS[currentZone as keyof typeof ZONE_AREAS]
-    if (zoneInfo) {
-      onZoneChange(currentZone, area, '', zoneInfo.fee)
+    if (currentZone) {
+      const fee = ZONE_AREAS[currentZone as keyof typeof ZONE_AREAS]?.fee || 0
+      onZoneChange(currentZone, area, '', fee)
     }
   }
 
   const getCurrentZoneName = () => {
-    if (!currentZone) return 'Select your zone'
-    return ZONE_AREAS[currentZone as keyof typeof ZONE_AREAS]?.name || 'Select your zone'
+    return ZONE_AREAS[currentZone as keyof typeof ZONE_AREAS]?.name || ''
   }
 
   const getCurrentAreas = () => {
-    if (!currentZone) return []
     const areas = ZONE_AREAS[currentZone as keyof typeof ZONE_AREAS]?.areas || []
-    if (!areaSearchTerm) return areas
     return areas.filter(area => 
       area.toLowerCase().includes(areaSearchTerm.toLowerCase())
     )
   }
 
   const getFilteredZones = () => {
-    if (!zoneSearchTerm) return Object.entries(ZONE_AREAS)
     return Object.entries(ZONE_AREAS).filter(([zoneId, zone]) => 
       zone.name.toLowerCase().includes(zoneSearchTerm.toLowerCase())
     )
   }
 
   const getCurrentFee = () => {
-    if (!currentZone) return 0
     return ZONE_AREAS[currentZone as keyof typeof ZONE_AREAS]?.fee || 0
   }
 
@@ -195,71 +192,69 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
         Delivery Zone Selection
       </h3>
       
-      {/* Zone Selection */}
-      <div className="relative">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Select your zone *
-        </label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="relative">
-          {currentZone ? (
-            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-orange-600 z-10" />
-          ) : (
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
-          )}
-          <input
-            type="text"
-            placeholder={currentZone ? getCurrentZoneName() : "Search zones..."}
-            value={zoneSearchTerm}
-            onChange={(e) => setZoneSearchTerm(e.target.value)}
-            onFocus={() => setIsZoneOpen(true)}
-            onBlur={() => setTimeout(() => setIsZoneOpen(false), 200)}
-            className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
-              currentZone 
-                ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-600 text-black dark:text-black'
-                : 'border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white'
-            }`}
-          />
-          <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-transform pointer-events-none ${
-            currentZone ? 'text-orange-600' : 'text-gray-400'
-          } ${isZoneOpen ? 'rotate-180' : ''}`} />
-        </div>
-        
-        {isZoneOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-hidden">
-            <div className="max-h-60 overflow-y-auto">
-              {getFilteredZones().map(([zoneId, zone]) => (
-                <button
-                  key={zoneId}
-                  type="button"
-                  onClick={() => {
-                    handleZoneSelect(zoneId)
-                    setZoneSearchTerm('')
-                  }}
-                  className="w-full px-4 py-3 text-left hover:bg-amber-50 dark:hover:bg-amber-900/20 flex items-center justify-between border-b border-gray-100 dark:border-gray-700 last:border-b-0"
-                >
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-white">{zone.name}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {zone.areas.length} areas available
-                    </div>
-                  </div>
-                  <div className="text-amber-600 dark:text-amber-400 font-semibold">
-                    ${zone.fee}
-                  </div>
-                </button>
-              ))}
-              {getFilteredZones().length === 0 && (
-                <div className="px-4 py-3 text-gray-500 dark:text-gray-400 text-center">
-                  No zones found
-                </div>
-              )}
-            </div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Select your zone *
+          </label>
+          <div className="relative">
+            {currentZone ? (
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-orange-600 z-10" />
+            ) : (
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
+            )}
+            <input
+              type="text"
+              placeholder={currentZone ? getCurrentZoneName() : "Search zones..."}
+              value={currentZone && !isZoneOpen ? getCurrentZoneName() : zoneSearchTerm}
+              onChange={(e) => setZoneSearchTerm(e.target.value)}
+              onFocus={() => setIsZoneOpen(true)}
+              onBlur={() => setTimeout(() => setIsZoneOpen(false), 200)}
+              className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
+                currentZone 
+                  ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-600 text-black dark:text-white'
+                  : 'border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-black dark:text-white'
+              }`}
+            />
+            <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-transform pointer-events-none ${
+              currentZone ? 'text-orange-600' : 'text-gray-400'
+            } ${isZoneOpen ? 'rotate-180' : ''}`} />
           </div>
-        )}
-      </div>
+          
+          {isZoneOpen && (
+            <div className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-hidden">
+              <div className="max-h-60 overflow-y-auto">
+                {getFilteredZones().map(([zoneId, zone]) => (
+                  <button
+                    key={zoneId}
+                    type="button"
+                    onClick={() => {
+                      handleZoneSelect(zoneId)
+                      setZoneSearchTerm('')
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-amber-50 dark:hover:bg-amber-900/20 flex items-center justify-between border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+                  >
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">{zone.name}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {zone.areas.length} areas
+                      </div>
+                    </div>
+                    <div className="text-amber-600 dark:text-amber-400 font-semibold">
+                      ${zone.fee}
+                    </div>
+                  </button>
+                ))}
+                {getFilteredZones().length === 0 && (
+                  <div className="px-4 py-3 text-gray-500 dark:text-gray-400 text-center">
+                    No zones found
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
 
-      {/* Area Selection */}
-      {currentZone && (
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Select your area *
@@ -272,23 +267,26 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
             )}
             <input
               type="text"
-              placeholder={currentArea || "Search areas..."}
-              value={areaSearchTerm}
+              placeholder={currentArea || (!currentZone ? "Select zone first..." : "Search areas...")}
+              value={currentArea && !isAreaOpen ? currentArea : areaSearchTerm}
               onChange={(e) => setAreaSearchTerm(e.target.value)}
-              onFocus={() => setIsAreaOpen(true)}
+              onFocus={() => currentZone && setIsAreaOpen(true)}
               onBlur={() => setTimeout(() => setIsAreaOpen(false), 200)}
+              disabled={!currentZone}
               className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
                  currentArea 
-                   ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-600 text-black dark:text-black'
-                   : 'border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white'
+                   ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-600 text-black dark:text-white'
+                   : !currentZone
+                   ? 'border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                   : 'border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-black dark:text-white'
                }`}
             />
             <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 transition-transform pointer-events-none ${
-              currentArea ? 'text-orange-600' : 'text-gray-400'
+              currentArea ? 'text-orange-600' : !currentZone ? 'text-gray-300' : 'text-gray-400'
             } ${isAreaOpen ? 'rotate-180' : ''}`} />
           </div>
           
-          {isAreaOpen && (
+          {isAreaOpen && currentZone && (
             <div className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-hidden">
               <div className="max-h-60 overflow-y-auto">
                 {getCurrentAreas().map((area, index) => (
@@ -313,9 +311,8 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
             </div>
           )}
         </div>
-      )}
+      </div>
 
-      {/* Delivery Fee Display */}
       {currentZone && currentArea && (
         <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
           <div className="flex items-center justify-between">

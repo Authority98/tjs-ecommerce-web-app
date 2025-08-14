@@ -25,6 +25,7 @@ export interface CustomerDetails {
   phone: string
   deliveryAddress: string
   // Singapore-specific address fields
+  postalCode?: string
   unitNumber?: string
   buildingName?: string
   streetAddress?: string

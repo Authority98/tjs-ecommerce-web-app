@@ -10,6 +10,10 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🔧 User Experience Improvements**: Enhanced form usability and delivery system optimization
+  - **Postal Code Field Made Optional**: Removed required validation from postal code field in customer details form for improved user experience
+  - **Zone Selection Text Update**: Changed zone selection display from "x areas available" to "x areas" for cleaner interface
+  - **Immediate Delivery Fee Calculation**: Delivery fees now calculate instantly upon zone selection without waiting for area selection
 - **🗺️ Zone-Based Delivery System Optimization**: Complete removal of postal code dependencies for simplified delivery management
   - **Database Schema Cleanup**: Removed `postal_code` column from orders table and `postalCodes` from delivery configurations
   - **TypeScript Type Updates**: Cleaned up all postal code references from type definitions in `src/lib/supabase.ts` and `src/types/index.ts`

@@ -112,8 +112,6 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
 
         {!isGiftCard && (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Delivery Address (Singapore Only)</h3>
-            
             {/* Zone Selection */}
             <ZoneSelector
               selectedZone={customerDetails.deliveryZone}
@@ -122,38 +120,62 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
               className="mb-6"
             />
             
-            <div>
-              <label htmlFor="unitNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Unit Number
-              </label>
-              <input
-                type="text"
-                id="unitNumber"
-                value={customerDetails.unitNumber || ''}
-                onChange={(e) => {
-                  updateField('unitNumber', e.target.value)
-                }}
-                className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
-                style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
-                placeholder="#12-34"
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="buildingName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Building/Estate Name
-              </label>
-              <input
-                type="text"
-                id="buildingName"
-                value={customerDetails.buildingName || ''}
-                onChange={(e) => {
-                  updateField('buildingName', e.target.value)
-                }}
-                className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
-                style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
-                placeholder="Marina Bay Residences"
-              />
+            {/* Postal Code, Unit Number, Building Name - 3 Column Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Postal Code
+                </label>
+                <input
+                  type="text"
+                  id="postalCode"
+                  value={customerDetails.postalCode || ''}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '') // Only allow numbers
+                    updateField('postalCode', value)
+                  }}
+                  className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
+                  style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
+                  placeholder="018956 (optional)"
+                  maxLength={6}
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="unitNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Unit Number *
+                </label>
+                <input
+                  type="text"
+                  id="unitNumber"
+                  value={customerDetails.unitNumber || ''}
+                  onChange={(e) => {
+                    updateField('unitNumber', e.target.value)
+                  }}
+                  className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
+                  style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
+                  placeholder="#12-34"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="buildingName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Building/Estate Name *
+                </label>
+                <input
+                  type="text"
+                  id="buildingName"
+                  value={customerDetails.buildingName || ''}
+                  onChange={(e) => {
+                    updateField('buildingName', e.target.value)
+                  }}
+                  className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
+                  style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
+                  placeholder="Marina Bay Residences"
+                  required
+                />
+              </div>
             </div>
             
             <div>
