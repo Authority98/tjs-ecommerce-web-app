@@ -210,7 +210,7 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
               onChange={(e) => setZoneSearchTerm(e.target.value)}
               onFocus={() => setIsZoneOpen(true)}
               onBlur={() => setTimeout(() => setIsZoneOpen(false), 200)}
-              className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
+              className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm ${
                 currentZone 
                   ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-600 text-black dark:text-white'
                   : 'border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-black dark:text-white'
@@ -273,7 +273,7 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
               onFocus={() => currentZone && setIsAreaOpen(true)}
               onBlur={() => setTimeout(() => setIsAreaOpen(false), 200)}
               disabled={!currentZone}
-              className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
+              className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm ${
                  currentArea 
                    ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-600 text-black dark:text-white'
                    : !currentZone

@@ -29,6 +29,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
           return (
             <div key={level.percentage} className="flex-1">
               <button
+                type="button"
                 onClick={() => onDecorLevelSelect(level.percentage)}
                 className={`w-full p-3 rounded-lg border text-center transition-all duration-200 ${
                   selectedOptions.decorLevel === level.percentage
@@ -46,6 +47,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
                     <span className="font-medium text-sm">{level.label}</span>
                     {level.percentage === 100 && level.detailedDescription && (
                       <button
+                        type="button"
                         onClick={(e) => {
                           e.stopPropagation()
                           setShowModal(true)
@@ -73,6 +75,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
           <h4 className="text-sm font-medium text-amber-800 dark:text-amber-200 mb-2">Event Size</h4>
           <div className="grid grid-cols-3 gap-2">
             <button
+                type="button"
                 onClick={() => onEventSizeSelect?.('small')}
                 className={`text-center p-2 rounded border transition-all duration-200 ${
                   selectedOptions.eventSize === 'small'
@@ -89,6 +92,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
               <div className="text-sm font-bold text-amber-600 dark:text-amber-400">$1,200</div>
             </button>
             <button
+              type="button"
               onClick={() => onEventSizeSelect?.('medium')}
               className={`text-center p-2 rounded border transition-all duration-200 ${
                 selectedOptions.eventSize === 'medium'
@@ -105,6 +109,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
               <div className="text-sm font-bold text-amber-600 dark:text-amber-400">$2,500</div>
             </button>
             <button
+              type="button"
               onClick={() => onEventSizeSelect?.('large')}
               className={`text-center p-2 rounded border transition-all duration-200 ${
                 selectedOptions.eventSize === 'large'
@@ -129,6 +134,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 relative">
             <button
+              type="button"
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
             >
@@ -146,6 +152,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
               {DECOR_LEVELS.find(level => level.percentage === 100)?.detailedDescription}
             </p>
             <button
+              type="button"
               onClick={() => setShowModal(false)}
               className="mt-6 w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
             >

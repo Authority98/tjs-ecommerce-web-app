@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, LogOut, Eye } from 'lucide-react'
+import { Plus, LogOut, Eye, Star, Calendar, Wrench, Trash2, Zap, Building, FileText, Truck } from 'lucide-react'
 import { Order } from '../types'
 import { useAdminData } from '../hooks/useAdminData'
 import ProductForm from '../components/ProductForm'
@@ -426,17 +426,25 @@ const AdminPage: React.FC = () => {
                         </div>
                         {selectedOrder.tree_height && selectedOrder.rental_period && (
                           <>
-                            {selectedOrder.rental_period > 45 && (
-                              <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                                <span className="text-gray-600 dark:text-gray-300">Extended Rental ({selectedOrder.rental_period} days)</span>
-                                <span className="font-semibold text-gray-800 dark:text-white">
-                                  ${selectedOrder.rental_period === 60 ? '100' : selectedOrder.rental_period === 90 ? '200' : '0'}
+                            {/* Always show rental period */}
+                            <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                              <div className="flex items-center">
+                                <Calendar className="w-4 h-4 text-purple-500 mr-2" />
+                                <span className="text-gray-600 dark:text-gray-300">
+                                  {selectedOrder.rental_period > 45 ? `Extended Rental (${selectedOrder.rental_period} days)` : `Rental Period (${selectedOrder.rental_period} days)`}
                                 </span>
                               </div>
-                            )}
-                            {selectedOrder.decor_level && selectedOrder.decor_level < 100 && (
+                              <span className="font-semibold text-gray-800 dark:text-white">
+                                {selectedOrder.rental_period > 45 ? `$${selectedOrder.rental_period === 60 ? '100' : selectedOrder.rental_period === 90 ? '200' : '0'}` : 'Included'}
+                              </span>
+                            </div>
+                            {/* Always show decoration level */}
+                            {selectedOrder.decor_level && (
                               <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                                <span className="text-gray-600 dark:text-gray-300">Decoration Level ({selectedOrder.decor_level}%)</span>
+                                <div className="flex items-center">
+                                  <Star className="w-4 h-4 text-purple-500 mr-2" />
+                                  <span className="text-gray-600 dark:text-gray-300">Decoration Level ({selectedOrder.decor_level === 100 ? 'Premium Decor' : 'Basic Decor'})</span>
+                                </div>
                                 <span className="font-semibold text-gray-800 dark:text-white">Included</span>
                               </div>
                             )}
@@ -448,7 +456,10 @@ const AdminPage: React.FC = () => {
                     {/* Delivery Charges */}
                     {selectedOrder.order_type !== 'giftcard' && (
                       <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                        <span className="text-gray-600 dark:text-gray-300">Delivery Fee</span>
+                        <div className="flex items-center">
+                          <Truck className="w-4 h-4 text-purple-500 mr-2" />
+                          <span className="text-gray-600 dark:text-gray-300">Delivery Fee</span>
+                        </div>
                         <span className="font-semibold text-gray-800 dark:text-white">+$26</span>
                       </div>
                     )}
@@ -463,24 +474,43 @@ const AdminPage: React.FC = () => {
                         <div className="ml-4 space-y-1">
                           {selectedOrder.installation_charges !== undefined && selectedOrder.installation_charges > 0 && (
                             <div className="flex justify-between items-center py-1 text-sm">
-                              <span className="text-gray-500 dark:text-gray-400">• {getServiceChargeLabel('Installation', selectedOrder.installation_date, selectedOrder.installation_time)}</span>
+                              <div className="flex items-center">
+                                <Wrench className="w-3 h-3 text-purple-500 mr-1" />
+                                <span className="text-gray-500 dark:text-gray-400">{getServiceChargeLabel('Installation', selectedOrder.installation_date, selectedOrder.installation_time)}</span>
+                              </div>
                               <span className="text-gray-600 dark:text-gray-300">${selectedOrder.installation_charges}</span>
                             </div>
                           )}
                           {selectedOrder.teardown_charges !== undefined && selectedOrder.teardown_charges > 0 && (
                             <div className="flex justify-between items-center py-1 text-sm">
-                              <span className="text-gray-500 dark:text-gray-400">• {getServiceChargeLabel('Teardown', selectedOrder.teardown_date, selectedOrder.teardown_time)}</span>
+                              <div className="flex items-center">
+                                <Trash2 className="w-3 h-3 text-purple-500 mr-1" />
+                                <span className="text-gray-500 dark:text-gray-400">{getServiceChargeLabel('Teardown', selectedOrder.teardown_date, selectedOrder.teardown_time)}</span>
+                              </div>
                               <span className="text-gray-600 dark:text-gray-300">${selectedOrder.teardown_charges}</span>
                             </div>
                           )}
                           {/* Dynamic delivery add-ons */}
                           {selectedOrder.selected_delivery_addons && selectedOrder.selected_delivery_addons.length > 0 && (
-                            selectedOrder.selected_delivery_addons.map((addOn) => (
-                              <div key={addOn.id} className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                                <span className="text-gray-600 dark:text-gray-300">{addOn.name}</span>
-                                <span className="text-gray-600 dark:text-gray-300">${addOn.fee}</span>
-                              </div>
-                            ))
+                            selectedOrder.selected_delivery_addons.map((addOn) => {
+                              // Determine icon based on add-on name
+                              const getAddOnIcon = (name: string) => {
+                                if (name.toLowerCase().includes('rush')) return <Zap className="w-3 h-3 text-purple-500 mr-1" />;
+                                if (name.toLowerCase().includes('lift') || name.toLowerCase().includes('access')) return <Building className="w-3 h-3 text-purple-500 mr-1" />;
+                                if (name.toLowerCase().includes('permit') || name.toLowerCase().includes('licensing')) return <FileText className="w-3 h-3 text-purple-500 mr-1" />;
+                                return <Truck className="w-3 h-3 text-purple-500 mr-1" />; // Default delivery icon
+                              };
+                              
+                              return (
+                                <div key={addOn.id} className="flex justify-between items-center py-1 text-sm">
+                                  <div className="flex items-center">
+                                    {getAddOnIcon(addOn.name)}
+                                    <span className="text-gray-500 dark:text-gray-400">{addOn.name}</span>
+                                  </div>
+                                  <span className="text-gray-600 dark:text-gray-300">${addOn.fee}</span>
+                                </div>
+                              );
+                            })
                           )}
                         </div>
                         {/* Service charges subtotal would be calculated dynamically */}
@@ -499,7 +529,10 @@ const AdminPage: React.FC = () => {
                     {/* Rush Order */}
                     {selectedOrder.rush_order && selectedOrder.rush_order_fee && selectedOrder.rush_order_fee > 0 && (
                       <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                        <span className="text-gray-600 dark:text-gray-300">Rush Order Fee</span>
+                        <div className="flex items-center">
+                          <Zap className="w-4 h-4 text-purple-500 mr-2" />
+                          <span className="text-gray-600 dark:text-gray-300">Rush Order Fee</span>
+                        </div>
                         <span className="font-semibold text-gray-800 dark:text-white">${selectedOrder.rush_order_fee}</span>
                       </div>
                     )}
@@ -553,7 +586,7 @@ const AdminPage: React.FC = () => {
                             <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Size:</span> {selectedOrder.tree_height}</p>
                             <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Type:</span> {selectedOrder.tree_type}</p>
                             <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Rental Period:</span> {selectedOrder.rental_period} days</p>
-                            <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Decoration Level:</span> {selectedOrder.decor_level}%</p>
+                            <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Decoration Level:</span> {selectedOrder.decor_level === 100 ? 'Premium Decor' : 'Basic Decor'}</p>
                           </>
                         )}
                       </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { OrderSummary, RENTAL_PERIODS } from '../types'
-import { Package, Star, Shield, Clock } from 'lucide-react'
+import { Package, Star, Shield, Clock, Calendar, Wrench, Trash2, Check, Truck, Zap, Building, FileText, Crown, Sparkles } from 'lucide-react'
 import DiscountCodeInput from './DiscountCodeInput'
 
 interface OrderSummaryProps {
@@ -26,6 +26,10 @@ interface OrderSummaryProps {
     amount: number
   } | null) => void
   isCalculatingTotal?: boolean
+  decorationLevel?: number
+  eventSize?: string
+  selectedDeliveryAddOns?: string[]
+  deliveryConfig?: any
 }
 
 const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
@@ -38,12 +42,16 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
   deliveryError,
   appliedDiscount,
   onDiscountApplied,
-  isCalculatingTotal = false
+  isCalculatingTotal = false,
+  decorationLevel,
+  eventSize,
+  selectedDeliveryAddOns = [],
+  deliveryConfig
 }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-24">
         <div className="mb-6 pb-4 border-b border-gray-200/50 dark:border-gray-600/50">
-          <h3 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400">Order Summary</h3>
+          <h3 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400 text-center">Order Summary</h3>
         </div>
         
         <div className="space-y-4">
@@ -91,9 +99,6 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                        )}
                        <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
                          {orderData.treeOptions.type}
-                       </span>
-                       <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
-                         {orderData.treeOptions.decorLevel}% decor
                        </span>
                      </div>
                    </div>
@@ -146,86 +151,139 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
         {/* Tree Options section removed - merged into product div above */}
 
         {/* Service & Delivery Charges */}
-        {additionalCharges.length > 0 && (
+        {(additionalCharges.length > 0 || decorationLevel || rentalPeriod || orderData.treeOptions?.rentalPeriod) && (
           <div className="p-4 border-b border-gray-200/50 dark:border-gray-600/50">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
-              <div className="w-2 h-2 rounded-full mr-2 bg-pink-500"></div>
+            <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center text-sm">
+              <Check className="h-3 w-3 text-pink-500 mr-2" />
               Service Charges
             </h4>
-            <div className="space-y-2">
-              {additionalCharges.filter(charge => charge.name !== 'Delivery').map((charge, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{charge.name}</span>
-                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">
+            <div className="space-y-1">
+              {/* 1. Decoration Level */}
+              {decorationLevel && (
+                <div className="flex items-center justify-between py-0.5">
+                  <div className="flex items-center">
+                    {decorationLevel === 100 ? (
+                      <Crown className="w-3 h-3 text-pink-500 mr-1.5" />
+                    ) : (
+                      <Sparkles className="w-3 h-3 text-pink-500 mr-1.5" />
+                    )}
+                    <span className="text-xs text-gray-600 dark:text-gray-400">
+                      {decorationLevel === 100 ? 'Premium Decor' : 'Basic Decor'}
+                    </span>
+                  </div>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Included</span>
+                </div>
+              )}
+              {/* 2. Event Size for Premium Decor */}
+              {decorationLevel === 100 && eventSize && (
+                <div className="flex items-center justify-between py-0.5">
+                  <div className="flex items-center">
+                    <Package className="w-3 h-3 text-pink-500 mr-1.5" />
+                    <span className="text-xs text-gray-600 dark:text-gray-400">
+                      Event Size ({eventSize === 'small' ? 'Small (≤50 people)' : eventSize === 'medium' ? 'Medium (51-150 people)' : 'Large/Corporate (150+ people)'})
+                    </span>
+                  </div>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">
+                    {eventSize === 'small' ? '$1,200' : eventSize === 'medium' ? '$2,500' : '$4,500+'}
+                  </span>
+                </div>
+              )}
+              {/* 3. Rental Period */}
+              {(rentalPeriod || orderData.treeOptions?.rentalPeriod) && (
+                <div className="flex items-center justify-between py-0.5">
+                  <div className="flex items-center">
+                    <Calendar className="w-3 h-3 text-pink-500 mr-1.5" />
+                    <span className="text-xs text-gray-600 dark:text-gray-400">Rental Period ({rentalPeriod || orderData.treeOptions?.rentalPeriod} days)</span>
+                  </div>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">
+                    {(() => {
+                      const period = RENTAL_PERIODS.find(p => p.days === (rentalPeriod || orderData.treeOptions?.rentalPeriod));
+                      return period && period.additionalCost > 0 ? `+$${period.additionalCost}` : 'Included';
+                    })()}
+                  </span>
+                </div>
+              )}
+              {/* 4. Installation charges */}
+              {additionalCharges.filter(charge => charge.name.toLowerCase().includes('installation')).map((charge, index) => (
+                <div key={`installation-${index}`} className="flex items-center justify-between py-0.5">
+                  <div className="flex items-center">
+                    <Wrench className="w-3 h-3 text-pink-500 mr-1.5" />
+                    <span className="text-xs text-gray-600 dark:text-gray-400">{charge.name}</span>
+                  </div>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">
                     {charge.amount > 0 ? `+$${charge.amount}` : 'Free'}
                   </span>
                 </div>
               ))}
-              {/* Rental Period */}
-              {currentStep >= 2 && (rentalPeriod || orderData.treeOptions?.rentalPeriod) && (
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Rental Period ({rentalPeriod || orderData.treeOptions?.rentalPeriod} days)</span>
-                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">
-                      {(() => {
-                        const period = RENTAL_PERIODS.find(p => p.days === (rentalPeriod || orderData.treeOptions?.rentalPeriod));
-                        return period && period.additionalCost > 0 ? `+$${period.additionalCost}` : 'Included';
-                      })()}
-                    </span>
-                </div>
-              )}
-              {/* Rush Order */}
-              {rushOrder && (
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Rush Order</span>
-                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">+$150</span>
-                </div>
-              )}
-              {/* Delivery section - always visible */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700 dark:text-gray-300">Delivery</span>
-                {additionalCharges.find(charge => charge.name === 'Delivery') ? (
-                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
-                ) : (
-                  <div className="flex items-center space-x-1">
-                    <div className="flex space-x-1">
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
-                    </div>
+              {/* 5. Teardown charges */}
+              {additionalCharges.filter(charge => charge.name.toLowerCase().includes('teardown')).map((charge, index) => (
+                <div key={`teardown-${index}`} className="flex items-center justify-between py-0.5">
+                  <div className="flex items-center">
+                    <Trash2 className="w-3 h-3 text-pink-500 mr-1.5" />
+                    <span className="text-xs text-gray-600 dark:text-gray-400">{charge.name}</span>
                   </div>
-                )}
-              </div>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">
+                    {charge.amount > 0 ? `+$${charge.amount}` : 'Free'}
+                  </span>
+                </div>
+              ))}
+              {/* 6. Delivery Add-ons - Minimal compact design */}
+              {selectedDeliveryAddOns && deliveryConfig && selectedDeliveryAddOns.length > 0 && (
+                <div className="flex flex-wrap gap-1 py-0.5">
+                  {selectedDeliveryAddOns.map((addOnId) => {
+                    const addOn = deliveryConfig.addOns?.find((a: any) => a.id === addOnId && a.enabled)
+                    if (!addOn) return null
+                    
+                    return (
+                      <div key={addOnId} className="inline-flex items-center bg-pink-50 dark:bg-pink-900/20 px-2 py-1 rounded text-xs">
+                        <span className="text-gray-700 dark:text-gray-300 mr-1">{addOn.name}</span>
+                        <span className="text-pink-600 dark:text-pink-400 font-medium">+${addOn.fee}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+              {/* 7. Delivery section - only show if delivery charge exists */}
+              {additionalCharges.find(charge => charge.name === 'Delivery') && (
+                <div className="flex items-center justify-between py-0.5">
+                  <div className="flex items-center">
+                    <Truck className="w-3 h-3 text-pink-500 mr-1.5" />
+                    <span className="text-xs text-gray-600 dark:text-gray-400">Delivery</span>
+                  </div>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
+                </div>
+              )}
             </div>
           </div>
         )}
 
-
-
-         {/* Total */}
-        <div className="pt-4 mt-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</div>
-              {orderData.product?.category === 'trees' && (
-                <div className="text-xs bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded text-amber-700 dark:text-amber-300">
-                   Final price upon order
-                 </div>
+        {/* Total - only show from delivery section onwards (step 2+) */}
+        {currentStep >= 2 && (
+          <div className="pt-4 mt-4">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</div>
+                {orderData.product?.category === 'trees' && (
+                  <div className="text-xs bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded text-amber-700 dark:text-amber-300">
+                     Final price upon order
+                   </div>
+                )}
+              </div>
+              {isCalculatingTotal ? (
+                <div className="flex items-center space-x-2">
+                  <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400">$</span>
+                  <div className="flex space-x-1 items-center">
+                    <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                    <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                    <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400">${finalTotal}</div>
               )}
             </div>
-            {isCalculatingTotal ? (
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400">$</span>
-                <div className="flex space-x-1 items-center">
-                  <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
-                  <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
-                  <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
-                </div>
-              </div>
-            ) : (
-              <div className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400">${finalTotal}</div>
-            )}
           </div>
-        </div>
+        )}
 
         {/* Discount Code Input - Only show for products, not gift cards - Moved below total and made minimal */}
          {orderData.type !== 'giftcard' && (

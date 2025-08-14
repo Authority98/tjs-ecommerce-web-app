@@ -278,7 +278,7 @@ const CheckoutPage: React.FC = () => {
     
     // Check customer details completion
     const customerDetailsComplete = customerDetails.name && customerDetails.email && customerDetails.phone && 
-      (isGiftCard || (customerDetails.postalCode && customerDetails.streetAddress))
+      (isGiftCard || (customerDetails.deliveryZone && customerDetails.streetAddress))
     
     // For products that skip scheduling, only need customer details
     if (skipScheduling) {
@@ -287,6 +287,11 @@ const CheckoutPage: React.FC = () => {
     
     // For products that require scheduling, must complete scheduling step
     if (!skipScheduling) {
+      // If we're on payment step (step 3), consider all options selected
+      if (currentStep >= 3) {
+        return true
+      }
+      
       // Must be on step 2 or later AND have scheduling requirements met
       if (currentStep < 2) {
         return false // Still on customer details step
@@ -358,19 +363,8 @@ const CheckoutPage: React.FC = () => {
     
     // Only add delivery charge if there's no delivery error
     if (!deliveryError && deliveryFee > 0) {
-      // Calculate base delivery fee (without add-ons)
-      let baseDeliveryFee = deliveryFee
-      
-      // Subtract add-on fees from total to get base delivery fee
-      if (deliveryConfig && selectedDeliveryAddOns.length > 0) {
-        const addOnFees = selectedDeliveryAddOns.reduce((total, addOnId) => {
-          const addOn = deliveryConfig.addOns.find(a => a.id === addOnId)
-          return total + (addOn?.fee || 0)
-        }, 0)
-        baseDeliveryFee = deliveryFee - addOnFees
-      }
-      
-      charges.push({ name: 'Delivery', amount: baseDeliveryFee })
+      // deliveryFee already contains only the zone-based fee from ZoneSelector
+      charges.push({ name: 'Delivery', amount: deliveryFee })
       
       // Add selected delivery add-ons as separate line items
       if (deliveryConfig && selectedDeliveryAddOns.length > 0) {
@@ -384,6 +378,15 @@ const CheckoutPage: React.FC = () => {
     }
     
     return charges
+  }
+
+  const updateCustomerPersonalDetails = (details: { name: string; email: string; phone: string }) => {
+    setCustomerDetails({
+      ...customerDetails,
+      name: details.name,
+      email: details.email,
+      phone: details.phone
+    })
   }
 
   const generateOrderNumber = () => {
@@ -511,12 +514,12 @@ const CheckoutPage: React.FC = () => {
   
   const steps = skipScheduling 
     ? [
-        { number: 1, title: 'Customer Details', completed: currentStep > 1 },
+        { number: 1, title: 'Delivery', completed: currentStep > 1 },
         { number: 2, title: 'Payment', completed: currentStep > 2 }
       ]
     : [
         { number: 1, title: 'Scheduling', completed: currentStep > 1 },
-        { number: 2, title: 'Customer Details', completed: currentStep > 2 },
+        { number: 2, title: 'Delivery', completed: currentStep > 2 },
         { number: 3, title: 'Payment', completed: currentStep > 3 }
       ]
 
@@ -677,9 +680,6 @@ const CheckoutPage: React.FC = () => {
                     onNext={() => setCurrentStep(2)}
                     onBack={() => setCurrentStep(1)}
                     isTreeOrder={!!orderData.treeOptions}
-                    deliveryConfig={deliveryConfig || undefined}
-                    selectedDeliveryAddOns={selectedDeliveryAddOns}
-                    setSelectedDeliveryAddOns={setSelectedDeliveryAddOns}
                     installationSelected={installationSelected}
                     setInstallationSelected={setInstallationSelected}
                     teardownSelected={teardownSelected}
@@ -694,7 +694,10 @@ const CheckoutPage: React.FC = () => {
                     onNext={() => setCurrentStep(skipScheduling ? 2 : 3)}
                     onBack={skipScheduling ? undefined : () => setCurrentStep(1)}
                     nextButtonText={'Continue to Payment'}
-                     isGiftCard={isGiftCard}
+                    isGiftCard={isGiftCard}
+                    deliveryConfig={deliveryConfig}
+                    selectedDeliveryAddOns={selectedDeliveryAddOns}
+                    setSelectedDeliveryAddOns={setSelectedDeliveryAddOns}
                   />
                 )}
                 
@@ -723,6 +726,10 @@ const CheckoutPage: React.FC = () => {
                 appliedDiscount={appliedDiscount}
                 onDiscountApplied={setAppliedDiscount}
                 isCalculatingTotal={!areAllOptionsSelected()}
+                decorationLevel={decorationLevel}
+                eventSize={eventSize}
+                selectedDeliveryAddOns={selectedDeliveryAddOns}
+                deliveryConfig={deliveryConfig}
               />
             </div>
           </div>

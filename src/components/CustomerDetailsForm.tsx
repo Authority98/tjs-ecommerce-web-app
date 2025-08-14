@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
-import { CustomerDetails } from '../types'
+import { CustomerDetails, DeliveryConfiguration } from '../types'
 import ZoneSelector from './ZoneSelector'
+import { Zap, Building, FileText, Check } from 'lucide-react'
 
 interface CustomerDetailsFormProps {
   customerDetails: CustomerDetails
@@ -9,6 +10,9 @@ interface CustomerDetailsFormProps {
   onBack?: () => void
   nextButtonText?: string
   isGiftCard?: boolean
+  deliveryConfig?: DeliveryConfiguration | null
+  selectedDeliveryAddOns: string[]
+  setSelectedDeliveryAddOns: (addOns: string[]) => void
 }
 
 const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
@@ -17,12 +21,14 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
   onNext,
   onBack,
   nextButtonText = 'Continue to Scheduling',
-  isGiftCard = false
+  isGiftCard = false,
+  deliveryConfig,
+  selectedDeliveryAddOns,
+  setSelectedDeliveryAddOns
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const isValid = customerDetails.name && customerDetails.email && customerDetails.phone && 
-      (isGiftCard || (customerDetails.postalCode && customerDetails.streetAddress))
+    const isValid = isGiftCard || (customerDetails.deliveryZone && customerDetails.unitNumber && customerDetails.buildingName && customerDetails.streetAddress)
     if (isValid) {
       onNext()
     }
@@ -45,6 +51,29 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
     })
   }
 
+  // Handle delivery add-on selection
+  const handleDeliveryAddOnToggle = (addOnId: string) => {
+    if (selectedDeliveryAddOns.includes(addOnId)) {
+      setSelectedDeliveryAddOns(selectedDeliveryAddOns.filter(id => id !== addOnId))
+    } else {
+      setSelectedDeliveryAddOns([...selectedDeliveryAddOns, addOnId])
+    }
+  }
+
+  // Get icon for delivery add-on
+  const getAddOnIcon = (addOnId: string) => {
+    switch (addOnId) {
+      case 'rush-order':
+        return <Zap className="w-3 h-3 text-pink-500" />
+      case 'no-lift':
+        return <Building className="w-3 h-3 text-pink-500" />
+      case 'permits':
+        return <FileText className="w-3 h-3 text-pink-500" />
+      default:
+        return <FileText className="w-3 h-3 text-pink-500" />
+    }
+  }
+
   // Update delivery address when Singapore address fields change
   useEffect(() => {
     if (customerDetails.postalCode || customerDetails.unitNumber || customerDetails.buildingName || customerDetails.streetAddress) {
@@ -64,53 +93,10 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
       <div className="absolute bottom-4 left-4">
         <div className="w-12 h-12 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 rounded-full blur-lg z-0 opacity-40"></div>
       </div>
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis relative z-10">Customer Details</h2>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis relative z-10">Delivery</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6 relative z-20">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Full Name *
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={customerDetails.name}
-            onChange={(e) => updateField('name', e.target.value)}
-            className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            required
-          />
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Email Address *
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={customerDetails.email}
-              onChange={(e) => updateField('email', e.target.value)}
-              className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Phone Number *
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              value={customerDetails.phone}
-              onChange={(e) => updateField('phone', e.target.value)}
-              className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              placeholder="+65 XXXX XXXX"
-              required
-            />
-          </div>
-        </div>
 
         {!isGiftCard && (
           <div className="space-y-4">
@@ -136,7 +122,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
                     const value = e.target.value.replace(/\D/g, '') // Only allow numbers
                     updateField('postalCode', value)
                   }}
-                  className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
+                  className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30 text-sm"
                   style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
                   placeholder="018956 (optional)"
                   maxLength={6}
@@ -154,7 +140,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
                   onChange={(e) => {
                     updateField('unitNumber', e.target.value)
                   }}
-                  className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
+                  className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30 text-sm"
                   style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
                   placeholder="#12-34"
                   required
@@ -172,7 +158,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
                   onChange={(e) => {
                     updateField('buildingName', e.target.value)
                   }}
-                  className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
+                  className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30 text-sm"
                   style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
                   placeholder="Marina Bay Residences"
                   required
@@ -191,13 +177,57 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
                 onChange={(e) => {
                   updateField('streetAddress', e.target.value)
                 }}
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 relative z-30"
+                className="w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 relative z-30 text-sm"
                 style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
                 placeholder="18 Marina Gardens Drive"
                 required
               />
             </div>
             
+            {/* Delivery Add-ons Section */}
+            {deliveryConfig && deliveryConfig.addOns && deliveryConfig.addOns.length > 0 && (
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Delivery Add-ons</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {deliveryConfig.addOns
+                    .filter(addOn => addOn.enabled)
+                    .map((addOn) => {
+                      const isSelected = selectedDeliveryAddOns.includes(addOn.id)
+                      return (
+                        <button
+                          key={addOn.id}
+                          type="button"
+                          onClick={() => handleDeliveryAddOnToggle(addOn.id)}
+                          className={`p-2 rounded-lg border text-left transition-all duration-200 ${
+                            isSelected
+                              ? 'border-amber-400 bg-amber-50/60 dark:bg-amber-900/20'
+                              : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 hover:border-amber-300'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-1">
+                              {getAddOnIcon(addOn.id)}
+                              <div>
+                                <span className="text-sm font-medium text-gray-800 dark:text-white block">
+                                  {addOn.name}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs font-medium text-amber-600 dark:text-amber-400">
+                                +${addOn.fee}
+                              </span>
+                              {isSelected && (
+                                <Check className="h-3 w-3 text-amber-500" />
+                              )}
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                </div>
+              </div>
+            )}
 
           </div>
         )}
@@ -209,7 +239,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
               onClick={onBack}
               className="flex-1 py-3 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-xl transition-all duration-300"
             >
-              Back
+              Back to Scheduling
             </button>
           )}
           <button

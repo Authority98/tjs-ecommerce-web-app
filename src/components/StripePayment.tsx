@@ -162,16 +162,63 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         Payment Information
       </h2>
       
-
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Card Number */}
+      {/* Customer Information */}
+      <div className="space-y-4 mb-6">
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 font-dosis">
+          Customer Information
+        </h3>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              First Name
+            </label>
+            <input
+              type="text"
+              placeholder="John"
+              className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Last Name
+            </label>
+            <input
+              type="text"
+              placeholder="Doe"
+              className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
+            />
+          </div>
+        </div>
+        
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Card Number
+            Email Address
           </label>
-          <div className="p-4 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 rounded-lg">
-            <CardNumberElement options={elementOptions} />
+          <input
+            type="email"
+            placeholder="john.doe@example.com"
+            className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
+          />
+        </div>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Card Information */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 font-dosis">
+            Card Information
+          </h3>
+          
+          {/* Card Number */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Card Number
+            </label>
+            <div className="p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 rounded-lg">
+              <CardNumberElement options={elementOptions} />
+            </div>
           </div>
         </div>
 
@@ -182,7 +229,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Expiry Date
             </label>
-            <div className="p-4 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 rounded-lg">
+            <div className="p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 rounded-lg">
               <CardExpiryElement options={elementOptions} />
             </div>
           </div>
@@ -192,7 +239,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               CVC
             </label>
-            <div className="p-4 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 rounded-lg">
+            <div className="p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 rounded-lg">
               <CardCvcElement options={elementOptions} />
             </div>
           </div>
