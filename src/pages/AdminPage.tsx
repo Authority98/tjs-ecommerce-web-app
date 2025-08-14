@@ -453,94 +453,106 @@ const AdminPage: React.FC = () => {
                       </>
                     ) : null}
                     
-                    {/* Delivery Charges */}
-                    {selectedOrder.order_type !== 'giftcard' && (
-                      <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                        <div className="flex items-center">
-                          <Truck className="w-4 h-4 text-purple-500 mr-2" />
-                          <span className="text-gray-600 dark:text-gray-300">Delivery Fee</span>
-                        </div>
-                        <span className="font-semibold text-gray-800 dark:text-white">+$26</span>
-                      </div>
-                    )}
-                    
-                    {/* Service Charges Breakdown */}
-                    {selectedOrder.order_type !== 'giftcard' && (
-                      <>
-                        <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                          <span className="text-gray-600 dark:text-gray-300">Service Charges:</span>
-                          <span className="font-semibold text-gray-800 dark:text-white"></span>
-                        </div>
-                        <div className="ml-4 space-y-1">
-                          {selectedOrder.installation_charges !== undefined && selectedOrder.installation_charges > 0 && (
-                            <div className="flex justify-between items-center py-1 text-sm">
-                              <div className="flex items-center">
-                                <Wrench className="w-3 h-3 text-purple-500 mr-1" />
-                                <span className="text-gray-500 dark:text-gray-400">{getServiceChargeLabel('Installation', selectedOrder.installation_date, selectedOrder.installation_time)}</span>
-                              </div>
-                              <span className="text-gray-600 dark:text-gray-300">${selectedOrder.installation_charges}</span>
-                            </div>
-                          )}
-                          {selectedOrder.teardown_charges !== undefined && selectedOrder.teardown_charges > 0 && (
-                            <div className="flex justify-between items-center py-1 text-sm">
-                              <div className="flex items-center">
-                                <Trash2 className="w-3 h-3 text-purple-500 mr-1" />
-                                <span className="text-gray-500 dark:text-gray-400">{getServiceChargeLabel('Teardown', selectedOrder.teardown_date, selectedOrder.teardown_time)}</span>
-                              </div>
-                              <span className="text-gray-600 dark:text-gray-300">${selectedOrder.teardown_charges}</span>
-                            </div>
-                          )}
-                          {/* Dynamic delivery add-ons */}
-                          {selectedOrder.selected_delivery_addons && selectedOrder.selected_delivery_addons.length > 0 && (
-                            selectedOrder.selected_delivery_addons.map((addOn) => {
-                              // Determine icon based on add-on name
-                              const getAddOnIcon = (name: string) => {
-                                if (name.toLowerCase().includes('rush')) return <Zap className="w-3 h-3 text-purple-500 mr-1" />;
-                                if (name.toLowerCase().includes('lift') || name.toLowerCase().includes('access')) return <Building className="w-3 h-3 text-purple-500 mr-1" />;
-                                if (name.toLowerCase().includes('permit') || name.toLowerCase().includes('licensing')) return <FileText className="w-3 h-3 text-purple-500 mr-1" />;
-                                return <Truck className="w-3 h-3 text-purple-500 mr-1" />; // Default delivery icon
-                              };
-                              
-                              return (
-                                <div key={addOn.id} className="flex justify-between items-center py-1 text-sm">
-                                  <div className="flex items-center">
-                                    {getAddOnIcon(addOn.name)}
-                                    <span className="text-gray-500 dark:text-gray-400">{addOn.name}</span>
-                                  </div>
-                                  <span className="text-gray-600 dark:text-gray-300">${addOn.fee}</span>
+                    {/* Pricing Breakdown - Matching OrderSummary Structure */}
+                    <div className="space-y-3">
+                      {/* Service Charges Section */}
+                      {selectedOrder.order_type !== 'giftcard' && ((selectedOrder.installation_charges && selectedOrder.installation_charges > 0) || (selectedOrder.teardown_charges && selectedOrder.teardown_charges > 0)) && (
+                        <div className="border border-orange-200 dark:border-orange-700 rounded-lg p-4">
+                          <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center text-sm">
+                            <div className="w-2 h-2 rounded-full mr-2 bg-blue-500"></div>
+                            Service Charges
+                          </h4>
+                          <div className="space-y-2">
+                            {selectedOrder.installation_charges !== undefined && selectedOrder.installation_charges > 0 && (
+                              <div className="flex justify-between items-center">
+                                <div className="flex items-center">
+                                  <Wrench className="w-4 h-4 text-purple-500 mr-2" />
+                                  <span className="text-gray-700 dark:text-gray-300 text-sm">{getServiceChargeLabel('Installation', selectedOrder.installation_date, selectedOrder.installation_time)}</span>
                                 </div>
-                              );
-                            })
-                          )}
-                        </div>
-                        {/* Service charges subtotal would be calculated dynamically */}
-                        {((selectedOrder.installation_charges && selectedOrder.installation_charges > 0) || 
-                          (selectedOrder.teardown_charges && selectedOrder.teardown_charges > 0)) && (
-                          <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                            <span className="text-gray-600 dark:text-gray-300">Service Charges Subtotal</span>
-                            <span className="font-semibold text-gray-800 dark:text-white">
-                              ${((selectedOrder.installation_charges || 0) + (selectedOrder.teardown_charges || 0))}
-                            </span>
+                                <span className="font-semibold text-gray-900 dark:text-white">${selectedOrder.installation_charges}</span>
+                              </div>
+                            )}
+                            {selectedOrder.teardown_charges !== undefined && selectedOrder.teardown_charges > 0 && (
+                              <div className="flex justify-between items-center">
+                                <div className="flex items-center">
+                                  <Trash2 className="w-4 h-4 text-purple-500 mr-2" />
+                                  <span className="text-gray-700 dark:text-gray-300 text-sm">{getServiceChargeLabel('Teardown', selectedOrder.teardown_date, selectedOrder.teardown_time)}</span>
+                                </div>
+                                <span className="font-semibold text-gray-900 dark:text-white">${selectedOrder.teardown_charges}</span>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </>
-                    )}
-                    
-                    {/* Rush Order */}
-                    {selectedOrder.rush_order && selectedOrder.rush_order_fee && selectedOrder.rush_order_fee > 0 && (
-                      <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                        <div className="flex items-center">
-                          <Zap className="w-4 h-4 text-purple-500 mr-2" />
-                          <span className="text-gray-600 dark:text-gray-300">Rush Order Fee</span>
                         </div>
-                        <span className="font-semibold text-gray-800 dark:text-white">${selectedOrder.rush_order_fee}</span>
+                      )}
+
+                      {/* Delivery Add-ons Section */}
+                      {selectedOrder.order_type !== 'giftcard' && (
+                        <div className="border border-orange-200 dark:border-orange-700 rounded-lg p-4">
+                          <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center text-sm">
+                            <div className="w-2 h-2 rounded-full mr-2 bg-green-500"></div>
+                            Delivery Add-ons
+                          </h4>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <div className="flex items-center">
+                                <Truck className="w-4 h-4 text-purple-500 mr-2" />
+                                <span className="text-gray-700 dark:text-gray-300 text-sm">Standard Delivery</span>
+                              </div>
+                              <span className="font-semibold text-gray-900 dark:text-white">$26</span>
+                            </div>
+                            {/* Dynamic delivery add-ons */}
+                            {selectedOrder.selected_delivery_addons && selectedOrder.selected_delivery_addons.length > 0 && (
+                              selectedOrder.selected_delivery_addons.map((addOn) => {
+                                // Determine icon based on add-on name
+                                const getAddOnIcon = (name: string) => {
+                                  if (name.toLowerCase().includes('rush')) return <Zap className="w-4 h-4 text-purple-500 mr-2" />;
+                                  if (name.toLowerCase().includes('lift') || name.toLowerCase().includes('access')) return <Building className="w-4 h-4 text-purple-500 mr-2" />;
+                                  if (name.toLowerCase().includes('permit') || name.toLowerCase().includes('licensing')) return <FileText className="w-4 h-4 text-purple-500 mr-2" />;
+                                  return <Truck className="w-4 h-4 text-purple-500 mr-2" />; // Default delivery icon
+                                };
+                                
+                                return (
+                                  <div key={addOn.id} className="flex justify-between items-center">
+                                    <div className="flex items-center">
+                                      {getAddOnIcon(addOn.name)}
+                                      <span className="text-gray-700 dark:text-gray-300 text-sm">{addOn.name}</span>
+                                    </div>
+                                    <span className="font-semibold text-gray-900 dark:text-white">${addOn.fee}</span>
+                                  </div>
+                                );
+                              })
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Rush Order Fee Section */}
+                      {selectedOrder.rush_order && selectedOrder.rush_order_fee && selectedOrder.rush_order_fee > 0 && (
+                        <div className="border border-orange-200 dark:border-orange-700 rounded-lg p-4">
+                          <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center text-sm">
+                            <div className="w-2 h-2 rounded-full mr-2 bg-orange-500"></div>
+                            Rush Order
+                          </h4>
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center">
+                              <Zap className="w-4 h-4 text-purple-500 mr-2" />
+                              <span className="text-gray-700 dark:text-gray-300 text-sm">Rush Processing Fee</span>
+                            </div>
+                            <span className="font-semibold text-gray-900 dark:text-white">${selectedOrder.rush_order_fee}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Total Amount Section */}
+                      <div className="border-2 border-pink-200 dark:border-rose-600 rounded-xl p-4 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-gray-800 dark:to-gray-700">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <span className="text-lg font-bold text-gray-900 dark:text-white">Total Amount</span>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">Including all charges</div>
+                          </div>
+                          <span className="text-2xl font-bold text-pink-600 dark:text-rose-400">${selectedOrder.total_amount}</span>
+                        </div>
                       </div>
-                    )}
-                    
-                    {/* Total */}
-                    <div className="flex justify-between items-center py-3 border-t-2 border-orange-300 dark:border-orange-600 mt-2">
-                      <span className="text-lg font-bold text-gray-800 dark:text-white">Total Amount</span>
-                      <span className="text-xl font-bold text-green-600 dark:text-green-400">${selectedOrder.total_amount}</span>
                     </div>
                   </div>
                 </div>

@@ -17,6 +17,12 @@ interface PaymentFormProps {
   onPaymentError: (error: string) => void;
   onBack: () => void;
   loading?: boolean;
+  customerDetails: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  onCustomerDetailsChange: (details: { name: string; email: string; phone: string }) => void;
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({
@@ -24,7 +30,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   onPaymentSuccess,
   onPaymentError,
   onBack,
-  loading = false
+  loading = false,
+  customerDetails,
+  onCustomerDetailsChange
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -168,38 +176,45 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           Customer Information
         </h3>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              First Name
-            </label>
-            <input
-              type="text"
-              placeholder="John"
-              className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Last Name
-            </label>
-            <input
-              type="text"
-              placeholder="Doe"
-              className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
-            />
-          </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Full Name *
+          </label>
+          <input
+            type="text"
+            value={customerDetails.name}
+            onChange={(e) => onCustomerDetailsChange({ ...customerDetails, name: e.target.value })}
+            placeholder="John Doe"
+            className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
+            required
+          />
         </div>
         
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Email Address
+            Email Address *
           </label>
           <input
             type="email"
+            value={customerDetails.email}
+            onChange={(e) => onCustomerDetailsChange({ ...customerDetails, email: e.target.value })}
             placeholder="john.doe@example.com"
             className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
+            required
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Phone Number *
+          </label>
+          <input
+            type="tel"
+            value={customerDetails.phone}
+            onChange={(e) => onCustomerDetailsChange({ ...customerDetails, phone: e.target.value })}
+            placeholder="+65 9123 4567"
+            className="w-full p-2 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
+            required
           />
         </div>
       </div>
@@ -280,6 +295,12 @@ interface StripePaymentProps {
   onPaymentError: (error: string) => void;
   onBack: () => void;
   loading?: boolean;
+  customerDetails: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  onCustomerDetailsChange: (details: { name: string; email: string; phone: string }) => void;
 }
 
 const StripePayment: React.FC<StripePaymentProps> = (props) => {

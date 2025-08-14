@@ -402,20 +402,38 @@ const CheckoutPage: React.FC = () => {
 
   const handlePaymentSuccess = async (paymentIntentId: string) => {
     setPaymentProcessing(true)
-    await handleSubmitOrder(paymentIntentId)
-    setPaymentProcessing(false)
+    try {
+      console.log('Payment successful, submitting order with payment intent:', paymentIntentId)
+      await handleSubmitOrder(paymentIntentId)
+      console.log('Order submitted successfully')
+    } catch (error) {
+      console.error('Error in handlePaymentSuccess:', error)
+      showErrorToast('Failed to process order. Please contact support.')
+    } finally {
+      setPaymentProcessing(false)
+    }
   }
 
   const handlePaymentError = (error: string) => {
     console.error('Payment error:', error)
-    alert(`Payment failed: ${error}`)
+    showErrorToast(`Payment failed: ${error}`)
   }
 
   const handleSubmitOrder = async (paymentIntentId?: string) => {
-    if (!orderData || !customerDetails.name || !customerDetails.email) return
+    console.log('Starting handleSubmitOrder with:', { paymentIntentId, orderData, customerDetails })
+    
+    if (!orderData || !customerDetails.name || !customerDetails.email) {
+      console.error('Missing required data:', { orderData: !!orderData, name: !!customerDetails.name, email: !!customerDetails.email })
+      throw new Error('Missing required order or customer data')
+    }
 
     try {
       const orderNumber = generateOrderNumber()
+      console.log('Generated order number:', orderNumber)
+      
+      // Define isGiftCard within function scope
+      const isGiftCard = orderData?.type === 'giftcard'
+      console.log('Order type check:', { orderType: orderData.type, isGiftCard })
       
       let giftCardId = null;
       
@@ -451,7 +469,6 @@ const CheckoutPage: React.FC = () => {
         unit_number: customerDetails.unitNumber || null,
         building_name: customerDetails.buildingName || null,
         street_address: customerDetails.streetAddress || null,
-        postal_code: customerDetails.postalCode || null,
         delivery_zone: customerDetails.deliveryZone || null,
         delivery_area: customerDetails.deliveryArea || null,
         delivery_fee: customerDetails.deliveryFee || 0,
@@ -489,19 +506,35 @@ const CheckoutPage: React.FC = () => {
         status: 'pending' as const
       };
 
-      const { error } = await supabase
+      console.log('Inserting order into database:', orderPayload)
+      const { data, error } = await supabase
         .from('orders')
         .insert([orderPayload])
+        .select()
 
-      if (error) throw error
+      if (error) {
+        console.error('Database insertion error:', error)
+        console.error('Error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        })
+        throw error
+      }
+      
+      console.log('Order inserted successfully:', data)
 
       // Clear session storage
       sessionStorage.removeItem('checkoutData')
+      console.log('Session storage cleared')
       
       // Navigate to thank you page with order number
       const orderType = orderData.giftCard ? 'giftcard' : 'product'
       const category = orderData.product?.category || ''
-      navigate(`/thank-you?orderNumber=${orderNumber}&total=${calculateFinalTotal()}&orderType=${orderType}&category=${category}`)
+      const thankYouUrl = `/thank-you?orderNumber=${orderNumber}&total=${calculateFinalTotal()}&orderType=${orderType}&category=${category}`
+      console.log('Navigating to thank you page:', thankYouUrl)
+      navigate(thankYouUrl)
     } catch (error) {
       console.error('Error submitting order:', error)
       alert('Error placing order. Please try again.')
@@ -713,6 +746,19 @@ const CheckoutPage: React.FC = () => {
                     onPaymentError={handlePaymentError}
                     onBack={() => setCurrentStep(skipScheduling ? 1 : 2)}
                     loading={paymentProcessing}
+                    customerDetails={{
+                      name: customerDetails.name,
+                      email: customerDetails.email,
+                      phone: customerDetails.phone
+                    }}
+                    onCustomerDetailsChange={(details) => {
+                      setCustomerDetails(prev => ({
+                        ...prev,
+                        name: details.name,
+                        email: details.email,
+                        phone: details.phone
+                      }));
+                    }}
                   />
                 )}
               </div>

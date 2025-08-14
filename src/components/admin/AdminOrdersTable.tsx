@@ -150,49 +150,106 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
               )}
             </div>
 
-            {/* Order Details */}
-            <div className="mb-4 p-3 sm:p-4 bg-white/30 dark:bg-gray-800/30 rounded-xl border border-white/40 backdrop-blur-sm">
-              {order.order_type === 'giftcard' && order.gift_cards ? (
-                // Gift Card Details
-                <div>
-                  <p className="text-sm sm:text-base font-bold text-gray-800 dark:text-white mb-2 sm:mb-3">
-                    🎁 Gift Card - ${order.gift_cards.amount}
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm text-gray-700 dark:text-gray-200">
-                    <p className="truncate"><span className="font-bold text-gray-900 dark:text-white">From:</span> {order.gift_cards.sender_name}</p>
-                    <p className="truncate"><span className="font-bold text-gray-900 dark:text-white">To:</span> {order.gift_cards.recipient_name}</p>
-                    <p className="truncate sm:col-span-2"><span className="font-bold text-gray-900 dark:text-white">Email:</span> {order.gift_cards.recipient_email}</p>
-                    {order.gift_cards.scheduled_date && (
-                      <p className="sm:col-span-2"><span className="font-bold text-gray-900 dark:text-white">Scheduled:</span> {new Date(order.gift_cards.scheduled_date).toLocaleDateString()}</p>
+            {/* Order Details - Matching OrderSummary Structure */}
+            <div className="mb-4 bg-white/30 dark:bg-gray-800/30 rounded-xl border border-white/40 backdrop-blur-sm">
+              {/* Product or Gift Card */}
+              <div className="relative">
+                <div className="flex space-x-4 p-4 border-b border-gray-200/50 dark:border-gray-600/50">
+                  <div className="relative">
+                    {order.order_type === 'giftcard' ? (
+                      <div className="w-16 h-16 bg-gradient-to-br from-pink-400 via-rose-500 to-red-400 rounded-xl shadow-lg flex items-center justify-center">
+                        <span className="text-white text-xl font-bold">🎁</span>
+                      </div>
+                    ) : (
+                      <img
+                        src={order.products?.images?.[0] || 'https://images.pexels.com/photos/1708166/pexels-photo-1708166.jpeg?auto=compress&cs=tinysrgb&w=100'}
+                        alt={order.products?.title || 'Product'}
+                        className="w-16 h-16 object-cover rounded-xl shadow-lg"
+                      />
                     )}
-                    {order.gift_cards.personal_message && (
-                      <p className="sm:col-span-2 break-words"><span className="font-bold text-gray-900 dark:text-white">Message:</span> {order.gift_cards.personal_message}</p>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-gray-800 dark:text-white line-clamp-2 mb-0.5 text-sm">
+                      {order.order_type === 'giftcard' ? '🎄 Twinkle Jingle eGift Card' : order.products?.title}
+                    </h4>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-600 dark:text-gray-300">
+                        {order.order_type === 'giftcard' ? 'Gift Card Value' : 'Total Amount'}
+                      </span>
+                      <span className="text-lg font-bold text-pink-600 dark:text-rose-400">
+                        ${order.order_type === 'giftcard' ? order.gift_cards?.amount : order.total_amount}
+                      </span>
+                    </div>
+                    
+                    {/* Tree Customizations - Merged into product div, single line */}
+                    {order.tree_height && (
+                      <div className="mt-1.5 pt-1.5 border-t border-gray-200/30 dark:border-gray-600/30">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Customizations</div>
+                        <div className="flex flex-wrap gap-1 text-xs">
+                          {order.tree_height && (
+                            <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                              {order.tree_height}
+                            </span>
+                          )}
+                          <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                            {order.tree_type}
+                          </span>
+                          {order.rental_period && (
+                            <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                              {order.rental_period} days
+                            </span>
+                          )}
+                          {order.decor_level && (
+                            <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                              {order.decor_level}% decor
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
-              ) : order.products ? (
-                // Product Details
-                <div>
-                  <p className="text-sm sm:text-base font-bold text-gray-800 dark:text-white break-words">
-                    Product: {order.products.title}
-                  </p>
-                  {order.tree_height && (
-                    <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-200 mt-2 font-semibold space-y-1 sm:space-y-0">
-                      <div className="flex flex-wrap gap-1 sm:gap-2">
-                        <span>Size: {order.tree_height}</span>
-                        <span className="hidden sm:inline">|</span>
-                        <span>Type: {order.tree_type}</span>
+              </div>
+
+              {/* Gift Card Details */}
+              {order.order_type === 'giftcard' && order.gift_cards && (
+                <div className="p-4 border-b border-gray-200/50 dark:border-gray-600/50">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center text-sm">
+                    <div className="w-2 h-2 rounded-full mr-2 bg-pink-500"></div>
+                    Gift Card Details
+                  </h4>
+                  <div className="space-y-3 text-sm">
+                    {order.gift_cards.recipient_name && (
+                      <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                        <div className="text-gray-500 dark:text-gray-400 text-xs">Recipient</div>
+                        <div className="font-medium text-gray-800 dark:text-white">{order.gift_cards.recipient_name}</div>
+                        {order.gift_cards.recipient_email && (
+                          <div className="text-gray-600 dark:text-gray-300 text-xs">{order.gift_cards.recipient_email}</div>
+                        )}
                       </div>
-                      <div className="flex flex-wrap gap-1 sm:gap-2">
-                        <span>Rental: {order.rental_period} days</span>
-                        <span className="hidden sm:inline">|</span>
-                        <span>Decor: {order.decor_level}%</span>
+                    )}
+                    {order.gift_cards.sender_name && (
+                      <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                        <div className="text-gray-500 dark:text-gray-400 text-xs">From</div>
+                        <div className="font-medium text-gray-800 dark:text-white">{order.gift_cards.sender_name}</div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                    {order.gift_cards.personal_message && (
+                      <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                        <div className="text-gray-500 dark:text-gray-400 text-xs">Personal Message</div>
+                        <div className="font-medium text-gray-800 dark:text-white italic">"{order.gift_cards.personal_message}"</div>
+                      </div>
+                    )}
+                    {order.gift_cards.scheduled_date && (
+                      <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                        <div className="text-gray-500 dark:text-gray-400 text-xs">Delivery</div>
+                        <div className="font-medium text-gray-800 dark:text-white">
+                          Scheduled for {new Date(order.gift_cards.scheduled_date).toLocaleDateString()}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              ) : (
-                <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-200 font-semibold">Order details not available</p>
               )}
             </div>
 

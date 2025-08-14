@@ -28,14 +28,13 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
           
           return (
             <div key={level.percentage} className="flex-1">
-              <button
-                type="button"
-                onClick={() => onDecorLevelSelect(level.percentage)}
-                className={`w-full p-3 rounded-lg border text-center transition-all duration-200 ${
+              <div
+                className={`w-full p-3 rounded-lg border text-center transition-all duration-200 cursor-pointer ${
                   selectedOptions.decorLevel === level.percentage
                     ? 'border-amber-400 bg-amber-50/60 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'
                     : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-amber-300'
                 }`}
+                onClick={() => onDecorLevelSelect(level.percentage)}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
@@ -63,7 +62,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
                     <Check className="h-4 w-4 text-amber-500" />
                   )}
                 </div>
-              </button>
+              </div>
             </div>
           )
         })}

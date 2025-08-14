@@ -10,6 +10,12 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🔧 Database Integration Fixes**: Resolved critical database insertion errors and improved error handling
+  - **Fixed Database Schema Mismatch**: Removed `postal_code` field from order payload as it was causing PGRST204 errors during database insertion
+  - **Enhanced Error Logging**: Added comprehensive error logging in checkout process to capture detailed database error information (message, details, hint, code)
+  - **Improved Payment Flow**: Fixed database insertion issues that were preventing successful order placement and admin visibility
+  - **Schema Validation**: Confirmed `payment_intent_id` column exists and order payload structure matches database schema requirements
+  - **Streamlined Checkout**: Orders now successfully insert into database after payment completion, enabling proper order tracking and admin management
 - **🐛 Critical Bug Fixes**: Resolved total calculation and fee synchronization issues
   - **Fixed Rush Order Fee Double-Counting**: Eliminated duplicate rush order charges in checkout total calculation
   - **Corrected Total Calculation Logic**: Fixed delivery fee and add-on fee calculation to prevent overcharging
