@@ -63,17 +63,22 @@ export function calculateDeliveryFee(
  * Calculate zone-based delivery fee
  */
 function calculateZoneBasedFee(zones: DeliveryZone[], postalCode: string): { fee: number; zoneName?: string; error?: string } {
-  // Extract first 2 digits of postal code for prefix matching
-  const postalPrefix = postalCode.substring(0, 2)
+  // Extract prefixes for matching
+  const postalPrefix3 = postalCode.substring(0, 3) // For 3-digit codes like 629, 098
+  const postalPrefix2 = postalCode.substring(0, 2) // For 2-digit codes like 62, 09
   
-  // Find matching zone - check for exact postal code match first, then prefix match
+  // Find matching zone - check in order of specificity
   const matchingZone = zones.find(zone => {
     // First check for exact full postal code match
     if (zone.postalCodes.includes(postalCode)) {
       return true
     }
-    // Then check for 2-digit prefix match (backward compatibility)
-    return zone.postalCodes.includes(postalPrefix)
+    // Then check for 3-digit prefix match (for Jurong Island 629, Sentosa 098)
+    if (zone.postalCodes.includes(postalPrefix3)) {
+      return true
+    }
+    // Finally check for 2-digit prefix match (backward compatibility)
+    return zone.postalCodes.includes(postalPrefix2)
   })
   
   if (!matchingZone) {
