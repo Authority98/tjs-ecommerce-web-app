@@ -458,6 +458,8 @@ const CheckoutPage: React.FC = () => {
           rush_order: rushOrder
         }),
         total_amount: calculateFinalTotal(),
+        installation_charges: installationSelected ? calculateTotalSurcharge(installationDate, installationTime) : 0,
+        teardown_charges: teardownSelected ? calculateTotalSurcharge(teardownDate, teardownTime) : 0,
         discount_code_id: appliedDiscount?.id || null,
         discount_amount: appliedDiscount?.amount || 0,
         status: 'pending' as const

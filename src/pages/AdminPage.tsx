@@ -443,23 +443,18 @@ const AdminPage: React.FC = () => {
                               <span className="text-gray-600 dark:text-gray-300">${selectedOrder.teardown_charges}</span>
                             </div>
                           )}
-                          <div className="flex justify-between items-center py-1 text-sm">
-                            <span className="text-gray-500 dark:text-gray-400">• No lift access</span>
-                            <span className="text-gray-600 dark:text-gray-300">+$60</span>
-                          </div>
-                          <div className="flex justify-between items-center py-1 text-sm">
-                            <span className="text-gray-500 dark:text-gray-400">• Permit/licensing needed</span>
-                            <span className="text-gray-600 dark:text-gray-300">+$80</span>
-                          </div>
-                          <div className="flex justify-between items-center py-1 text-sm">
-                            <span className="text-gray-500 dark:text-gray-400">• Specific delivery timing</span>
-                            <span className="text-gray-600 dark:text-gray-300">+$50</span>
-                          </div>
+                          {/* Dynamic delivery add-ons would go here if stored in order data */}
                         </div>
-                        <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
-                          <span className="text-gray-600 dark:text-gray-300">Service Charges Subtotal</span>
-                          <span className="font-semibold text-gray-800 dark:text-white">$210</span>
-                        </div>
+                        {/* Service charges subtotal would be calculated dynamically */}
+                        {((selectedOrder.installation_charges && selectedOrder.installation_charges > 0) || 
+                          (selectedOrder.teardown_charges && selectedOrder.teardown_charges > 0)) && (
+                          <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
+                            <span className="text-gray-600 dark:text-gray-300">Service Charges Subtotal</span>
+                            <span className="font-semibold text-gray-800 dark:text-white">
+                              ${((selectedOrder.installation_charges || 0) + (selectedOrder.teardown_charges || 0))}
+                            </span>
+                          </div>
+                        )}
                       </>
                     )}
                     
