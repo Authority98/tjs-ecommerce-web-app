@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { Calendar, Clock, Zap, Check } from 'lucide-react'
-import { RENTAL_PERIODS, DeliveryConfiguration, DeliveryAddOn } from '../types'
+import { Calendar, Clock, Zap, Check, Palette } from 'lucide-react'
+import { RENTAL_PERIODS, DeliveryConfiguration, DeliveryAddOn, DECOR_LEVELS } from '../types'
 import { showSuccessToast } from '../utils/toast'
 import Tooltip from './ui/Tooltip'
+import DecorationLevelSelection from './DecorationLevelSelection'
 
 interface SchedulingFormProps {
   installationDate: string
@@ -17,6 +18,8 @@ interface SchedulingFormProps {
   setRushOrder: (rush: boolean) => void
   rentalPeriod?: number
   setRentalPeriod?: (period: number) => void
+  decorationLevel?: number
+  setDecorationLevel?: (level: number) => void
   onNext: () => void
   onBack: () => void
   isTreeOrder: boolean
@@ -42,6 +45,8 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   setRushOrder,
   rentalPeriod = 45,
   setRentalPeriod,
+  decorationLevel = 50,
+  setDecorationLevel,
   onNext,
   onBack,
   isTreeOrder,
@@ -177,6 +182,28 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
       <div className="border-t border-gray-200 dark:border-gray-600 mb-6"></div>
       
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Decoration Level Selection - Only for tree orders */}
+        {isTreeOrder && setDecorationLevel && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <div className="flex items-center space-x-2">
+                <Palette className="h-4 w-4" style={{color: '#F59E0B'}} />
+                <span>Decoration Level *</span>
+                <Tooltip content="Choose your preferred decoration level for the tree" />
+              </div>
+            </label>
+            <DecorationLevelSelection
+                selectedOptions={{ 
+                  decorLevel: decorationLevel,
+                  height: '',
+                  width: '',
+                  type: ''
+                }}
+                onDecorLevelSelect={setDecorationLevel}
+              />
+          </div>
+        )}
+        
         {/* Rental Period Selection - Only for tree orders */}
         {isTreeOrder && setRentalPeriod && (
           <div>
@@ -363,7 +390,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
             type="submit"
             className="flex-1 py-3 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-white font-bold rounded-lg hover:shadow-lg hover:shadow-amber-400/30 transition-all duration-300"
           >
-            Continue to Payment
+            Continue to Customer Details
           </button>
         </div>
       </form>

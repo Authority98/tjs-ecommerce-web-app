@@ -119,6 +119,16 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 - **🎁 Gift Card System**: Complete gift card functionality with RLS policy fixes
 - **🔧 Database Optimizations**: Fixed row-level security policies for gift cards
 - **⚡ Performance Improvements**: Maintained zero-animation design for optimal speed
+- **🎨 Enhanced Decoration Level Selection**: Improved user interface for decoration options
+  - Reordered decoration levels with 'Basic Decor' (50%) as the default and first option
+  - Added interactive "Learn more" button for 'Premium Decor' with detailed information modal
+  - Positioned "Learn more" button inline with Premium Decor text for better visual hierarchy
+  - Enhanced modal popup with detailed description of Premium Decor package features
+- **🔄 Optimized Checkout Flow**: Improved section ordering and navigation
+  - Reordered checkout sections: Scheduling → Customer Details → Payment for logical progression
+  - Updated button text from "Continue to Payment" to "Continue to Customer Details" for clarity
+  - Added back button functionality to Customer Details form for better navigation
+  - Enhanced step-by-step user experience with intuitive flow progression
 
 ## ✨ Features
 

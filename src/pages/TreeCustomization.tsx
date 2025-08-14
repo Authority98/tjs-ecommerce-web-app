@@ -6,7 +6,7 @@ import { Ruler, TreePine, Calendar, Palette } from 'lucide-react'
 
 import { showSuccessToast, TOAST_MESSAGES } from '../utils/toast'
 import { supabase } from '../lib/supabase'
-import { Product, TreeOptions, TREE_SIZES, TREE_TYPES, RENTAL_PERIODS, DECOR_LEVELS } from '../types'
+import { Product, TreeOptions, TREE_SIZES, TREE_TYPES, RENTAL_PERIODS } from '../types'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ProductPreview from '../components/ProductPreview'
 import StepNavigation from '../components/StepNavigation'
@@ -14,7 +14,7 @@ import StepHeader from '../components/StepHeader'
 import TreeSizeSelection from '../components/TreeSizeSelection'
 import TreeTypeSelection from '../components/TreeTypeSelection'
 import RentalPeriodSelection from '../components/RentalPeriodSelection'
-import DecorationLevelSelection from '../components/DecorationLevelSelection'
+
 
 // Add the CSS styles directly in the component
 const treeCustomizationStyles = `
@@ -49,8 +49,7 @@ const [selectedOptions, setSelectedOptions] = useState<TreeOptions>({
 
   const steps = [
     { id: 'size', title: 'Tree Size', icon: Ruler, description: 'Choose the perfect dimensions' },
-    { id: 'type', title: 'Tree Type', icon: TreePine, description: 'Select your preferred variety' },
-    { id: 'decor', title: 'Decoration Level', icon: Palette, description: 'Customize your style' }
+    { id: 'type', title: 'Tree Type', icon: TreePine, description: 'Select your preferred variety' }
   ]
 
   useEffect(() => {
@@ -114,12 +113,7 @@ const [selectedOptions, setSelectedOptions] = useState<TreeOptions>({
 
 
 
-  const handleDecorLevelSelect = (level: number) => {
-    setSelectedOptions({ ...selectedOptions, decorLevel: level })
-    const decorLevel = DECOR_LEVELS.find(d => d.percentage === level)
-    showSuccessToast(TOAST_MESSAGES.DECOR_SELECTED(decorLevel?.label || ''))
-    // Don't auto-advance on last step
-  }
+
 
   const handleProceedToCheckout = () => {
     const checkoutData = {
@@ -136,7 +130,6 @@ const [selectedOptions, setSelectedOptions] = useState<TreeOptions>({
     switch (stepIndex) {
       case 0: return !!(selectedOptions.height && selectedOptions.width)
       case 1: return !!selectedOptions.type
-      case 2: return !!selectedOptions.decorLevel
       default: return false
     }
   }
@@ -315,12 +308,7 @@ const [selectedOptions, setSelectedOptions] = useState<TreeOptions>({
                   />
                 )}
 
-                {activeStep === 2 && (
-                  <DecorationLevelSelection
-                    selectedOptions={selectedOptions}
-                    onDecorLevelSelect={handleDecorLevelSelect}
-                  />
-                )}
+
 
               </div>
           </div>

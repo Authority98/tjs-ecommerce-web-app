@@ -38,6 +38,7 @@ const CheckoutPage: React.FC = () => {
   const [teardownTime, setTeardownTime] = useState('')
   const [rushOrder, setRushOrder] = useState(false)
   const [rentalPeriod, setRentalPeriod] = useState(45)
+  const [decorationLevel, setDecorationLevel] = useState(50)
   const [installationSelected, setInstallationSelected] = useState(false)
   const [teardownSelected, setTeardownSelected] = useState(false)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
@@ -168,6 +169,11 @@ const CheckoutPage: React.FC = () => {
       if (storedData) {
         const checkoutData = JSON.parse(storedData)
         setOrderData(checkoutData)
+        
+        // Initialize decoration level from tree options
+        if (checkoutData.treeOptions?.decorLevel) {
+          setDecorationLevel(checkoutData.treeOptions.decorLevel)
+        }
         
         // Auto-fill customer details for gift cards
         if (checkoutData.type === 'giftcard' && checkoutData.giftCard?.senderName) {
@@ -452,7 +458,7 @@ const CheckoutPage: React.FC = () => {
           tree_width: orderData.treeOptions?.width,
           tree_type: orderData.treeOptions?.type,
           rental_period: orderData.treeOptions ? rentalPeriod : null,
-          decor_level: orderData.treeOptions?.decorLevel,
+          decor_level: decorationLevel,
           installation_date: installationDate || null,
           installation_time: installationTime || null,
           teardown_date: teardownDate || null,
@@ -508,8 +514,8 @@ const CheckoutPage: React.FC = () => {
         { number: 2, title: 'Payment', completed: currentStep > 2 }
       ]
     : [
-        { number: 1, title: 'Customer Details', completed: currentStep > 1 },
-        { number: 2, title: 'Scheduling', completed: currentStep > 2 },
+        { number: 1, title: 'Scheduling', completed: currentStep > 1 },
+        { number: 2, title: 'Customer Details', completed: currentStep > 2 },
         { number: 3, title: 'Payment', completed: currentStep > 3 }
       ]
 
@@ -649,17 +655,7 @@ const CheckoutPage: React.FC = () => {
               <div
                 key={currentStep}
               >
-                {currentStep === 1 && (
-                  <CustomerDetailsForm
-                    customerDetails={customerDetails}
-                    setCustomerDetails={setCustomerDetails}
-                    onNext={() => setCurrentStep(2)}
-                    nextButtonText={skipScheduling ? 'Continue to Payment' : 'Continue to Scheduling'}
-                     isGiftCard={isGiftCard}
-                  />
-                )}
-                
-                {currentStep === 2 && !skipScheduling && (
+                {currentStep === 1 && !skipScheduling && (
                   <SchedulingForm
                     installationDate={installationDate}
                     setInstallationDate={setInstallationDate}
@@ -673,7 +669,9 @@ const CheckoutPage: React.FC = () => {
                     setRushOrder={setRushOrder}
                     rentalPeriod={rentalPeriod}
                     setRentalPeriod={setRentalPeriod}
-                    onNext={() => setCurrentStep(3)}
+                    decorationLevel={decorationLevel}
+                    setDecorationLevel={setDecorationLevel}
+                    onNext={() => setCurrentStep(2)}
                     onBack={() => setCurrentStep(1)}
                     isTreeOrder={!!orderData.treeOptions}
                     deliveryConfig={deliveryConfig || undefined}
@@ -683,6 +681,17 @@ const CheckoutPage: React.FC = () => {
                     setInstallationSelected={setInstallationSelected}
                     teardownSelected={teardownSelected}
                     setTeardownSelected={setTeardownSelected}
+                  />
+                )}
+                
+                {((currentStep === 2 && !skipScheduling) || (currentStep === 1 && skipScheduling)) && (
+                  <CustomerDetailsForm
+                    customerDetails={customerDetails}
+                    setCustomerDetails={setCustomerDetails}
+                    onNext={() => setCurrentStep(skipScheduling ? 2 : 3)}
+                    onBack={skipScheduling ? undefined : () => setCurrentStep(1)}
+                    nextButtonText={'Continue to Payment'}
+                     isGiftCard={isGiftCard}
                   />
                 )}
                 

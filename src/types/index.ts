@@ -206,14 +206,14 @@ export const RENTAL_PERIODS = [
 ]
 
 export const DECOR_LEVELS = [
+  { percentage: 50, label: 'Basic Decor', description: 'Essential decorations' },
   { 
     percentage: 100, 
-    label: 'All-Inclusive Premium Decor Package', 
-    description: '✨ Complete venue transformation with full decor setup, premium props, ambient lighting, elegant floral arrangements, and professional teardown service',
-    notes: '🎯 Perfect for clients seeking a luxurious, hands-off experience with zero stress and maximum impact'
-  },
-  { percentage: 75, label: 'Two Third Decor', description: '75%' },
-  { percentage: 50, label: 'Half Decor', description: '50%' }
+    label: 'Premium Decor', 
+    description: 'Complete decoration package',
+    notes: 'Full service with professional setup',
+    detailedDescription: '✨ Complete venue transformation with full decor setup, premium props, ambient lighting, elegant floral arrangements, and professional teardown service. Perfect for clients seeking a luxurious, hands-off experience with zero stress and maximum impact.'
+  }
 ]
 
 // Delivery Configuration Types

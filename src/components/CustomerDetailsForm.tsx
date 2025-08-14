@@ -6,6 +6,7 @@ interface CustomerDetailsFormProps {
   customerDetails: CustomerDetails
   setCustomerDetails: (details: CustomerDetails) => void
   onNext: () => void
+  onBack?: () => void
   nextButtonText?: string
   isGiftCard?: boolean
 }
@@ -14,6 +15,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
   customerDetails,
   setCustomerDetails,
   onNext,
+  onBack,
   nextButtonText = 'Continue to Scheduling',
   isGiftCard = false
 }) => {
@@ -200,12 +202,23 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
           </div>
         )}
 
-        <button
-          type="submit"
-          className="w-full py-3 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-amber-400/30 transition-all duration-300"
-        >
-          {nextButtonText}
-        </button>
+        <div className="flex gap-4">
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              className="flex-1 py-3 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-xl transition-all duration-300"
+            >
+              Back
+            </button>
+          )}
+          <button
+            type="submit"
+            className={`${onBack ? 'flex-1' : 'w-full'} py-3 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-amber-400/30 transition-all duration-300`}
+          >
+            {nextButtonText}
+          </button>
+        </div>
       </form>
     </div>
   )
