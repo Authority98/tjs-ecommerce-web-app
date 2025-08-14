@@ -28,7 +28,10 @@ export interface CustomerDetails {
   unitNumber?: string
   buildingName?: string
   streetAddress?: string
-  postalCode?: string
+  // Zone-based delivery fields
+  deliveryZone?: string
+  deliveryArea?: string
+  deliveryFee?: number
 }
 
 export interface OrderSummary {
@@ -216,7 +219,6 @@ export const DECOR_LEVELS = [
 export interface DeliveryZone {
   id: string
   name: string
-  postalCodes: string[]
   fee: number
 }
 
@@ -244,37 +246,31 @@ export const DEFAULT_DELIVERY_ZONES: DeliveryZone[] = [
   {
     id: 'central',
     name: 'Central (CBD)',
-    postalCodes: [],
     fee: 40
   },
   {
     id: 'north',
     name: 'North',
-    postalCodes: [],
     fee: 50
   },
   {
     id: 'east',
     name: 'East',
-    postalCodes: [],
     fee: 45
   },
   {
     id: 'west',
     name: 'West',
-    postalCodes: [],
     fee: 50
   },
   {
     id: 'sentosa',
     name: 'Sentosa',
-    postalCodes: [],
     fee: 80
   },
   {
     id: 'jurong-island',
     name: 'Jurong Island',
-    postalCodes: [],
     fee: 120
   }
 ]

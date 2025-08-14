@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Settings, Truck, MapPin, Clock, Plus, Trash2, Save } from 'lucide-react'
+import { Settings, Truck, MapPin, Clock, Save } from 'lucide-react'
 import { 
   DeliveryConfiguration, 
   DeliveryZone, 
@@ -19,8 +19,6 @@ const DeliverySettings: React.FC = () => {
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [newZone, setNewZone] = useState({ name: '', postalCodes: '', fee: 0 })
-  const [showAddZone, setShowAddZone] = useState(false)
 
   useEffect(() => {
     // Check if user is authenticated before loading config
@@ -133,50 +131,7 @@ const DeliverySettings: React.FC = () => {
     })
   }
 
-  const addZone = () => {
-    if (!newZone.name || !newZone.postalCodes || newZone.fee <= 0) {
-      alert('Please fill in all zone details')
-      return
-    }
 
-    const zone: DeliveryZone = {
-      id: newZone.name.toLowerCase().replace(/\s+/g, '-'),
-      name: newZone.name,
-      postalCodes: newZone.postalCodes.split(',').map(code => code.trim()),
-      fee: newZone.fee
-    }
-
-    if (!config.zoneBasedConfig) {
-      setConfig({
-        ...config,
-        zoneBasedConfig: { zones: [zone] }
-      })
-    } else {
-      setConfig({
-        ...config,
-        zoneBasedConfig: {
-          ...config.zoneBasedConfig,
-          zones: [...config.zoneBasedConfig.zones, zone]
-        }
-      })
-    }
-
-    setNewZone({ name: '', postalCodes: '', fee: 0 })
-    setShowAddZone(false)
-  }
-
-  const removeZone = (zoneId: string) => {
-    if (!config.zoneBasedConfig) return
-    
-    const updatedZones = config.zoneBasedConfig.zones.filter(zone => zone.id !== zoneId)
-    setConfig({
-      ...config,
-      zoneBasedConfig: {
-        ...config.zoneBasedConfig,
-        zones: updatedZones
-      }
-    })
-  }
 
   const updateAddOn = (addOnId: string, updates: Partial<DeliveryAddOn>) => {
     const updatedAddOns = config.addOns.map(addOn => 
@@ -240,71 +195,10 @@ const DeliverySettings: React.FC = () => {
         <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 border border-white/20 dark:border-gray-700/30">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Delivery Zones</h3>
-            <Button
-              onClick={() => setShowAddZone(true)}
-              icon={Plus}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              Add Zone
-            </Button>
-          </div>
-
-          {/* Add Zone Form */}
-          {showAddZone && (
-            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 mb-6">
-              <h4 className="font-semibold text-gray-800 dark:text-white mb-4">Add New Zone</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Zone Name
-                  </label>
-                  <input
-                    type="text"
-                    value={newZone.name}
-                    onChange={(e) => setNewZone({ ...newZone, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    placeholder="e.g., Central"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Postal Codes (comma-separated)
-                  </label>
-                  <input
-                    type="text"
-                    value={newZone.postalCodes}
-                    onChange={(e) => setNewZone({ ...newZone, postalCodes: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    placeholder="e.g., 01, 02, 03"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Delivery Fee ($)
-                  </label>
-                  <input
-                    type="number"
-                    value={newZone.fee}
-                    onChange={(e) => setNewZone({ ...newZone, fee: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    placeholder="40"
-                  />
-                </div>
-              </div>
-              <div className="flex space-x-3 mt-4">
-                <Button onClick={addZone} className="bg-green-600 hover:bg-green-700 text-white">
-                  Add Zone
-                </Button>
-                <Button 
-                  onClick={() => setShowAddZone(false)} 
-                  variant="ghost"
-                  className="text-gray-600 hover:text-gray-800"
-                >
-                  Cancel
-                </Button>
-              </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Read-only view of predefined zones
             </div>
-          )}
+          </div>
 
           {/* Zones Table */}
           <div className="overflow-x-auto">
@@ -312,31 +206,16 @@ const DeliverySettings: React.FC = () => {
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-600">
                   <th className="text-left py-3 px-4 font-semibold text-gray-800 dark:text-white">Zone Name</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-800 dark:text-white">Postal Codes</th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-800 dark:text-white">Fee</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-800 dark:text-white">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {config.zoneBasedConfig?.zones.map((zone) => (
                   <tr key={zone.id} className="border-b border-gray-100 dark:border-gray-700">
                     <td className="py-3 px-4">
-                      <input
-                        type="text"
-                        value={zone.name}
-                        onChange={(e) => updateZone(zone.id, { name: e.target.value })}
-                        className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                      />
-                    </td>
-                    <td className="py-3 px-4">
-                      <input
-                        type="text"
-                        value={zone.postalCodes?.join(', ') || ''}
-                        onChange={(e) => updateZone(zone.id, { 
-                          postalCodes: e.target.value.split(',').map(code => code.trim()) 
-                        })}
-                        className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                      />
+                      <div className="text-gray-800 dark:text-white font-medium">
+                        {zone.name}
+                      </div>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center">
@@ -348,14 +227,6 @@ const DeliverySettings: React.FC = () => {
                           className="w-20 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                         />
                       </div>
-                    </td>
-                    <td className="py-3 px-4">
-                      <button
-                        onClick={() => removeZone(zone.id)}
-                        className="text-red-600 hover:text-red-800 p-1"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
                     </td>
                   </tr>
                 ))}

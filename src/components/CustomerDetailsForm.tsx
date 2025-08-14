@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { CustomerDetails } from '../types'
+import ZoneSelector from './ZoneSelector'
 
 interface CustomerDetailsFormProps {
   customerDetails: CustomerDetails
@@ -23,6 +24,16 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
     if (isValid) {
       onNext()
     }
+  }
+
+  const handleZoneChange = (zone: string, area: string, postalCode: string, fee: number) => {
+    setCustomerDetails({
+      ...customerDetails,
+      postalCode: '', // No postal code needed for zone-based delivery
+      deliveryZone: zone,
+      deliveryArea: area,
+      deliveryFee: fee
+    })
   }
 
   const updateField = (field: keyof CustomerDetails, value: string) => {
@@ -103,43 +114,29 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Delivery Address (Singapore Only)</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Postal Code *
-                </label>
-                <input
-                  type="text"
-                  id="postalCode"
-                  value={customerDetails.postalCode || ''}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '')
-                    updateField('postalCode', value)
-                  }}
-                  className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
-                  style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
-                  placeholder="Enter postal code"
-                  required
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Enter your postal code</p>
-              </div>
-              
-              <div>
-                <label htmlFor="unitNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Unit Number
-                </label>
-                <input
-                  type="text"
-                  id="unitNumber"
-                  value={customerDetails.unitNumber || ''}
-                  onChange={(e) => {
-                    updateField('unitNumber', e.target.value)
-                  }}
-                  className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
-                  style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
-                  placeholder="#12-34"
-                />
-              </div>
+            {/* Zone Selection */}
+            <ZoneSelector
+              selectedZone={customerDetails.deliveryZone}
+              selectedArea={customerDetails.deliveryArea}
+              onZoneChange={handleZoneChange}
+              className="mb-6"
+            />
+            
+            <div>
+              <label htmlFor="unitNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Unit Number
+              </label>
+              <input
+                type="text"
+                id="unitNumber"
+                value={customerDetails.unitNumber || ''}
+                onChange={(e) => {
+                  updateField('unitNumber', e.target.value)
+                }}
+                className="w-full p-3 border border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent relative z-30"
+                style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
+                placeholder="#12-34"
+              />
             </div>
             
             <div>

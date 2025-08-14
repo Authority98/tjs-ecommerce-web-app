@@ -142,7 +142,9 @@ export type Database = {
           unit_number?: string
           building_name?: string
           street_address?: string
-          postal_code?: string
+          delivery_zone?: string
+          delivery_area?: string
+          delivery_fee?: number
           product_id?: string
           gift_card_id?: string
           order_type: 'product' | 'giftcard'
@@ -172,7 +174,9 @@ export type Database = {
           unit_number?: string
           building_name?: string
           street_address?: string
-          postal_code?: string
+          delivery_zone?: string
+          delivery_area?: string
+          delivery_fee?: number
           product_id?: string
           gift_card_id?: string
           order_type?: 'product' | 'giftcard'
@@ -202,7 +206,9 @@ export type Database = {
           unit_number?: string
           building_name?: string
           street_address?: string
-          postal_code?: string
+          delivery_zone?: string
+          delivery_area?: string
+          delivery_fee?: number
           product_id?: string
           gift_card_id?: string
           order_type?: 'product' | 'giftcard'

@@ -10,6 +10,17 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🗺️ Zone-Based Delivery System Optimization**: Complete removal of postal code dependencies for simplified delivery management
+  - **Database Schema Cleanup**: Removed `postal_code` column from orders table and `postalCodes` from delivery configurations
+  - **TypeScript Type Updates**: Cleaned up all postal code references from type definitions in `src/lib/supabase.ts` and `src/types/index.ts`
+  - **Delivery Calculator Simplification**: Removed all postal code-based calculation logic, now purely zone-based
+  - **Enhanced Zone Selector UI**: Improved visual feedback for zone and area selection
+    - Search functionality appears immediately upon clicking fields (no separate search option)
+    - Selected fields display orange background with location icon instead of search icon
+    - Black text color for better readability when options are selected
+    - Consistent styling across both light and dark themes
+  - **Migration Applied**: Successfully migrated database to remove postal code dependencies
+  - **Simplified Architecture**: Delivery fees now calculated exclusively based on selected delivery zones
 - **📝 Enhanced Scheduling Form UX**: Comprehensive improvements to the installation and service scheduling interface
   - **Interactive Tooltips**: Added reusable tooltip component with helpful information for rental period, installation date/time, and teardown date/time
   - **Streamlined Date/Time Inputs**: Combined separate date and time fields into single `datetime-local` inputs for better user experience

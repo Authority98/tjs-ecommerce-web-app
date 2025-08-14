@@ -27,7 +27,10 @@ const CheckoutPage: React.FC = () => {
     unitNumber: '',
     buildingName: '',
     streetAddress: '',
-    postalCode: ''
+    postalCode: '',
+    deliveryZone: '',
+    deliveryArea: '',
+    deliveryFee: 0
   })
   const [installationDate, setInstallationDate] = useState('')
   const [installationTime, setInstallationTime] = useState('')
@@ -108,45 +111,16 @@ const CheckoutPage: React.FC = () => {
     loadDeliveryConfig()
   }, [])
 
-  // Calculate delivery fee when config or customer details change
+  // Update delivery fee when customer details change (from ZoneSelector)
   useEffect(() => {
-    if (deliveryConfig && customerDetails?.postalCode && orderData?.type !== 'giftcard') {
-      // Validate postal code if it has any digits
-      if (customerDetails.postalCode.length > 0) {
-        setDeliveryError(null)
-        
-        // Add a small delay to debounce the validation
-        const timeoutId = setTimeout(() => {
-          const result = calculateDeliveryFee(deliveryConfig, {
-            postalCode: customerDetails.postalCode,
-            // Only pass distance if using distance-based model
-            ...(deliveryConfig.model === 'distance' && { distance: 15 }),
-            selectedAddOns: selectedDeliveryAddOns
-          })
-          
-          if (!result.error) {
-            setDeliveryFee(result.totalFee)
-            setDeliveryError(null)
-            showSuccessToast(`✅ Delivery available for $${result.totalFee}`)
-          } else {
-            setDeliveryFee(0)
-            setDeliveryError('Invalid postal code - delivery not available for this area')
-            showErrorToast('Invalid postal code')
-          }
-        }, 500)
-        
-        return () => clearTimeout(timeoutId)
-      } else {
-        // Reset states when postal code is empty
-        setDeliveryError(null)
-        setDeliveryFee(0)
-      }
-    } else {
-      // Reset states when no config or postal code
+    if (customerDetails?.deliveryFee && orderData?.type !== 'giftcard') {
+      setDeliveryFee(customerDetails.deliveryFee)
       setDeliveryError(null)
+    } else if (orderData?.type !== 'giftcard') {
       setDeliveryFee(0)
+      setDeliveryError(customerDetails?.deliveryZone ? null : 'Please select your delivery zone')
     }
-  }, [deliveryConfig, customerDetails?.postalCode, orderData?.type, selectedDeliveryAddOns])
+  }, [customerDetails?.deliveryFee, customerDetails?.deliveryZone, orderData?.type])
 
   const initializeCheckout = async () => {
     try {
@@ -443,6 +417,9 @@ const CheckoutPage: React.FC = () => {
         building_name: customerDetails.buildingName || null,
         street_address: customerDetails.streetAddress || null,
         postal_code: customerDetails.postalCode || null,
+        delivery_zone: customerDetails.deliveryZone || null,
+        delivery_area: customerDetails.deliveryArea || null,
+        delivery_fee: customerDetails.deliveryFee || 0,
         order_type: isGiftCard ? 'giftcard' : 'product',
         payment_intent_id: paymentIntentId,
         ...(isGiftCard ? {
