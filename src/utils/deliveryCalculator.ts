@@ -63,25 +63,29 @@ export function calculateDeliveryFee(
  * Calculate zone-based delivery fee
  */
 function calculateZoneBasedFee(zones: DeliveryZone[], postalCode: string): { fee: number; zoneName?: string; error?: string } {
-  // Extract prefixes for matching
-  const postalPrefix3 = postalCode.substring(0, 3) // For 3-digit codes like 629, 098
-  const postalPrefix2 = postalCode.substring(0, 2) // For 2-digit codes like 62, 09
+  // Normalize postal code to 6 digits with leading zeros
+  const normalizedPostalCode = String(postalCode).padStart(6, '0')
   
-  // Find matching zone - check in order of specificity
-  const matchingZone = zones.find(zone => {
-    // First check for exact full postal code match
-    if (zone.postalCodes.includes(postalCode)) {
-      return true
-    }
-    // Then check for 3-digit prefix match (for Jurong Island 629, Sentosa 098)
-    if (zone.postalCodes.includes(postalPrefix3)) {
-      return true
-    }
-    // Finally check for 2-digit prefix match (backward compatibility)
-    return zone.postalCodes.includes(postalPrefix2)
-  })
+  // Find matching zone using longest prefix first approach
+  let bestMatch: { zone: DeliveryZone; prefixLength: number } | null = null
   
-  if (!matchingZone) {
+  for (const zone of zones) {
+    for (const zoneCode of zone.postalCodes) {
+      const normalizedZoneCode = String(zoneCode).padStart(6, '0')
+      
+      // Check if the postal code starts with this zone code
+      if (normalizedPostalCode.startsWith(normalizedZoneCode.substring(0, zoneCode.length))) {
+        const prefixLength = zoneCode.length
+        
+        // Keep the match with the longest prefix (most specific)
+        if (!bestMatch || prefixLength > bestMatch.prefixLength) {
+          bestMatch = { zone, prefixLength }
+        }
+      }
+    }
+  }
+  
+  if (!bestMatch) {
     return {
       fee: 0,
       error: `Delivery not available for postal code ${postalCode}`
@@ -89,8 +93,8 @@ function calculateZoneBasedFee(zones: DeliveryZone[], postalCode: string): { fee
   }
   
   return {
-    fee: matchingZone.fee,
-    zoneName: matchingZone.name
+    fee: bestMatch.zone.fee,
+    zoneName: bestMatch.zone.name
   }
 }
 
