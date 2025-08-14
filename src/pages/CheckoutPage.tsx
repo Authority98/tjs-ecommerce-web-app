@@ -292,6 +292,11 @@ const CheckoutPage: React.FC = () => {
         return true
       }
       
+      // If we're on delivery section (step 2), only need customer details to be complete
+      if (currentStep === 2) {
+        return customerDetailsComplete
+      }
+      
       // Must be on step 2 or later AND have scheduling requirements met
       if (currentStep < 2) {
         return false // Still on customer details step

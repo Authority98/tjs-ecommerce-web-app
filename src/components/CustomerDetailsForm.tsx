@@ -187,7 +187,6 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
             {/* Delivery Add-ons Section */}
             {deliveryConfig && deliveryConfig.addOns && deliveryConfig.addOns.length > 0 && (
               <div className="mt-6">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Delivery Add-ons</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   {deliveryConfig.addOns
                     .filter(addOn => addOn.enabled)

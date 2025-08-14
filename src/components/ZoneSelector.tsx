@@ -313,19 +313,7 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
         </div>
       </div>
 
-      {currentZone && currentArea && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-medium text-gray-900 dark:text-white">Delivery Fee</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">{getCurrentZoneName()} • {currentArea}</div>
-            </div>
-            <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">
-              ${getCurrentFee()}
-            </div>
-          </div>
-        </div>
-      )}
+
     </div>
   )
 }
