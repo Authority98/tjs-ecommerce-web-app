@@ -17,6 +17,7 @@ export interface TreeOptions {
   type: string
   rentalPeriod?: number
   decorLevel: number
+  eventSize?: 'small' | 'medium' | 'large'
 }
 
 export interface CustomerDetails {

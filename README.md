@@ -47,6 +47,13 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
   - **Direct Surcharge Display**: Service charges now directly reflect timing surcharges without additional fees
   - **Updated Pricing**: Weekend service $100 (was $110), evening service $80 (was $90), late-night service $150 (was $160), standard time free (was $10)
   - **Transparent Calculations**: Service charges only appear when timing surcharges apply
+- **🎯 Event Size Selection for Premium Decor**: Interactive event sizing options for premium decoration services
+  - **Three-Tier Event Sizing**: Added Small Event (≤50 people, $1,200), Medium Event (51-150 people, $2,500), and Large/Corporate Event (150+ people, $4,500+) options
+  - **Conditional Display**: Event size options appear only when "Premium Decor" decoration level is selected
+  - **Interactive Selection**: Clickable event size cards with visual feedback through amber highlighting when selected
+  - **Responsive Design**: Three-column grid layout that adapts to different screen sizes with consistent styling
+  - **State Management**: Full integration with application state management for event size tracking throughout checkout process
+  - **Clean Interface**: Minimal design without checkmark icons, relying on background color changes for selection indication
 - **🔧 Admin Interface Enhancements**: Comprehensive improvements to the admin order management system
   - **Fixed Desktop Eye Icon Button**: Resolved pointer events issue where decorative elements were blocking the view order details button on desktop
   - **Enhanced Order Details Modal**: Complete charges breakdown display matching checkout experience

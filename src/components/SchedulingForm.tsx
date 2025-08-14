@@ -20,6 +20,8 @@ interface SchedulingFormProps {
   setRentalPeriod?: (period: number) => void
   decorationLevel?: number
   setDecorationLevel?: (level: number) => void
+  eventSize?: 'small' | 'medium' | 'large'
+  setEventSize?: (size: 'small' | 'medium' | 'large') => void
   onNext: () => void
   onBack: () => void
   isTreeOrder: boolean
@@ -47,6 +49,8 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   setRentalPeriod,
   decorationLevel = 50,
   setDecorationLevel,
+  eventSize,
+  setEventSize,
   onNext,
   onBack,
   isTreeOrder,
@@ -197,9 +201,11 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
                   decorLevel: decorationLevel,
                   height: '',
                   width: '',
-                  type: ''
+                  type: '',
+                  eventSize: eventSize
                 }}
                 onDecorLevelSelect={setDecorationLevel}
+                onEventSizeSelect={setEventSize}
               />
           </div>
         )}

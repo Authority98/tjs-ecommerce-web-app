@@ -39,6 +39,7 @@ const CheckoutPage: React.FC = () => {
   const [rushOrder, setRushOrder] = useState(false)
   const [rentalPeriod, setRentalPeriod] = useState(45)
   const [decorationLevel, setDecorationLevel] = useState(50)
+  const [eventSize, setEventSize] = useState<'small' | 'medium' | 'large' | undefined>(undefined)
   const [installationSelected, setInstallationSelected] = useState(false)
   const [teardownSelected, setTeardownSelected] = useState(false)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
@@ -671,6 +672,8 @@ const CheckoutPage: React.FC = () => {
                     setRentalPeriod={setRentalPeriod}
                     decorationLevel={decorationLevel}
                     setDecorationLevel={setDecorationLevel}
+                    eventSize={eventSize}
+                    setEventSize={setEventSize}
                     onNext={() => setCurrentStep(2)}
                     onBack={() => setCurrentStep(1)}
                     isTreeOrder={!!orderData.treeOptions}
