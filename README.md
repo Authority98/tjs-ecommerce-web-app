@@ -37,6 +37,14 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
     - Charges breakdown section repositioned to appear before product details for better information hierarchy
   - **Improved Order Information Display**: Better organization and presentation of order data in admin interface
 - **🚚 Enhanced Delivery System**: Completely redesigned delivery validation and user experience
+  - **LATEST**: Precision Postal Code Matching System
+    - Implemented allowlist-based postal code matching for Jurong Island and Sentosa
+    - Jurong Island: 140+ specific 6-digit postal codes (627475, 627490, etc.) for $120 delivery fee
+    - Sentosa: All 098xxx codes + specific 099xxx codes (avoiding HarbourFront/Keppel mischarging) for $80 delivery fee
+    - Uses `String(postal).padStart(6,'0')` for consistent 6-digit normalization
+    - Longest-prefix-first matching algorithm ensures proper zone prioritization
+    - Database configuration updated to match actual calculation logic for admin transparency
+    - Eliminates edge cases and provides reliable postal code validation
   - Removed 6-digit postal code restriction - now accepts postal codes of any length
   - Replaced inline error messages with clean toast notifications (no emojis)
   - Added animated loading dots in delivery section until postal code is entered
