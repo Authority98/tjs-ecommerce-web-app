@@ -122,6 +122,22 @@ const CheckoutPage: React.FC = () => {
     }
   }, [customerDetails?.deliveryFee, customerDetails?.deliveryZone, orderData?.type])
 
+  // Synchronize rushOrder with selectedDeliveryAddOns
+  useEffect(() => {
+    if (rushOrder) {
+      // Add rush-order to selectedDeliveryAddOns if not already present
+      setSelectedDeliveryAddOns(prev => {
+        if (!prev.includes('rush-order')) {
+          return [...prev, 'rush-order']
+        }
+        return prev
+      })
+    } else {
+      // Remove rush-order from selectedDeliveryAddOns if present
+      setSelectedDeliveryAddOns(prev => prev.filter(id => id !== 'rush-order'))
+    }
+  }, [rushOrder])
+
   const initializeCheckout = async () => {
     try {
       // Check if coming directly with productId (for decorations/ribbons)
@@ -194,12 +210,18 @@ const CheckoutPage: React.FC = () => {
         const timingSurcharge = calculateTotalSurcharge(teardownDate, teardownTime)
         total += timingSurcharge
       }
-      total += deliveryFee // Dynamic delivery fee
-    }
-    
-    if (rushOrder) {
-      const rushOrderAddOn = deliveryConfig?.addOns.find(addOn => addOn.id === 'rush-order' && addOn.enabled)
-      total += rushOrderAddOn?.fee || 150 // Rush order fee (fallback to 150 if not configured)
+      
+      // Add base delivery fee
+      total += deliveryFee
+      
+      // Add delivery add-on fees (including rush order if selected)
+      if (deliveryConfig && selectedDeliveryAddOns.length > 0) {
+        const addOnFees = selectedDeliveryAddOns.reduce((addOnTotal, addOnId) => {
+          const addOn = deliveryConfig.addOns.find(a => a.id === addOnId)
+          return addOnTotal + (addOn?.fee || 0)
+        }, 0)
+        total += addOnFees
+      }
     }
     
     // Apply discount if available (only for products, not gift cards)
@@ -300,9 +322,8 @@ const CheckoutPage: React.FC = () => {
         }
       }
       
-      if (timingSurcharge > 0) {
-        charges.push({ name: chargeName, amount: timingSurcharge })
-      }
+      // Always show installation service, even if no surcharge applies
+      charges.push({ name: chargeName, amount: timingSurcharge })
     }
     
     // Add teardown charges if selected
@@ -324,9 +345,8 @@ const CheckoutPage: React.FC = () => {
         }
       }
       
-      if (timingSurcharge > 0) {
-        charges.push({ name: chargeName, amount: timingSurcharge })
-      }
+      // Always show teardown service, even if no surcharge applies
+      charges.push({ name: chargeName, amount: timingSurcharge })
     }
     
     // Only add delivery charge if there's no delivery error

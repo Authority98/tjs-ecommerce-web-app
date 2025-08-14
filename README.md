@@ -10,6 +10,11 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🐛 Critical Bug Fixes**: Resolved total calculation and fee synchronization issues
+  - **Fixed Rush Order Fee Double-Counting**: Eliminated duplicate rush order charges in checkout total calculation
+  - **Corrected Total Calculation Logic**: Fixed delivery fee and add-on fee calculation to prevent overcharging
+  - **Enhanced State Synchronization**: Added automatic synchronization between rush order selection and delivery add-ons
+  - **Improved Fee Display**: Rush order and delivery add-ons now display correctly as separate line items
 - **🔧 User Experience Improvements**: Enhanced form usability and delivery system optimization
   - **Postal Code Field Made Optional**: Removed required validation from postal code field in customer details form for improved user experience
   - **Zone Selection Text Update**: Changed zone selection display from "x areas available" to "x areas" for cleaner interface

@@ -156,7 +156,9 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
               {additionalCharges.filter(charge => charge.name !== 'Delivery').map((charge, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <span className="text-sm text-gray-700 dark:text-gray-300">{charge.name}</span>
-                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">+${charge.amount}</span>
+                  <span className="text-sm font-medium text-pink-600 dark:text-pink-400">
+                    {charge.amount > 0 ? `+$${charge.amount}` : 'Free'}
+                  </span>
                 </div>
               ))}
               {/* Rental Period */}

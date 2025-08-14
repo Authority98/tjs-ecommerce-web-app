@@ -317,8 +317,8 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
                 )
               })()}
               
-              {/* Other Delivery Add-ons */}
-              {enabledDeliveryAddOns.map((addOn) => {
+              {/* Other Delivery Add-ons (excluding rush-order which is handled separately) */}
+              {enabledDeliveryAddOns.filter(addOn => addOn.id !== 'rush-order').map((addOn) => {
                 const isSelected = selectedDeliveryAddOns.includes(addOn.id)
                 return (
                   <button
