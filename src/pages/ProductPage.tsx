@@ -256,7 +256,7 @@ const ProductPage: React.FC = () => {
             {/* Filter Toggle Button */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-white/90 to-purple-50/50 dark:from-purple-950/20 dark:to-violet-950/30 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-700/30 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105"
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-white/90 to-purple-50/50 dark:from-purple-950/20 dark:to-violet-950/30 backdrop-blur-xl rounded-full border border-white/20 dark:border-gray-700/30 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105"
             >
               <Filter className="h-5 w-5 mr-2" />
               Filters
