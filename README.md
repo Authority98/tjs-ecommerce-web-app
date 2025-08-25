@@ -10,6 +10,14 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **📝 Event Inquiry System**: Complete inquiry management system for event services
+  - **Inquiry Modal**: Modern inquiry form with side-by-side email and phone fields for better UX
+  - **Service Options Integration**: Dynamic service options based on selected event type with pricing calculation
+  - **Database Storage**: Inquiries stored in Supabase with proper data validation and error handling
+  - **Admin Management**: New "Inquiries" tab in admin panel for viewing and managing customer inquiries
+  - **Real-time Updates**: Inquiry submissions appear immediately in admin interface
+  - **Data Validation**: Fixed numeric price formatting issues and JSON data storage
+  - **Enhanced Error Handling**: Comprehensive error logging and user-friendly error messages
 - **🔧 Database Integration Fixes**: Resolved critical database insertion errors and improved error handling
   - **Fixed Database Schema Mismatch**: Removed `postal_code` field from order payload as it was causing PGRST204 errors during database insertion
   - **Enhanced Error Logging**: Added comprehensive error logging in checkout process to capture detailed database error information (message, details, hint, code)

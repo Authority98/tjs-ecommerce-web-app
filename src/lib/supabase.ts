@@ -261,6 +261,41 @@ export type Database = {
           updated_at?: string
         }
       }
+      inquiries: {
+        Row: {
+          id: string
+          name: string
+          email: string
+          phone: string
+          address: string
+          service_name: string
+          selected_options: any
+          total_price: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          email: string
+          phone: string
+          address: string
+          service_name: string
+          selected_options?: any
+          total_price: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          email?: string
+          phone?: string
+          address?: string
+          service_name?: string
+          selected_options?: any
+          total_price?: number
+          created_at?: string
+        }
+      }
     }
   }
 }

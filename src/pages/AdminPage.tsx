@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, LogOut, Eye, Star, Calendar, Wrench, Trash2, Zap, Building, FileText, Truck } from 'lucide-react'
+import { Plus, LogOut, Eye, Star, Calendar, Wrench, Trash2, Zap, Building, FileText, Truck, MessageSquare } from 'lucide-react'
 import { Order } from '../types'
 import { useAdminData } from '../hooks/useAdminData'
 import ProductForm from '../components/ProductForm'
 import LoadingSpinner from '../components/LoadingSpinner'
 import AdminLogin from '../components/AdminLogin'
 import { AdminStats, AdminProductsGrid, AdminOrdersTable, DiscountCodesManager, DeliverySettings, InstallationChargesSettings, TimingSurchargesSettings } from '../components/admin'
+import InquiriesManager from '../components/admin/InquiriesManager'
 import Button from '../components/ui/Button'
 import { supabase } from '../lib/supabase'
 
@@ -41,7 +42,7 @@ const AdminPage: React.FC = () => {
 
   const [showForm, setShowForm] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
-  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'discounts' | 'settings' | 'events'>('products')
+  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'discounts' | 'settings' | 'inquiries'>('products')
   const [activeSettingsTab, setActiveSettingsTab] = useState<'delivery' | 'installation' | 'timing'>('delivery')
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
 
@@ -245,6 +246,17 @@ const AdminPage: React.FC = () => {
           </button>
 
           <button
+            onClick={() => setActiveTab('inquiries')}
+            className={`px-3 sm:px-6 py-3 sm:py-4 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
+              activeTab === 'inquiries'
+                ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-xl scale-105'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            <MessageSquare className="w-4 h-4 mr-2" />
+            Inquiries
+          </button>
+          <button
             onClick={() => setActiveTab('settings')}
             className={`px-3 sm:px-6 py-3 sm:py-4 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
               activeTab === 'settings'
@@ -302,7 +314,11 @@ const AdminPage: React.FC = () => {
           </div>
         )}
 
-
+        {activeTab === 'inquiries' && (
+          <div>
+            <InquiriesManager />
+          </div>
+        )}
 
         {activeTab === 'settings' && (
           <div>

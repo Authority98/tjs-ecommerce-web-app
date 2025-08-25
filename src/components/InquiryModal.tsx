@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { X, Send, CheckCircle, Mail, Phone, MapPin, User } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface ServiceOption {
   name: string;
@@ -54,89 +56,160 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ isOpen, onClose, serviceNam
     }
   };
 
-  const calculateTotalPrice = () => {
-    const total = selectedOptions.reduce((sum, option) => {
+  const calculateTotalPriceNumeric = () => {
+    return selectedOptions.reduce((sum, option) => {
       if (typeof option.price === 'number') {
         return sum + option.price;
       }
       return sum; // 'request' prices are not added to total
     }, 0);
+  };
+
+  const calculateTotalPrice = () => {
+    const total = calculateTotalPriceNumeric();
     return total > 0 ? `$${total.toLocaleString()}` : 'Price upon request';
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here (e.g., send data to backend)
-    console.log({
-      name,
-      email,
-      phone,
-      address,
-      serviceName,
-      selectedOptions,
-      totalPrice: calculateTotalPrice()
-    });
-    onClose();
+    setIsSubmitting(true);
+
+    try {
+      const inquiryData = {
+        name,
+        email,
+        phone,
+        address,
+        service_name: serviceName,
+        selected_options: JSON.stringify(selectedOptions),
+        total_price: calculateTotalPriceNumeric()
+      };
+
+      console.log('Submitting inquiry data:', inquiryData);
+
+      const { data, error } = await supabase
+        .from('inquiries')
+        .insert([inquiryData])
+        .select();
+
+      if (error) {
+        console.error('Error submitting inquiry:', error);
+        console.error('Error details:', error.message, error.details, error.hint);
+        alert(`There was an error submitting your inquiry: ${error.message}. Please try again.`);
+      } else {
+        console.log('Inquiry submitted successfully:', data);
+        setIsSubmitted(true);
+        setTimeout(() => {
+          onClose();
+          // Reset form state
+          setName('');
+          setEmail('');
+          setPhone('');
+          setAddress('');
+          setSelectedOptions([]);
+          setIsSubmitted(false);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error submitting inquiry:', error);
+      alert('There was an error submitting your inquiry. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
+  if (isSubmitted) {
+    return (
+      <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex justify-center items-center p-4 z-[9999]">
+        <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm transform animate-pulse">
+          <div className="text-center">
+            <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
+            <h3 className="text-xl font-bold text-gray-800 mb-2 font-dosis">Thank You!</h3>
+            <p className="text-sm text-gray-600 font-manrope">Your inquiry has been submitted successfully. We'll get back to you soon!</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center p-4 z-50 animate-fade-in">
-      <div className="relative bg-gradient-to-br from-gray-800 to-black text-white rounded-2xl shadow-2xl p-8 w-full max-w-lg transform scale-95 animate-scale-in border border-rose-500">
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex justify-center items-center p-4 z-[9999]">
+      <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-lg transform transition-all duration-300 border border-gray-100">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors duration-200"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 hover:bg-gray-100 rounded-full"
           aria-label="Close modal"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X className="h-5 w-5" />
         </button>
 
-        <h2 className="text-3xl font-bold text-rose-400 mb-6 text-center font-dosis">Inquire About {serviceName}</h2>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2 font-dosis">Get a Quote</h2>
+          <p className="text-sm text-gray-600 font-manrope">Tell us about your <span className="text-rose-500 font-semibold">{serviceName}</span> requirements</p>
+        </div>
 
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-gray-700 text-xs font-semibold mb-2 flex items-center">
+              <User className="w-3 h-3 mr-1 text-rose-500" />
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              placeholder="Enter your full name"
+              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200 font-manrope"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="name" className="block text-gray-300 text-sm font-semibold mb-2">Name:</label>
-              <input
-                type="text"
-                id="name"
-                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-gray-300 text-sm font-semibold mb-2">Email:</label>
+              <label htmlFor="email" className="block text-gray-700 text-xs font-semibold mb-2 flex items-center">
+                <Mail className="w-3 h-3 mr-1 text-rose-500" />
+                Email Address
+              </label>
               <input
                 type="email"
                 id="email"
-                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
+                placeholder="your.email@example.com"
+                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200 font-manrope"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
+            <div>
+              <label htmlFor="phone" className="block text-gray-700 text-xs font-semibold mb-2 flex items-center">
+                <Phone className="w-3 h-3 mr-1 text-rose-500" />
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                placeholder="+65 1234 5678"
+                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200 font-manrope"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+            </div>
           </div>
           <div>
-            <label htmlFor="phone" className="block text-gray-300 text-sm font-semibold mb-2">Phone:</label>
-            <input
-              type="tel"
-              id="phone"
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="address" className="block text-gray-300 text-sm font-semibold mb-2">Address:</label>
+            <label htmlFor="address" className="block text-gray-700 text-xs font-semibold mb-2 flex items-center">
+              <MapPin className="w-3 h-3 mr-1 text-rose-500" />
+              Event Address
+            </label>
             <textarea
               id="address"
-              rows={3}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200 resize-y"
+              rows={2}
+              placeholder="Enter the full address where the event will take place"
+              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200 resize-none font-manrope"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               required
@@ -145,25 +218,24 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ isOpen, onClose, serviceNam
 
           {availableOptions.length > 0 && (
             <div>
-              <label className="block text-gray-300 text-sm font-semibold mb-3">Select Options:</label>
+              <label className="block text-gray-700 text-xs font-semibold mb-3">Service Options:</label>
               <div className="space-y-2">
                 {availableOptions.map((option, index) => (
-                  <div key={index} className="flex items-center bg-gray-700 p-3 rounded-lg border border-gray-600">
+                  <div key={index} className="flex items-center bg-white border border-gray-100 p-3 rounded-xl hover:border-rose-200 transition-all duration-200">
                     <input
                       type="checkbox"
                       id={`option-${index}`}
                       name="serviceOption"
                       checked={selectedOptions.some(item => item.name === option.name)}
                       onChange={(e) => handleOptionChange(option, e.target.checked)}
-                      className="form-checkbox h-5 w-5 text-rose-500 bg-gray-900 border-gray-500 rounded focus:ring-rose-500 transition-colors duration-200"
+                      className="form-checkbox h-5 w-5 text-rose-500 bg-white border-gray-300 rounded focus:ring-rose-500 transition-colors duration-200"
                     />
-                    <label htmlFor={`option-${index}`} className="ml-3 text-gray-200 flex-grow cursor-pointer">
-                      {option.name}
-
-                      <span className="block text-sm text-gray-400">
+                    <label htmlFor={`option-${index}`} className="ml-3 text-gray-800 flex-grow cursor-pointer font-manrope">
+                      <span className="text-sm font-semibold">{option.name}</span>
+                      <span className="block text-xs text-gray-500 mt-1">
                         {typeof option.price === 'number' ? `$${option.price.toLocaleString()}` : 'Price upon request'}
                       </span>
-                       </label>
+                    </label>
                   </div>
                 ))}
               </div>
@@ -172,19 +244,30 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ isOpen, onClose, serviceNam
 
 
 
-          <div className="flex justify-end space-x-4 mt-6">
+          <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg text-white font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+              className="px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm text-gray-700 font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 font-manrope"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-3 bg-rose-600 hover:bg-rose-700 rounded-lg text-white font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50"
+              disabled={isSubmitting}
+              className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 rounded-xl text-sm text-white font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center font-manrope"
             >
-              Submit Inquiry
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-2"></div>
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <Send className="w-3 h-3 mr-2" />
+                  Submit Inquiry
+                </>
+              )}
             </button>
           </div>
         </form>
