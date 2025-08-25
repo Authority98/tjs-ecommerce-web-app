@@ -102,6 +102,7 @@ const CustomerDetailsForm: React.FC<CustomerDetailsFormProps> = ({
           <div className="space-y-4">
             {/* Zone Selection */}
             <ZoneSelector
+              deliveryConfig={deliveryConfig}
               selectedZone={customerDetails.deliveryZone}
               selectedArea={customerDetails.deliveryArea}
               onZoneChange={handleZoneChange}

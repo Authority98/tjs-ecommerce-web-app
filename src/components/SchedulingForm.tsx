@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
-import { Calendar, Clock, Zap, Check, Palette } from 'lucide-react'
-import { RENTAL_PERIODS, DECOR_LEVELS } from '../types'
+import React, { useState, useEffect } from 'react'
+import { Calendar, Clock, Sparkles, TreePine, Wrench, Trash2, Palette, Check } from 'lucide-react'
+import { RENTAL_PERIODS, TimingSurcharge } from '../types'
 import { showSuccessToast } from '../utils/toast'
+import { supabase } from '../lib/supabase'
 import Tooltip from './ui/Tooltip'
 import DecorationLevelSelection from './DecorationLevelSelection'
 
@@ -20,11 +21,13 @@ interface SchedulingFormProps {
   setRentalPeriod?: (period: number) => void
   decorationLevel?: number
   setDecorationLevel?: (level: number) => void
-  eventSize?: 'small' | 'medium' | 'large'
-  setEventSize?: (size: 'small' | 'medium' | 'large') => void
+
+  menPower: number
+  setMenPower: (power: number) => void
   onNext: () => void
   onBack: () => void
   isTreeOrder: boolean
+  isEventService?: boolean
   installationSelected: boolean
   setInstallationSelected: (selected: boolean) => void
   teardownSelected: boolean
@@ -46,16 +49,40 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   setRentalPeriod,
   decorationLevel = 50,
   setDecorationLevel,
-  eventSize,
-  setEventSize,
+
+  menPower,
+  setMenPower,
   onNext,
   onBack,
   isTreeOrder,
+  isEventService = false,
   installationSelected,
   setInstallationSelected,
   teardownSelected,
   setTeardownSelected
 }) => {
+  const [timingSurcharges, setTimingSurcharges] = useState<TimingSurcharge[]>([])
+
+  // Load timing surcharges on component mount
+  useEffect(() => {
+    loadTimingSurcharges()
+  }, [])
+
+  const loadTimingSurcharges = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('timing_surcharges')
+        .select('*')
+        .eq('is_active', true)
+        .order('surcharge_type', { ascending: true })
+        .order('surcharge_amount', { ascending: true })
+
+      if (error) throw error
+      setTimingSurcharges(data || [])
+    } catch (error) {
+      console.error('Error loading timing surcharges:', error)
+    }
+  }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onNext()
@@ -81,20 +108,29 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
     return day === 0 || day === 6 // Sunday or Saturday
   }
 
-  // Helper function to get timing surcharge
+  // Helper function to get timing surcharge (removed - only day-based surcharges now)
   const getTimingSurcharge = (time: string) => {
-    if (!time) return 0
-    const hour = parseInt(time.split(':')[0])
-    
-    if (hour >= 22) return 150 // Late-night (after 10pm)
-    if (hour >= 18) return 80  // Evening (6pm-10pm)
-    return 0
+    return 0 // No time-based surcharges anymore
   }
 
   // Helper function to get day type surcharge
   const getDayTypeSurcharge = (dateString: string) => {
     if (!dateString) return 0
-    // For now, just check weekend. Public holiday logic would need a separate API/database
+    
+    // Find matching day-based surcharge from database
+    const dayBasedSurcharges = timingSurcharges.filter(s => s.surcharge_type === 'day_based')
+    
+    for (const surcharge of dayBasedSurcharges) {
+      if (surcharge.day_types && surcharge.day_types.includes('weekend') && isWeekend(dateString)) {
+        return surcharge.surcharge_amount
+      }
+      // Add public holiday logic here when implemented
+      if (surcharge.day_types && surcharge.day_types.includes('public_holiday')) {
+        // TODO: Implement public holiday detection
+      }
+    }
+    
+    // Fallback to hardcoded values if no database surcharges found
     return isWeekend(dateString) ? 100 : 0
   }
 
@@ -103,55 +139,35 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
     return getTimingSurcharge(time) + getDayTypeSurcharge(dateString)
   }
 
-  // Auto-enable installation service when installation date and time are selected
+  // Auto-enable installation service when installation date is selected
   useEffect(() => {
-    if (installationDate && installationTime && !installationSelected) {
+    if (installationDate && !installationSelected) {
       setInstallationSelected(true)
-      const timeSurcharge = getTimingSurcharge(installationTime)
       const daySurcharge = getDayTypeSurcharge(installationDate)
-      const totalSurcharge = timeSurcharge + daySurcharge
       
       let message = 'Installation service enabled'
-      if (totalSurcharge > 0) {
-        const charges = []
-        if (timeSurcharge > 0) {
-          const timeType = installationTime >= '18:00' ? (installationTime >= '22:00' ? 'late-night' : 'evening') : 'standard'
-          charges.push(`${timeType} time +$${timeSurcharge}`)
-        }
-        if (daySurcharge > 0) {
-          const dayType = isWeekend(installationDate) ? 'weekend' : 'holiday'
-          charges.push(`${dayType} +$${daySurcharge}`)
-        }
-        message += ` with ${charges.join(' and ')} (Total: +$${totalSurcharge})`
+      if (daySurcharge > 0) {
+        const dayType = isWeekend(installationDate) ? 'weekend' : 'holiday'
+        message += ` with ${dayType} surcharge (+$${daySurcharge})`
       }
       showSuccessToast(message)
     }
-  }, [installationDate, installationTime])
+  }, [installationDate])
 
-  // Auto-enable teardown service when teardown date and time are selected (for tree orders)
+  // Auto-enable teardown service when teardown date is selected (for tree orders and event services)
   useEffect(() => {
-    if (isTreeOrder && teardownDate && teardownTime && !teardownSelected) {
+    if ((isTreeOrder || isEventService) && teardownDate && !teardownSelected) {
       setTeardownSelected(true)
-      const timeSurcharge = getTimingSurcharge(teardownTime)
       const daySurcharge = getDayTypeSurcharge(teardownDate)
-      const totalSurcharge = timeSurcharge + daySurcharge
       
       let message = 'Teardown service enabled'
-      if (totalSurcharge > 0) {
-        const charges = []
-        if (timeSurcharge > 0) {
-          const timeType = teardownTime >= '18:00' ? (teardownTime >= '22:00' ? 'late-night' : 'evening') : 'standard'
-          charges.push(`${timeType} time +$${timeSurcharge}`)
-        }
-        if (daySurcharge > 0) {
-          const dayType = isWeekend(teardownDate) ? 'weekend' : 'holiday'
-          charges.push(`${dayType} +$${daySurcharge}`)
-        }
-        message += ` with ${charges.join(' and ')} (Total: +$${totalSurcharge})`
+      if (daySurcharge > 0) {
+        const dayType = isWeekend(teardownDate) ? 'weekend' : 'holiday'
+        message += ` with ${dayType} surcharge (+$${daySurcharge})`
       }
       showSuccessToast(message)
     }
-  }, [teardownDate, teardownTime, isTreeOrder])
+  }, [teardownDate, isTreeOrder, isEventService])
 
   return (
     <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15 rounded-3xl shadow-xl p-8 border border-white/20 dark:border-gray-700/30 relative">
@@ -163,7 +179,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
         <div className="w-12 h-12 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 rounded-full blur-lg z-0 opacity-40"></div>
       </div>
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">
-        {isTreeOrder ? 'Installation & Service Scheduling' : 'Delivery Scheduling'}
+        {isTreeOrder ? 'Installation & Service Scheduling' : isEventService ? 'Event Service Scheduling' : 'Delivery Scheduling'}
       </h2>
       
       {/* Header separator */}
@@ -185,11 +201,9 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
                   decorLevel: decorationLevel,
                   height: '',
                   width: '',
-                  type: '',
-                  eventSize: eventSize
+                  type: ''
                 }}
                 onDecorLevelSelect={setDecorationLevel}
-                onEventSizeSelect={setEventSize}
               />
           </div>
         )}
@@ -246,44 +260,44 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4" style={{color: '#F59E0B'}} />
-                <span>{isTreeOrder ? 'Installation Date & Time' : 'Delivery Date & Time'} {isTreeOrder && '*'}</span>
-                <Tooltip content={isTreeOrder ? "Select your preferred date and time for tree installation and decoration" : "Select your preferred delivery date and time"} />
+                <span>{isTreeOrder ? 'Installation Date' : isEventService ? 'Event Date' : 'Delivery Date'} {(isTreeOrder || isEventService) && '*'}</span>
+                <Tooltip content={isTreeOrder ? "Select your preferred date for tree installation and decoration" : isEventService ? "Select your preferred date for the event service" : "Select your preferred delivery date"} />
               </div>
             </label>
             <input
-              type="datetime-local"
-              id="installationDateTime"
-              value={installationDate && installationTime ? `${installationDate}T${installationTime}` : ''}
+              type="date"
+              id="installationDate"
+              value={installationDate}
               onChange={(e) => {
-                const [date, time] = e.target.value.split('T')
-                setInstallationDate(date || '')
-                setInstallationTime(time || '')
+                setInstallationDate(e.target.value)
+                // Clear time when date changes since we're only using dates now
+                setInstallationTime('')
               }}
-              min={`${today}T00:00`}
+              min={today}
               className="w-full p-2 border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm"
-              required={isTreeOrder}
+              required={isTreeOrder || isEventService}
             />
           </div>
 
-          {isTreeOrder && (
+          {(isTreeOrder || isEventService) && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-4 w-4" style={{color: '#F59E0B'}} />
-                  <span>Teardown Date & Time *</span>
-                  <Tooltip content="Schedule when you'd like us to remove the tree and decorations" />
+                  <span>Teardown Date *</span>
+                  <Tooltip content={isTreeOrder ? "Select the date when you'd like us to remove the tree and decorations" : "Select the date when you'd like us to clean up after the event"} />
                 </div>
               </label>
               <input
-                 type="datetime-local"
-                 id="teardownDateTime"
-                 value={teardownDate && teardownTime ? `${teardownDate}T${teardownTime}` : ''}
+                 type="date"
+                 id="teardownDate"
+                 value={teardownDate}
                  onChange={(e) => {
-                   const [date, time] = e.target.value.split('T')
-                   setTeardownDate(date || '')
-                   setTeardownTime(time || '')
+                   setTeardownDate(e.target.value)
+                   // Clear time when date changes since we're only using dates now
+                   setTeardownTime('')
                  }}
-                 min={getMinTeardownDate() ? `${getMinTeardownDate()}T00:00` : ''}
+                 min={getMinTeardownDate()}
                  className="w-full p-2 border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm"
                  required
                />
@@ -291,7 +305,30 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
            )}
          </div>
 
-
+        {/* Men Power Selection - Only for tree orders */}
+        {isTreeOrder && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <div className="flex items-center space-x-2">
+                <Wrench className="h-4 w-4" style={{color: '#F59E0B'}} />
+                <span>Men Power *</span>
+                <Tooltip content="Select the number of workers needed for your tree installation" />
+              </div>
+            </label>
+            <select
+              value={menPower}
+              onChange={(e) => setMenPower(Number(e.target.value))}
+              className="w-full p-2 border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm"
+              required
+            >
+              {Array.from({ length: 18 }, (_, i) => i + 3).map((num) => (
+                <option key={num} value={num}>
+                  {num} {num === 1 ? 'Worker' : 'Workers'}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="flex space-x-4 pt-4">
           <button

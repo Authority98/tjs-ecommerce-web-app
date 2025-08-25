@@ -9,6 +9,8 @@ import ThankYouPage from './pages/ThankYouPage'
 import AdminPage from './pages/AdminPage'
 import CategorySelection from './pages/CategorySelection'
 import GiftCardPage from './pages/GiftCardPage'
+import EventsPage from './pages/EventsPage'
+import EventServicesPage from './pages/EventServicesPage'
 import Header from './components/Header'
 import Footer from './components/Footer'
 
@@ -26,6 +28,8 @@ function App() {
               <Route path="/tree-customization/:productId" element={<TreeCustomization />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/gift-cards" element={<GiftCardPage />} />
+              <Route path="/events" element={<EventsPage />} />
+              <Route path="/events/:categoryId" element={<EventServicesPage />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />

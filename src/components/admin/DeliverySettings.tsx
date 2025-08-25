@@ -52,25 +52,49 @@ const DeliverySettings: React.FC = () => {
       if (data && data.length > 0 && !error) {
         // Convert snake_case to camelCase for the frontend
         const configData = data[0]
+        let zones = configData.zones || []
+        
+        // Ensure Northeast zone is always included
+        const hasNortheast = zones.some((zone: any) => zone.id === 'northeast')
+        if (!hasNortheast) {
+          zones = [...zones, { id: 'northeast', name: 'Northeast', fee: 45 }]
+          console.log('Added missing Northeast zone to loaded configuration')
+        }
+        
         const convertedData = {
           ...configData,
           id: configData.id, // Preserve the ID for updates
           model: 'zone', // Force zone-based model
-          addOns: configData.add_ons,
+          addOns: configData.add_ons || DEFAULT_DELIVERY_ADDONS,
           isActive: configData.is_active,
-          zoneBasedConfig: configData.zones ? { zones: configData.zones } : undefined,
+          zoneBasedConfig: { zones },
           distanceBasedConfig: configData.distance_config
         }
         setConfig(convertedData)
-      } else if (error) {
-        console.error('Error loading delivery config:', error)
-        console.log('Using default configuration')
+        console.log('Delivery config loaded with zones:', zones.map((z: any) => z.name))
       } else {
-        console.log('No active delivery configuration found, using default configuration')
+        if (error) {
+          console.error('Error loading delivery config:', error)
+        }
+        console.log('Using default configuration with all zones including Northeast')
+        // Use default configuration when no data is found or there's an error
+        setConfig({
+          model: 'zone',
+          zoneBasedConfig: { zones: DEFAULT_DELIVERY_ZONES },
+          addOns: DEFAULT_DELIVERY_ADDONS,
+          isActive: true
+        })
       }
     } catch (error) {
       console.error('Error loading delivery config:', error)
-      console.log('Using default configuration')
+      console.log('Using default configuration with all zones including Northeast')
+      // Use default configuration when there's an exception
+      setConfig({
+        model: 'zone',
+        zoneBasedConfig: { zones: DEFAULT_DELIVERY_ZONES },
+        addOns: DEFAULT_DELIVERY_ADDONS,
+        isActive: true
+      })
     } finally {
       setLoading(false)
     }
@@ -87,29 +111,54 @@ const DeliverySettings: React.FC = () => {
       }
       
       // Convert camelCase to snake_case for the database
+      let zones = config.zoneBasedConfig?.zones || []
+      
+      // Ensure Northeast zone is always included when saving
+      const hasNortheast = zones.some(zone => zone.id === 'northeast')
+      if (!hasNortheast) {
+        zones = [...zones, { id: 'northeast', name: 'Northeast', fee: 45 }]
+        console.log('Added Northeast zone before saving to database')
+      }
+      
       const dbConfig: any = {
         model: 'zone',
         add_ons: config.addOns,
         is_active: config.isActive,
-        zones: config.zoneBasedConfig?.zones || []
+        zones: zones
       }
       
-      // Include ID if updating existing config
+      let result
       if (config.id) {
-        dbConfig.id = config.id
+        // Update existing configuration
+        result = await supabase
+          .from('delivery_configurations')
+          .update(dbConfig)
+          .eq('id', config.id)
+      } else {
+        // Insert new configuration
+        result = await supabase
+          .from('delivery_configurations')
+          .insert([dbConfig])
       }
-      
-      const { error } = await supabase
-        .from('delivery_configurations')
-        .upsert([dbConfig])
 
-      if (error) throw error
+      if (result.error) {
+        console.error('Database error:', result.error)
+        throw result.error
+      }
       
       // Show success message
       alert('Delivery configuration saved successfully!')
+      
+      // Reload the configuration to get the latest data
+      await loadDeliveryConfig()
+      
+      // Dispatch custom event to notify other components of the update
+      console.log('🚀 Dispatching deliveryConfigUpdated event from admin')
+      window.dispatchEvent(new CustomEvent('deliveryConfigUpdated'))
+      console.log('✅ deliveryConfigUpdated event dispatched successfully')
     } catch (error) {
       console.error('Error saving config:', error)
-      alert('Error saving configuration. Please try again.')
+      alert(`Error saving configuration: ${error.message || 'Please try again.'}`)
     } finally {
       setSaving(false)
     }

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import { Elements } from '@stripe/react-stripe-js'
 import { supabase } from '../lib/supabase'
 import { stripe } from '../lib/stripe'
-import { Product, OrderSummary, CustomerDetails, RENTAL_PERIODS, DeliveryConfiguration, DEFAULT_DELIVERY_ZONES, DEFAULT_DELIVERY_ADDONS } from '../types'
+import { Product, OrderSummary, CustomerDetails, RENTAL_PERIODS, DeliveryConfiguration, DEFAULT_DELIVERY_ZONES, DEFAULT_DELIVERY_ADDONS, TimingSurcharge } from '../types'
 import { calculateDeliveryFee } from '../utils/deliveryCalculator'
 import { showErrorToast, showSuccessToast, showLoadingToast } from '../utils/toast'
 import OrderSummaryComponent from '../components/OrderSummary'
@@ -16,6 +16,7 @@ import './CheckoutPage.css'
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const location = useLocation()
   const [currentStep, setCurrentStep] = useState(1)
   const [orderData, setOrderData] = useState<OrderSummary | null>(null)
   const [loading, setLoading] = useState(true)
@@ -39,9 +40,10 @@ const CheckoutPage: React.FC = () => {
   const [rushOrder, setRushOrder] = useState(false)
   const [rentalPeriod, setRentalPeriod] = useState(45)
   const [decorationLevel, setDecorationLevel] = useState(50)
-  const [eventSize, setEventSize] = useState<'small' | 'medium' | 'large' | undefined>(undefined)
+
   const [installationSelected, setInstallationSelected] = useState(false)
   const [teardownSelected, setTeardownSelected] = useState(false)
+  const [menPower, setMenPower] = useState(3)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
   const [appliedDiscount, setAppliedDiscount] = useState<{
     id: string
@@ -53,15 +55,15 @@ const CheckoutPage: React.FC = () => {
   const [deliveryConfig, setDeliveryConfig] = useState<DeliveryConfiguration | null>(null)
   const [deliveryFee, setDeliveryFee] = useState(20) // Default fallback
   const [deliveryError, setDeliveryError] = useState<string | null>(null)
-  const [selectedDeliveryAddOns, setSelectedDeliveryAddOns] = useState<string[]>([])
+  const [selectedDeliveryAddOns, setSelectedDeliveryAddOns] = useState<string[]>([])  
+  const [timingSurcharges, setTimingSurcharges] = useState<TimingSurcharge[]>([])
 
   useEffect(() => {
     initializeCheckout()
   }, [])
 
   // Load delivery configuration
-  useEffect(() => {
-    const loadDeliveryConfig = async () => {
+  const loadDeliveryConfig = async () => {
     try {
       const { data, error } = await supabase
         .from('delivery_configurations')
@@ -82,6 +84,7 @@ const CheckoutPage: React.FC = () => {
         }
         
         setDeliveryConfig(convertedConfig)
+        console.log('Delivery config loaded:', convertedConfig)
       } else {
         // Use default configuration if none found in database
         const defaultConfig: DeliveryConfiguration = {
@@ -94,6 +97,7 @@ const CheckoutPage: React.FC = () => {
         }
 
         setDeliveryConfig(defaultConfig)
+        console.log('Using default delivery config with Northeast zone')
       }
     } catch (error) {
       // Use default configuration on error
@@ -110,8 +114,45 @@ const CheckoutPage: React.FC = () => {
     }
   }
 
+  useEffect(() => {
     loadDeliveryConfig()
+    loadTimingSurcharges()
+
+    // Listen for delivery config updates from admin area
+    const handleDeliveryConfigUpdate = () => {
+      console.log('🔄 Delivery config update detected in CheckoutPage, reloading...')
+      loadDeliveryConfig()
+      console.log('✅ Delivery config reload completed in CheckoutPage')
+    }
+
+    // Add event listener for delivery config updates
+    console.log('📡 Setting up deliveryConfigUpdated event listener in CheckoutPage')
+    window.addEventListener('deliveryConfigUpdated', handleDeliveryConfigUpdate)
+
+    // Cleanup event listener
+    return () => {
+      console.log('🧹 Cleaning up deliveryConfigUpdated event listener in CheckoutPage')
+      window.removeEventListener('deliveryConfigUpdated', handleDeliveryConfigUpdate)
+    }
   }, [])
+
+  // Load timing surcharges configuration
+  const loadTimingSurcharges = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('timing_surcharges')
+        .select('*')
+        .eq('is_active', true)
+        .order('surcharge_type', { ascending: true })
+        .order('surcharge_amount', { ascending: true })
+
+      if (error) throw error
+      setTimingSurcharges(data || [])
+    } catch (error) {
+      console.error('Error loading timing surcharges:', error)
+      // Keep default hardcoded values as fallback
+    }
+  }
 
   // Update delivery fee when customer details change (from ZoneSelector)
   useEffect(() => {
@@ -142,6 +183,18 @@ const CheckoutPage: React.FC = () => {
 
   const initializeCheckout = async () => {
     try {
+      // Check if coming from event service selection
+      if (location.state?.eventService) {
+        const eventService = location.state.eventService
+        setOrderData({
+          type: 'event',
+          eventService: eventService,
+          totalAmount: eventService.priceType === 'starting_from' || eventService.priceType === 'fixed' ? eventService.price : 0
+        })
+        setLoading(false)
+        return
+      }
+
       // Check if coming directly with productId (for decorations/ribbons)
       const productId = searchParams.get('productId')
       if (productId) {
@@ -246,20 +299,29 @@ const CheckoutPage: React.FC = () => {
     return day === 0 || day === 6 // Sunday or Saturday
   }
 
-  // Helper function to get timing surcharge
+  // Helper function to get timing surcharge (removed - only day-based surcharges now)
   const getTimingSurcharge = (time: string) => {
-    if (!time) return 0
-    const hour = parseInt(time.split(':')[0])
-    
-    if (hour >= 22) return 150 // Late-night (after 10pm)
-    if (hour >= 18) return 80  // Evening (6pm-10pm)
-    return 0
+    return 0 // No time-based surcharges anymore
   }
 
   // Helper function to get day type surcharge
   const getDayTypeSurcharge = (dateString: string) => {
     if (!dateString) return 0
-    // For now, just check weekend. Public holiday logic would need a separate API/database
+    
+    // Find matching day-based surcharge from database
+    const dayBasedSurcharges = timingSurcharges.filter(s => s.surcharge_type === 'day_based')
+    
+    for (const surcharge of dayBasedSurcharges) {
+      if (surcharge.day_types && surcharge.day_types.includes('weekend') && isWeekend(dateString)) {
+        return surcharge.surcharge_amount
+      }
+      // Add public holiday logic here when implemented
+      if (surcharge.day_types && surcharge.day_types.includes('public_holiday')) {
+        // TODO: Implement public holiday detection
+      }
+    }
+    
+    // Fallback to hardcoded values if no database surcharges found
     return isWeekend(dateString) ? 100 : 0
   }
 
@@ -322,48 +384,36 @@ const CheckoutPage: React.FC = () => {
     
     // Add installation charges if selected
     if (installationSelected) {
-      const timingSurcharge = calculateTotalSurcharge(installationDate, installationTime)
+      const daySurcharge = installationDate ? getDayTypeSurcharge(installationDate) : 0
       
       // Build charge name with surcharge reasons
-      let chargeName = 'Installation'
-      if (timingSurcharge > 0 && installationDate && installationTime) {
-        const reasons = []
-        const timeType = installationTime >= '18:00' ? (installationTime >= '22:00' ? 'Late-night' : 'Evening') : null
-        if (timeType) reasons.push(timeType)
-        
-        const isWeekendDay = installationDate && isWeekend(installationDate)
-        if (isWeekendDay) reasons.push('Weekend')
-        
-        if (reasons.length > 0) {
-          chargeName += ` (${reasons.join(', ')})`
+      let chargeName = 'Assembling'
+      if (daySurcharge > 0 && installationDate) {
+        const isWeekendDay = isWeekend(installationDate)
+        if (isWeekendDay) {
+          chargeName += ' (Weekend)'
         }
       }
       
       // Always show installation service, even if no surcharge applies
-      charges.push({ name: chargeName, amount: timingSurcharge })
+      charges.push({ name: chargeName, amount: daySurcharge })
     }
     
     // Add teardown charges if selected
     if (teardownSelected) {
-      const timingSurcharge = calculateTotalSurcharge(teardownDate, teardownTime)
+      const daySurcharge = teardownDate ? getDayTypeSurcharge(teardownDate) : 0
       
       // Build charge name with surcharge reasons
-      let chargeName = 'Teardown'
-      if (timingSurcharge > 0 && teardownDate && teardownTime) {
-        const reasons = []
-        const timeType = teardownTime >= '18:00' ? (teardownTime >= '22:00' ? 'Late-night' : 'Evening') : null
-        if (timeType) reasons.push(timeType)
-        
-        const isWeekendDay = teardownDate && isWeekend(teardownDate)
-        if (isWeekendDay) reasons.push('Weekend')
-        
-        if (reasons.length > 0) {
-          chargeName += ` (${reasons.join(', ')})`
+      let chargeName = 'Dismentaling'
+      if (daySurcharge > 0 && teardownDate) {
+        const isWeekendDay = isWeekend(teardownDate)
+        if (isWeekendDay) {
+          chargeName += ' (Weekend)'
         }
       }
       
       // Always show teardown service, even if no surcharge applies
-      charges.push({ name: chargeName, amount: timingSurcharge })
+      charges.push({ name: chargeName, amount: daySurcharge })
     }
     
     // Only add delivery charge if there's no delivery error
@@ -431,9 +481,10 @@ const CheckoutPage: React.FC = () => {
       const orderNumber = generateOrderNumber()
       console.log('Generated order number:', orderNumber)
       
-      // Define isGiftCard within function scope
+      // Define order types within function scope
       const isGiftCard = orderData?.type === 'giftcard'
-      console.log('Order type check:', { orderType: orderData.type, isGiftCard })
+      const isEventService = orderData?.type === 'event'
+      console.log('Order type check:', { orderType: orderData.type, isGiftCard, isEventService })
       
       let giftCardId = null;
       
@@ -472,19 +523,31 @@ const CheckoutPage: React.FC = () => {
         delivery_zone: customerDetails.deliveryZone || null,
         delivery_area: customerDetails.deliveryArea || null,
         delivery_fee: customerDetails.deliveryFee || 0,
-        order_type: isGiftCard ? 'giftcard' : 'product',
+        order_type: isGiftCard ? 'giftcard' : isEventService ? 'event' : 'product',
         payment_intent_id: paymentIntentId,
         ...(isGiftCard ? {
           gift_card_id: giftCardId,
-          product_id: null
+          product_id: null,
+          event_service_id: null
+        } : isEventService ? {
+          event_service_id: orderData.eventService?.id,
+          product_id: null,
+          gift_card_id: null,
+          installation_date: installationDate || null,
+          installation_time: installationTime || null,
+          teardown_date: teardownDate || null,
+          teardown_time: teardownTime || null,
+          rush_order: rushOrder
         } : {
           product_id: orderData.product?.id,
           gift_card_id: null,
+          event_service_id: null,
           tree_height: orderData.treeOptions?.height,
           tree_width: orderData.treeOptions?.width,
           tree_type: orderData.treeOptions?.type,
           rental_period: orderData.treeOptions ? rentalPeriod : null,
           decor_level: decorationLevel,
+          men_power: !!orderData.treeOptions ? menPower : null,
           installation_date: installationDate || null,
           installation_time: installationTime || null,
           teardown_date: teardownDate || null,
@@ -492,8 +555,8 @@ const CheckoutPage: React.FC = () => {
           rush_order: rushOrder
         }),
         total_amount: calculateFinalTotal(),
-        installation_charges: installationSelected ? calculateTotalSurcharge(installationDate, installationTime) : 0,
-        teardown_charges: teardownSelected ? calculateTotalSurcharge(teardownDate, teardownTime) : 0,
+        installation_charges: installationSelected ? (installationDate ? getDayTypeSurcharge(installationDate) : 0) : 0,
+        teardown_charges: teardownSelected ? (teardownDate ? getDayTypeSurcharge(teardownDate) : 0) : 0,
         selected_delivery_addons: deliveryConfig && selectedDeliveryAddOns.length > 0 
           ? selectedDeliveryAddOns.map(addOnId => {
               const addOn = deliveryConfig.addOns.find(a => a.id === addOnId)
@@ -530,8 +593,8 @@ const CheckoutPage: React.FC = () => {
       console.log('Session storage cleared')
       
       // Navigate to thank you page with order number
-      const orderType = orderData.giftCard ? 'giftcard' : 'product'
-      const category = orderData.product?.category || ''
+      const orderType = orderData.giftCard ? 'giftcard' : isEventService ? 'event' : 'product'
+      const category = orderData.product?.category || orderData.eventService?.category || ''
       const thankYouUrl = `/thank-you?orderNumber=${orderNumber}&total=${calculateFinalTotal()}&orderType=${orderType}&category=${category}`
       console.log('Navigating to thank you page:', thankYouUrl)
       navigate(thankYouUrl)
@@ -547,6 +610,7 @@ const CheckoutPage: React.FC = () => {
 
   // Define steps based on order type - skip scheduling for gift cards and decoration/ribbon/centrepiece products
   const isGiftCard = orderData?.type === 'giftcard'
+  const isEventService = orderData?.type === 'event'
   const isDecorationOrRibbon = orderData?.product?.category === 'decorations' || orderData?.product?.category === 'ribbons'
   const skipScheduling = isGiftCard || isDecorationOrRibbon
   
@@ -713,11 +777,13 @@ const CheckoutPage: React.FC = () => {
                     setRentalPeriod={setRentalPeriod}
                     decorationLevel={decorationLevel}
                     setDecorationLevel={setDecorationLevel}
-                    eventSize={eventSize}
-                    setEventSize={setEventSize}
+
+                    menPower={menPower}
+                    setMenPower={setMenPower}
                     onNext={() => setCurrentStep(2)}
                     onBack={() => setCurrentStep(1)}
                     isTreeOrder={!!orderData.treeOptions}
+                    isEventService={isEventService}
                     installationSelected={installationSelected}
                     setInstallationSelected={setInstallationSelected}
                     teardownSelected={teardownSelected}
@@ -778,9 +844,10 @@ const CheckoutPage: React.FC = () => {
                 onDiscountApplied={setAppliedDiscount}
                 isCalculatingTotal={!areAllOptionsSelected()}
                 decorationLevel={decorationLevel}
-                eventSize={eventSize}
+
                 selectedDeliveryAddOns={selectedDeliveryAddOns}
                 deliveryConfig={deliveryConfig}
+                menPower={menPower}
               />
             </div>
           </div>

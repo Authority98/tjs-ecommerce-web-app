@@ -64,7 +64,7 @@ const CategorySelection: React.FC = () => {
                 key={category.id}
                 className="group"
               >
-                <Link to={category.id === 'gift-card' ? '/gift-cards' : `/products/${category.id}`}>
+                <Link to={category.id === 'gift-card' ? '/gift-cards' : category.id === 'events' ? '/events' : `/products/${category.id}`}>
                   <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${category.bgGradient} shadow-xl border border-white/20 dark:border-gray-700/30 h-full bg-opacity-95 backdrop-blur-sm`}>
                     {/* Icon Container */}
                     <div className="relative p-8 text-center">

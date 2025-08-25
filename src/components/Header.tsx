@@ -53,9 +53,10 @@ const Header: React.FC = () => {
   return (
     <header className="relative backdrop-blur-xl bg-transparent z-[150]">
       {/* Desktop Header */}
-      <div className="relative w-full max-w-[1384px] mx-auto px-4 sm:px-6 lg:px-8 py-4 hidden md:block">
-        <div className="flex justify-between items-center h-24 py-4">
-          <Link to="/" className="flex items-center group">
+      <div className="relative w-full max-w-[1430px] mx-auto px-4 sm:px-6 lg:px-8 py-4 hidden md:block">
+        <div className="flex items-center h-24 py-4" style={{width: '100%', gap: '20px'}}>
+          <div className="flex justify-start" style={{width: '20%'}}>
+            <Link to="/" className="flex flex-col items-center group">
             <div className="relative">
               <img
                 src="/assets/images/logo.webp"
@@ -72,10 +73,25 @@ const Header: React.FC = () => {
               {/* Fallback icon (hidden by default) */}
               <TreePine className="h-8 w-8 text-[#F7B541] hidden" />
             </div>
-          </Link>
+            <div 
+               className="text-center"
+               style={{
+                 fontFamily: '"Dancing Script", sans-serif',
+                 fontStyle: 'normal',
+                 fontWeight: 500,
+                 color: 'rgb(217, 166, 108)',
+                 fontSize: '16px',
+                 lineHeight: '21px'
+               }}
+             >
+Event planning and decoration services
+            </div>
+            </Link>
+          </div>
           
           {/* Desktop Navigation */}
-          <nav className="flex space-x-[30px] flex-1 justify-center items-center" style={{marginLeft: '100px'}}>
+          <div className="flex justify-end" style={{width: '45%'}}>
+             <nav className="flex space-x-[30px] items-center">
             {menuItems.map((item) => {
               const isActive = !item.external && (location.pathname === item.path || (item.label === 'Shop Now' && location.pathname !== '/'))
               return (
@@ -112,9 +128,11 @@ const Header: React.FC = () => {
                 </div>
               )
             })}
-          </nav>
+            </nav>
+          </div>
 
-          <div className="flex items-center space-x-6">
+          <div className="flex justify-end" style={{width: '35%'}}>
+            <div className="flex items-center space-x-6">
             {/* Contact Information */}
             <div className="flex items-center space-x-[20px] ml-8">
               <a 
@@ -151,13 +169,14 @@ const Header: React.FC = () => {
             </div>
           </div>
         </div>
+        </div>
       </div>
       
       {/* Mobile Header */}
       <div className="md:hidden w-full bg-black/80 backdrop-blur-sm">
         {/* Logo centered at top */}
         <div className="flex justify-center py-2">
-          <Link to="/" className="flex items-center group">
+          <Link to="/" className="flex flex-col items-center group">
             <div className="relative">
               <img
                 src="/assets/images/logo.webp"
@@ -171,6 +190,19 @@ const Header: React.FC = () => {
                 }}
               />
               <TreePine className="h-8 w-8 text-[#F7B541] hidden" />
+            </div>
+            <div 
+               className="text-center"
+               style={{
+                 fontFamily: '"Dancing Script", sans-serif',
+                 fontStyle: 'normal',
+                 fontWeight: 500,
+                 color: 'rgb(217, 166, 108)',
+                 fontSize: '14px',
+                 lineHeight: '18px'
+               }}
+             >
+              Event planning and decoration services
             </div>
           </Link>
         </div>

@@ -78,8 +78,8 @@ const InstallationChargesSettings: React.FC = () => {
               <Wrench className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white font-dosis">Installation/Teardown Charges</h2>
-        <p className="text-gray-600 dark:text-gray-400">Configure base charges for installation and teardown services</p>
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white font-dosis">Assembling/Dismentaling Charges</h2>
+        <p className="text-gray-600 dark:text-gray-400">Configure base charges for assembling and dismentaling services</p>
             </div>
           </div>
           <Button
@@ -130,7 +130,7 @@ const InstallationChargesSettings: React.FC = () => {
         <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-700">
           <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">How it works:</h4>
           <ul className="text-sm text-blue-700 dark:text-blue-400 space-y-1">
-            <li>• Base charges are applied when customers select installation/teardown services</li>
+            <li>• Base charges are applied when customers select assembling/dismentaling services</li>
             <li>• Additional timing surcharges may apply based on selected date and time</li>
             <li>• Disable a service by unchecking the checkbox to hide it from customers</li>
             <li>• Set base charge to $0 to only apply timing surcharges</li>

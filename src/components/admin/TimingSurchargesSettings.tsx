@@ -86,16 +86,16 @@ const TimingSurchargesSettings: React.FC = () => {
     ))
   }
 
-  const addNewSurcharge = (type: 'time_based' | 'day_based') => {
+  const addNewSurcharge = () => {
     const newSurcharge: TimingSurcharge = {
       id: `new-${Date.now()}`,
-      surcharge_type: type,
-      name: type === 'time_based' ? 'New Time Surcharge' : 'New Day Surcharge',
+      surcharge_type: 'day_based',
+      name: 'New Day Surcharge',
       description: '',
       surcharge_amount: 0,
-      time_start: type === 'time_based' ? '09:00:00' : undefined,
-      time_end: type === 'time_based' ? '17:00:00' : undefined,
-      day_types: type === 'day_based' ? ['weekend'] : undefined,
+      time_start: undefined,
+      time_end: undefined,
+      day_types: ['weekend'],
       is_active: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -128,7 +128,6 @@ const TimingSurchargesSettings: React.FC = () => {
     }
   }
 
-  const timeBasedSurcharges = surcharges.filter(s => s.surcharge_type === 'time_based')
   const dayBasedSurcharges = surcharges.filter(s => s.surcharge_type === 'day_based')
 
   if (loading) {
@@ -149,8 +148,8 @@ const TimingSurchargesSettings: React.FC = () => {
               <Clock className="h-6 w-6 text-orange-600 dark:text-orange-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white font-dosis">Timing Surcharges</h2>
-              <p className="text-gray-600 dark:text-gray-400">Configure additional charges based on time and day type</p>
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white font-dosis">Day Surcharges</h2>
+              <p className="text-gray-600 dark:text-gray-400">Configure additional charges based on day type (weekends, holidays)</p>
             </div>
           </div>
           <Button
@@ -163,83 +162,6 @@ const TimingSurchargesSettings: React.FC = () => {
           </Button>
         </div>
 
-        {/* Time-Based Surcharges */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center">
-              <Clock className="h-5 w-5 text-orange-600 dark:text-orange-400 mr-2" />
-              Time-Based Surcharges
-            </h3>
-            <Button
-              onClick={() => addNewSurcharge('time_based')}
-              icon={Plus}
-              className="bg-orange-600 hover:bg-orange-700 text-white text-sm px-3 py-1"
-            >
-              Add Time Surcharge
-            </Button>
-          </div>
-          <div className="space-y-3">
-            {timeBasedSurcharges.map((surcharge) => (
-              <div key={surcharge.id} className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-                <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center">
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={surcharge.is_active}
-                      onChange={(e) => updateSurcharge(surcharge.id, { is_active: e.target.checked })}
-                      className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 focus:ring-2"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      value={surcharge.name}
-                      onChange={(e) => updateSurcharge(surcharge.id, { name: e.target.value })}
-                      className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
-                      placeholder="Surcharge name"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="time"
-                      value={surcharge.time_start || ''}
-                      onChange={(e) => updateSurcharge(surcharge.id, { time_start: e.target.value })}
-                      className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="time"
-                      value={surcharge.time_end || ''}
-                      onChange={(e) => updateSurcharge(surcharge.id, { time_end: e.target.value })}
-                      className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
-                    />
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <span className="text-gray-600 dark:text-gray-400 text-sm">$</span>
-                    <input
-                      type="number"
-                      value={surcharge.surcharge_amount}
-                      onChange={(e) => updateSurcharge(surcharge.id, { surcharge_amount: Number(e.target.value) })}
-                      className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
-                      min="0"
-                      step="0.01"
-                    />
-                  </div>
-                  <div>
-                    <button
-                      onClick={() => deleteSurcharge(surcharge.id)}
-                      className="text-red-600 hover:text-red-800 p-1"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Day-Based Surcharges */}
         <div>
           <div className="flex items-center justify-between mb-4">
@@ -248,7 +170,7 @@ const TimingSurchargesSettings: React.FC = () => {
               Day-Based Surcharges
             </h3>
             <Button
-              onClick={() => addNewSurcharge('day_based')}
+              onClick={addNewSurcharge}
               icon={Plus}
               className="bg-orange-600 hover:bg-orange-700 text-white text-sm px-3 py-1"
             >
@@ -314,10 +236,20 @@ const TimingSurchargesSettings: React.FC = () => {
         <div className="mt-6 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl border border-orange-200 dark:border-orange-700">
           <h4 className="font-semibold text-orange-800 dark:text-orange-300 mb-2">Current Configuration:</h4>
           <div className="text-sm text-orange-700 dark:text-orange-400 space-y-1">
-            <p><strong>Evening (6pm-10pm):</strong> +$80</p>
-            <p><strong>Late-night (after 10pm):</strong> +$150</p>
-            <p><strong>Weekend:</strong> +$100</p>
-            <p><strong>Public Holiday:</strong> +$180</p>
+            {dayBasedSurcharges.filter(s => s.is_active).length === 0 ? (
+              <p className="text-gray-500 dark:text-gray-400 italic">No active day surcharges configured</p>
+            ) : (
+              dayBasedSurcharges
+                .filter(s => s.is_active)
+                .map((surcharge) => (
+                  <p key={surcharge.id}>
+                    <strong>{surcharge.name}:</strong> +${surcharge.surcharge_amount}
+                    {surcharge.day_types && (
+                      <span className="text-xs ml-1">({surcharge.day_types.join(', ')})</span>
+                    )}
+                  </p>
+                ))
+            )}
           </div>
         </div>
       </div>

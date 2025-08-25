@@ -30,6 +30,7 @@ interface OrderSummaryProps {
   eventSize?: string
   selectedDeliveryAddOns?: string[]
   deliveryConfig?: any
+  menPower?: number
 }
 
 const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
@@ -46,7 +47,8 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
   decorationLevel,
   eventSize,
   selectedDeliveryAddOns = [],
-  deliveryConfig
+  deliveryConfig,
+  menPower
 }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-24">
@@ -55,13 +57,17 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
         </div>
         
         <div className="space-y-4">
-        {/* Product or Gift Card */}
+        {/* Product, Gift Card, or Event Service */}
         <div className="relative">
           <div className="flex space-x-4 p-4 border-b border-gray-200/50 dark:border-gray-600/50">
             <div className="relative">
               {orderData.type === 'giftcard' ? (
                 <div className="w-20 h-20 bg-gradient-to-br from-pink-400 via-rose-500 to-red-400 rounded-xl shadow-lg flex items-center justify-center">
                   <span className="text-white text-2xl font-bold">🎁</span>
+                </div>
+              ) : orderData.type === 'event' ? (
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-400 via-pink-500 to-rose-400 rounded-xl shadow-lg flex items-center justify-center">
+                  <span className="text-white text-2xl font-bold">🎉</span>
                 </div>
               ) : (
                 <img
@@ -74,15 +80,29 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
             </div>
             <div className="flex-1">
               <h4 className="font-bold text-gray-800 dark:text-white line-clamp-2 mb-0.5">
-                {orderData.type === 'giftcard' ? '🎄 Twinkle Jingle eGift Card' : orderData.product?.title}
+                {orderData.type === 'giftcard' ? '🎄 Twinkle Jingle eGift Card' : 
+                 orderData.type === 'event' ? orderData.eventService?.name : 
+                 orderData.product?.title}
               </h4>
-              {orderData.product?.category !== 'trees' && (
+              {orderData.type === 'event' && orderData.eventService?.category && (
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                  {orderData.eventService.category}
+                </div>
+              )}
+              {(orderData.product?.category !== 'trees' || orderData.type === 'event') && (
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-300">
-                    {orderData.type === 'giftcard' ? 'Gift Card Value' : 'Price'}
+                    {orderData.type === 'giftcard' ? 'Gift Card Value' : 
+                     orderData.type === 'event' ? 'Service Price' : 'Price'}
                   </span>
                   <span className="text-xl font-bold text-pink-600 dark:text-rose-400">
-                    {orderData.type === 'giftcard' ? `$${orderData.giftCard?.amount || orderData.totalAmount}` : `$${orderData.product?.price}`}
+                    {orderData.type === 'giftcard' ? `$${orderData.giftCard?.amount || orderData.totalAmount}` : 
+                     orderData.type === 'event' ? (
+                       orderData.eventService?.priceType === 'fixed' ? `$${orderData.eventService.price}` :
+                       orderData.eventService?.priceType === 'from' ? `From $${orderData.eventService.price}` :
+                       orderData.eventService?.priceType === 'upon_request' ? 'Price upon request' :
+                       'Custom quotation'
+                     ) : `$${orderData.product?.price}`}
                   </span>
                 </div>
               )}
@@ -159,7 +179,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
             </h4>
             <div className="space-y-1">
               {/* 1. Decoration Level */}
-              {decorationLevel && (
+              {decorationLevel && orderData.treeOptions && (
                 <div className="flex items-center justify-between py-0.5">
                   <div className="flex items-center">
                     {decorationLevel === 100 ? (
@@ -174,20 +194,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Included</span>
                 </div>
               )}
-              {/* 2. Event Size for Premium Decor */}
-              {decorationLevel === 100 && eventSize && (
-                <div className="flex items-center justify-between py-0.5">
-                  <div className="flex items-center">
-                    <Package className="w-3 h-3 text-pink-500 mr-1.5" />
-                    <span className="text-xs text-gray-600 dark:text-gray-400">
-                      Event Size ({eventSize === 'small' ? 'Small (≤50 people)' : eventSize === 'medium' ? 'Medium (51-150 people)' : 'Large/Corporate (150+ people)'})
-                    </span>
-                  </div>
-                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">
-                    {eventSize === 'small' ? '$1,200' : eventSize === 'medium' ? '$2,500' : '$4,500+'}
-                  </span>
-                </div>
-              )}
+
               {/* 3. Rental Period */}
               {(rentalPeriod || orderData.treeOptions?.rentalPeriod) && (
                 <div className="flex items-center justify-between py-0.5">
@@ -203,9 +210,19 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   </span>
                 </div>
               )}
-              {/* 4. Installation charges */}
-              {additionalCharges.filter(charge => charge.name.toLowerCase().includes('installation')).map((charge, index) => (
-                <div key={`installation-${index}`} className="flex items-center justify-between py-0.5">
+              {/* 4. Men Power */}
+              {menPower && orderData.treeOptions && (
+                <div className="flex items-center justify-between py-0.5">
+                  <div className="flex items-center">
+                    <Wrench className="w-3 h-3 text-pink-500 mr-1.5" />
+                    <span className="text-xs text-gray-600 dark:text-gray-400">Men Power ({menPower} {menPower === 1 ? 'Worker' : 'Workers'})</span>
+                  </div>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Included</span>
+                </div>
+              )}
+              {/* 5. Assembling charges */}
+              {additionalCharges.filter(charge => charge.name.toLowerCase().includes('assembling')).map((charge, index) => (
+                <div key={`assembling-${index}`} className="flex items-center justify-between py-0.5">
                   <div className="flex items-center">
                     <Wrench className="w-3 h-3 text-pink-500 mr-1.5" />
                     <span className="text-xs text-gray-600 dark:text-gray-400">{charge.name}</span>
@@ -215,9 +232,9 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   </span>
                 </div>
               ))}
-              {/* 5. Teardown charges */}
-              {additionalCharges.filter(charge => charge.name.toLowerCase().includes('teardown')).map((charge, index) => (
-                <div key={`teardown-${index}`} className="flex items-center justify-between py-0.5">
+              {/* 6. Dismentaling charges */}
+              {additionalCharges.filter(charge => charge.name.toLowerCase().includes('dismentaling')).map((charge, index) => (
+                <div key={`dismentaling-${index}`} className="flex items-center justify-between py-0.5">
                   <div className="flex items-center">
                     <Trash2 className="w-3 h-3 text-pink-500 mr-1.5" />
                     <span className="text-xs text-gray-600 dark:text-gray-400">{charge.name}</span>
@@ -227,7 +244,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   </span>
                 </div>
               ))}
-              {/* 6. Delivery Add-ons - Minimal compact design */}
+              {/* 7. Delivery Add-ons - Minimal compact design */}
               {selectedDeliveryAddOns && deliveryConfig && selectedDeliveryAddOns.length > 0 && (
                 <div className="flex flex-wrap gap-1 py-0.5">
                   {selectedDeliveryAddOns.map((addOnId) => {
@@ -243,12 +260,14 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   })}
                 </div>
               )}
-              {/* 7. Delivery section - only show if delivery charge exists */}
+              {/* 8. Delivery section - only show if delivery charge exists */}
               {additionalCharges.find(charge => charge.name === 'Delivery') && (
                 <div className="flex items-center justify-between py-0.5">
                   <div className="flex items-center">
                     <Truck className="w-3 h-3 text-pink-500 mr-1.5" />
-                    <span className="text-xs text-gray-600 dark:text-gray-400">Delivery</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400">
+                      {orderData.product?.category === 'trees' ? 'Two Way Trip' : 'Delivery'}
+                    </span>
                   </div>
                   <span className="text-xs font-medium text-pink-600 dark:text-pink-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
                 </div>

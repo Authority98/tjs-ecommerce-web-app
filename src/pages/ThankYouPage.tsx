@@ -168,13 +168,22 @@ const ThankYouPage: React.FC = () => {
                         <span className="text-violet-600 dark:text-violet-400 text-sm font-bold">2</span>
                       </div>
                       <div>
+                        <div className="font-medium text-gray-800 dark:text-white">Time Coordination</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-300">Our team will contact you to arrange the specific timing for your service</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-violet-100 dark:bg-violet-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-violet-600 dark:text-violet-400 text-sm font-bold">3</span>
+                      </div>
+                      <div>
                         <div className="font-medium text-gray-800 dark:text-white">Professional Setup</div>
                         <div className="text-sm text-gray-600 dark:text-gray-300">Our team will handle delivery and installation</div>
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">
                       <div className="w-6 h-6 bg-violet-100 dark:bg-violet-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-violet-600 dark:text-violet-400 text-sm font-bold">3</span>
+                        <span className="text-violet-600 dark:text-violet-400 text-sm font-bold">4</span>
                       </div>
                       <div>
                         <div className="font-medium text-gray-800 dark:text-white">Enjoy the Magic</div>

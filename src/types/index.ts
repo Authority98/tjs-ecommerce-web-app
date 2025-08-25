@@ -17,7 +17,6 @@ export interface TreeOptions {
   type: string
   rentalPeriod?: number
   decorLevel: number
-  eventSize?: 'small' | 'medium' | 'large'
 }
 
 export interface CustomerDetails {
@@ -37,7 +36,7 @@ export interface CustomerDetails {
 }
 
 export interface OrderSummary {
-  type?: 'product' | 'giftcard'
+  type?: 'product' | 'giftcard' | 'event'
   product?: Product
   giftCard?: {
     amount: number
@@ -47,6 +46,14 @@ export interface OrderSummary {
     personalMessage?: string
     scheduledDate?: string
     isForSelf?: boolean
+  }
+  eventService?: {
+    id: string
+    name: string
+    category: string
+    price: number
+    priceType: 'fixed' | 'from' | 'upon_request' | 'custom'
+    description?: string
   }
   treeOptions?: TreeOptions
   customerDetails?: CustomerDetails
@@ -256,6 +263,11 @@ export const DEFAULT_DELIVERY_ZONES: DeliveryZone[] = [
     fee: 50
   },
   {
+    id: 'northeast',
+    name: 'Northeast',
+    fee: 45
+  },
+  {
     id: 'east',
     name: 'East',
     fee: 45
@@ -309,12 +321,10 @@ export interface InstallationCharge {
 
 export interface TimingSurcharge {
   id: string
-  surcharge_type: 'time_based' | 'day_based'
+  surcharge_type: 'day_based'
   name: string
   description?: string
   surcharge_amount: number
-  time_start?: string
-  time_end?: string
   day_types?: string[]
   is_active: boolean
   created_at: string
@@ -330,7 +340,8 @@ export interface Order {
   delivery_address: string
   product_id?: string
   gift_card_id?: string
-  order_type: 'product' | 'giftcard'
+  event_service_id?: string
+  order_type: 'product' | 'giftcard' | 'event'
   tree_height?: string
   tree_width?: string
   tree_type?: string

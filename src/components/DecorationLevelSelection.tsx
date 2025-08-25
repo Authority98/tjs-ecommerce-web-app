@@ -68,65 +68,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
         })}
       </div>
 
-      {/* Premium Decor Event Sizing */}
-      {selectedOptions.decorLevel === 100 && (
-        <div className="mt-3 p-3 bg-amber-50/40 dark:bg-amber-900/15 rounded-lg">
-          <h4 className="text-sm font-medium text-amber-800 dark:text-amber-200 mb-2">Event Size</h4>
-          <div className="grid grid-cols-3 gap-2">
-            <button
-                type="button"
-                onClick={() => onEventSizeSelect?.('small')}
-                className={`text-center p-2 rounded border transition-all duration-200 ${
-                  selectedOptions.eventSize === 'small'
-                    ? 'bg-amber-100 dark:bg-amber-900/40 border-amber-400 dark:border-amber-500'
-                    : 'bg-white/60 dark:bg-gray-700/40 border-gray-200/50 dark:border-gray-600/50 hover:border-amber-300 dark:hover:border-amber-600'
-                }`}
-              >
-              <div className={`text-xs font-medium ${
-                selectedOptions.eventSize === 'small'
-                  ? 'text-amber-700 dark:text-amber-300'
-                  : 'text-gray-600 dark:text-gray-400'
-              }`}>Small Event</div>
-              <div className="text-xs text-gray-500 dark:text-gray-500">(≤50 people)</div>
-              <div className="text-sm font-bold text-amber-600 dark:text-amber-400">$1,200</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => onEventSizeSelect?.('medium')}
-              className={`text-center p-2 rounded border transition-all duration-200 ${
-                selectedOptions.eventSize === 'medium'
-                  ? 'bg-amber-100 dark:bg-amber-900/40 border-amber-400 dark:border-amber-500'
-                  : 'bg-white/60 dark:bg-gray-700/40 border-gray-200/50 dark:border-gray-600/50 hover:border-amber-300 dark:hover:border-amber-600'
-              }`}
-            >
-              <div className={`text-xs font-medium ${
-                selectedOptions.eventSize === 'medium'
-                  ? 'text-amber-700 dark:text-amber-300'
-                  : 'text-gray-600 dark:text-gray-400'
-              }`}>Medium Event</div>
-              <div className="text-xs text-gray-500 dark:text-gray-500">(51-150 people)</div>
-              <div className="text-sm font-bold text-amber-600 dark:text-amber-400">$2,500</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => onEventSizeSelect?.('large')}
-              className={`text-center p-2 rounded border transition-all duration-200 ${
-                selectedOptions.eventSize === 'large'
-                  ? 'bg-amber-100 dark:bg-amber-900/40 border-amber-400 dark:border-amber-500'
-                  : 'bg-white/60 dark:bg-gray-700/40 border-gray-200/50 dark:border-gray-600/50 hover:border-amber-300 dark:hover:border-amber-600'
-              }`}
-            >
-              <div className={`text-xs font-medium ${
-                selectedOptions.eventSize === 'large'
-                  ? 'text-amber-700 dark:text-amber-300'
-                  : 'text-gray-600 dark:text-gray-400'
-              }`}>Large/Corporate</div>
-              <div className="text-xs text-gray-500 dark:text-gray-500">(150+ people)</div>
-              <div className="text-sm font-bold text-amber-600 dark:text-amber-400">$4,500+</div>
-            </button>
-          </div>
-        </div>
-      )}
+
 
       {/* Modal */}
       {showModal && (

@@ -10,11 +10,10 @@ interface ZoneSelectorProps {
   className?: string
 }
 
-// Static zone configuration with areas and fees
+// Static zone areas configuration (fees come from deliveryConfig)
 const ZONE_AREAS = {
   'central': {
     name: 'Central (CBD)',
-    fee: 40,
     areas: [
       'Downtown Core',
       'Marina East',
@@ -41,7 +40,6 @@ const ZONE_AREAS = {
   },
   'north': {
     name: 'North',
-    fee: 50,
     areas: [
       'Yishun',
       'Sembawang',
@@ -59,7 +57,6 @@ const ZONE_AREAS = {
   },
   'northeast': {
     name: 'Northeast',
-    fee: 45,
     areas: [
       'Ang Mo Kio',
       'Hougang',
@@ -73,7 +70,6 @@ const ZONE_AREAS = {
   },
   'east': {
     name: 'East',
-    fee: 45,
     areas: [
       'Bedok',
       'Changi',
@@ -86,7 +82,6 @@ const ZONE_AREAS = {
   },
   'west': {
     name: 'West',
-    fee: 50,
     areas: [
       'Boon Lay',
       'Bukit Batok',
@@ -105,7 +100,6 @@ const ZONE_AREAS = {
   },
   'jurong-island': {
     name: 'Jurong Island',
-    fee: 120,
     areas: [
       'Jurong Island (Industrial)',
       'Jurong Island (Petrochemical)',
@@ -116,7 +110,6 @@ const ZONE_AREAS = {
   },
   'sentosa': {
     name: 'Sentosa',
-    fee: 80,
     areas: [
       'Sentosa Cove',
       'Resorts World Sentosa',
@@ -148,8 +141,8 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
     setZoneSearchTerm('')
     setIsZoneOpen(false)
     
-    // Calculate delivery fee immediately when zone is selected
-    const fee = ZONE_AREAS[zoneId as keyof typeof ZONE_AREAS]?.fee || 0
+    // Calculate delivery fee from deliveryConfig
+    const fee = getZoneFee(zoneId)
     onZoneChange(zoneId, '', '', fee)
   }
 
@@ -159,7 +152,7 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
     setIsAreaOpen(false)
     
     if (currentZone) {
-      const fee = ZONE_AREAS[currentZone as keyof typeof ZONE_AREAS]?.fee || 0
+      const fee = getZoneFee(currentZone)
       onZoneChange(currentZone, area, '', fee)
     }
   }
@@ -181,8 +174,29 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
     )
   }
 
+  // Get zone fee from deliveryConfig or fallback to default
+  const getZoneFee = (zoneId: string) => {
+    if (deliveryConfig?.zoneBasedConfig?.zones) {
+      const zone = deliveryConfig.zoneBasedConfig.zones.find(z => z.id === zoneId)
+      if (zone) {
+        return zone.fee
+      }
+    }
+    // Fallback fees if deliveryConfig is not available
+    const fallbackFees: { [key: string]: number } = {
+      'central': 40,
+      'north': 50,
+      'northeast': 45,
+      'east': 45,
+      'west': 50,
+      'jurong-island': 120,
+      'sentosa': 80
+    }
+    return fallbackFees[zoneId] || 0
+  }
+
   const getCurrentFee = () => {
-    return ZONE_AREAS[currentZone as keyof typeof ZONE_AREAS]?.fee || 0
+    return getZoneFee(currentZone)
   }
 
   return (
@@ -241,7 +255,7 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
                       </div>
                     </div>
                     <div className="text-amber-600 dark:text-amber-400 font-semibold">
-                      ${zone.fee}
+                      ${getZoneFee(zoneId)}
                     </div>
                   </button>
                 ))}

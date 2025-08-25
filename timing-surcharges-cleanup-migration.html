@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timing Surcharges Cleanup Migration</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .warning {
+            background: #fed7d7;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #742a2a;
+        }
+        .step {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #4299e1;
+        }
+        .step h3 {
+            color: #2d3748;
+            margin-top: 0;
+        }
+        .sql-code {
+            background: #1a202c;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+        .sql-code pre {
+            color: #e2e8f0;
+            margin: 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover {
+            background: #3182ce;
+        }
+        .link {
+            color: #4299e1;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .success {
+            background: #c6f6d5;
+            border: 1px solid #9ae6b4;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #22543d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗂️ Timing Surcharges Cleanup Migration</h1>
+        <p class="subtitle">Remove unused time-based columns from timing_surcharges table</p>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> This migration removes unused time_start and time_end columns from the timing_surcharges table since we now only use day-based surcharges.
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Open Supabase Dashboard</h3>
+            <p>Go to your <a href="https://supabase.com/dashboard" target="_blank" class="link">Supabase Dashboard</a> and select your project.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Navigate to SQL Editor</h3>
+            <p>In your project dashboard, click on <strong>"SQL Editor"</strong> in the left sidebar.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Run the Migration SQL</h3>
+            <p>Copy the SQL below and paste it into the SQL Editor, then click <strong>"Run"</strong>:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyMigrationSQL()">Copy SQL</button>
+                <pre id="migration-sql">-- Remove unused time-based columns from timing_surcharges table
+-- Since we now only use day-based surcharges, time_start and time_end are no longer needed
+
+-- Remove time_start and time_end columns
+ALTER TABLE timing_surcharges 
+DROP COLUMN IF EXISTS time_start;
+
+ALTER TABLE timing_surcharges 
+DROP COLUMN IF EXISTS time_end;
+
+-- Update the surcharge_type constraint to only allow day_based
+ALTER TABLE timing_surcharges 
+DROP CONSTRAINT IF EXISTS timing_surcharges_surcharge_type_check;
+
+ALTER TABLE timing_surcharges 
+ADD CONSTRAINT timing_surcharges_surcharge_type_check 
+CHECK (surcharge_type = 'day_based');
+
+-- Remove any existing time_based surcharges from the database
+DELETE FROM timing_surcharges 
+WHERE surcharge_type = 'time_based';
+
+-- Add comment to document the change
+COMMENT ON TABLE timing_surcharges IS 'Configuration table for day-based timing surcharges only - time-based functionality removed';</pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Verify the Migration</h3>
+            <p>After running the migration, you can verify it worked by running this query:</p>
+            
+            <div class="sql-code">
+                <button class="copy-btn" onclick="copyVerificationSQL()">Copy SQL</button>
+                <pre id="verification-sql">-- Verify the table structure
+SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_name = 'timing_surcharges'
+ORDER BY ordinal_position;
+
+-- Check remaining surcharges
+SELECT * FROM timing_surcharges;</pre>
+            </div>
+        </div>
+
+        <div class="success">
+            <strong>✅ Migration Complete!</strong> The timing_surcharges table has been cleaned up and now only supports day-based surcharges. The unused time_start and time_end columns have been removed.
+        </div>
+
+        <div class="step">
+            <h3>What This Migration Does:</h3>
+            <ul>
+                <li><strong>Removes unused columns:</strong> time_start and time_end are no longer needed</li>
+                <li><strong>Updates constraints:</strong> Only allows 'day_based' surcharge types</li>
+                <li><strong>Cleans up data:</strong> Removes any existing time-based surcharges</li>
+                <li><strong>Improves performance:</strong> Smaller table structure with only necessary columns</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function copyMigrationSQL() {
+            const sqlText = document.getElementById('migration-sql').textContent;
+            navigator.clipboard.writeText(sqlText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#38a169';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#4299e1';
+                }, 2000);
+            });
+        }
+
+        function copyVerificationSQL() {
+            const sqlText = document.getElementById('verification-sql').textContent;
+            navigator.clipboard.writeText(sqlText).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#38a169';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#4299e1';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

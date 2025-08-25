@@ -5,7 +5,7 @@ import { useAdminData } from '../hooks/useAdminData'
 import ProductForm from '../components/ProductForm'
 import LoadingSpinner from '../components/LoadingSpinner'
 import AdminLogin from '../components/AdminLogin'
-import { AdminStats, AdminProductsGrid, AdminOrdersTable, DiscountCodesManager, DeliverySettings, InstallationChargesSettings, TimingSurchargesSettings } from '../components/admin'
+import { AdminStats, AdminProductsGrid, AdminOrdersTable, DiscountCodesManager, DeliverySettings, InstallationChargesSettings, TimingSurchargesSettings, EventsManager } from '../components/admin'
 import Button from '../components/ui/Button'
 import { supabase } from '../lib/supabase'
 
@@ -41,7 +41,7 @@ const AdminPage: React.FC = () => {
 
   const [showForm, setShowForm] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
-  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'discounts' | 'settings'>('products')
+  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'discounts' | 'settings' | 'events'>('products')
   const [activeSettingsTab, setActiveSettingsTab] = useState<'delivery' | 'installation' | 'timing'>('delivery')
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
 
@@ -244,6 +244,16 @@ const AdminPage: React.FC = () => {
             Discount Codes
           </button>
           <button
+            onClick={() => setActiveTab('events')}
+            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
+              activeTab === 'events'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-xl scale-105'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Events
+          </button>
+          <button
             onClick={() => setActiveTab('settings')}
             className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
               activeTab === 'settings'
@@ -301,6 +311,13 @@ const AdminPage: React.FC = () => {
           </div>
         )}
 
+        {activeTab === 'events' && (
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-6 font-dosis">Event Services Management</h2>
+            <EventsManager />
+          </div>
+        )}
+
         {activeTab === 'settings' && (
           <div>
             <h2 className="text-2xl font-bold text-white mb-6 font-dosis">Settings</h2>
@@ -335,7 +352,7 @@ const AdminPage: React.FC = () => {
                     : 'bg-white/80 text-gray-700 hover:bg-white'
                 }`}
               >
-                Timing Surcharges
+                Day Surcharges
               </button>
             </div>
 
