@@ -160,7 +160,10 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ isOpen, onClose, serviceNam
                     <label htmlFor={`option-${index}`} className="ml-3 text-gray-200 flex-grow cursor-pointer">
                       {option.name}
 
-                    </label>
+                      <span className="block text-sm text-gray-400">
+                        {typeof option.price === 'number' ? `$${option.price.toLocaleString()}` : 'Price upon request'}
+                      </span>
+                       </label>
                   </div>
                 ))}
               </div>
