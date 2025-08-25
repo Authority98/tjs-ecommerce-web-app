@@ -76,21 +76,26 @@ const EventsPage: React.FC = () => {
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
             {events.map((event) => (
               <div key={event.id} className="group">
-                <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900 shadow-xl border border-white/20 dark:border-gray-700/30 h-full bg-opacity-95 backdrop-blur-sm`}>
+                <div className={`relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950/20 dark:to-gray-900/20 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden border border-white/20 dark:border-gray-700/30 transition-all duration-300 h-full`}>
+                  {/* Decorative Elements */}
+                  <div className="absolute -top-4 -right-16 w-24 h-24 bg-white/10 rounded-full blur-2xl z-0"></div>
+                  <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-3xl z-0"></div>
                   <div className="relative p-8">
-                    <h3 className="text-2xl font-bold text-white mb-2 font-dosis">
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-3 line-clamp-2 font-dosis">
                       {event.name}
                     </h3>
-                    <p className="text-gray-300 leading-relaxed mb-4">
+                    <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 leading-relaxed font-manrope">
                       {event.description}
                     </p>
                     <div className="flex items-center justify-between mt-4">
                       <span className="text-lg font-semibold text-emerald-400">
                         {formatPrice(event)}
                       </span>
-                      <Link to={`/events/service/${event.id}`} className="inline-flex items-center px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-xl shadow-lg transition-all duration-300">
-                        View Details
-                        <span className="ml-2">→</span>
+                      <Link to={`/events/service/${event.id}`}>
+                        <button className="inline-flex items-center px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-xl shadow-lg transition-all duration-300">
+                          View Details
+                          <span className="ml-2">→</span>
+                        </button>
                       </Link>
                     </div>
                   </div>
