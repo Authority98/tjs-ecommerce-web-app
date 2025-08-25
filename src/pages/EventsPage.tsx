@@ -119,15 +119,16 @@ const EventsPage: React.FC = () => {
                       <div className="p-4 bg-rose-100 dark:bg-rose-900/30 rounded-full inline-flex items-center justify-center shadow-lg">
                         {React.cloneElement(getIconForService(event.name), { className: 'w-10 h-10 text-rose-500 dark:text-rose-300' })}
                       </div>
-                     <div className="mt-4 text-center">
-                       <button
-                         onClick={() => handleOpenModal(event)}
-                         className="inline-flex items-center px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-full shadow-lg transition-all duration-300"
-                       >
-                         Enquire Now
-                         <span className="ml-2">→</span>
-                       </button>
-                     </div>
+                    </div>
+                    <div className="mt-4 text-center">
+                      <button
+                        onClick={() => handleOpenModal(event)}
+                        className="inline-flex items-center px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-full shadow-lg transition-all duration-300"
+                      >
+                        Enquire Now
+                        <span className="ml-2">→</span>
+                      </button>
+                    </div>
                     <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-3 line-clamp-2 font-dosis text-center">
                       {event.name}
                     </h3>

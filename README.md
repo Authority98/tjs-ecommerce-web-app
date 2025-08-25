@@ -75,7 +75,7 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
   - **Event Page Product Box Theme Update**: The theme of product boxes on the event page has been updated to match the theme of product boxes in other categories, ensuring visual consistency across the application.
 - The events page now displays only four choices with relevant icons at the top of the product boxes and a product box-like appearance, with the "View Details" button positioned below the price.
 - The pricing display has been removed from the events page.
-- The "View Details" button and the associated `EventServiceDetailPage.tsx` have been removed from the events page.
+- The "View Details" button and the associated `EventServiceDetailPage.tsx` have been removed from the events page. (Resolved `ERR_ABORTED` errors related to this file, likely a caching issue).
 - An "Enquire Now" button has been added to each event service on the events page, which opens an inquiry modal with fields for name, email, phone, address, and relevant service options.
 - The ability to add new events from the admin panel has been removed.
 - **🚚 Enhanced Delivery System**: Completely redesigned delivery validation and user experience
