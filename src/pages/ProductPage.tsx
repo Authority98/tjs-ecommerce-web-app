@@ -285,22 +285,22 @@ const ProductPage: React.FC = () => {
                       <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Colors</h3>
                       <div className="flex flex-wrap gap-2">
                         {PRODUCT_COLORS.map((color) => (
-                          <button
-                            key={color.value}
-                            onClick={() => toggleColorFilter(color.value)}
-                            className={`flex items-center px-3 py-2 rounded-2xl border-2 transition-all duration-300 ${
-                              filters.colors.includes(color.value)
-                                ? 'border-purple-500 bg-gradient-to-br from-purple-50 to-fuchsia-50/80 dark:from-purple-900/30 dark:to-fuchsia-900/20 shadow-lg hover:shadow-xl hover:scale-105'
-                                : 'border-white/20 dark:border-gray-700/30 bg-white/50 dark:bg-purple-950/10 backdrop-blur-sm hover:shadow-md hover:bg-white/70 dark:hover:bg-purple-900/20'
-                            }`}
-                          >
-                            <div
-                              className="w-4 h-4 rounded-full mr-2 border border-gray-300 dark:border-gray-600"
-                              style={{ backgroundColor: color.hex }}
-                            />
-                            <span className="text-sm text-gray-700 dark:text-gray-300">{color.name}</span>
-                          </button>
-                        ))}
+                    <button
+                      key={color.value}
+                      onClick={() => toggleColorFilter(color.value)}
+                      className={`flex items-center px-4 py-2 rounded-full border-2 transition-all duration-300 ${
+                        filters.colors.includes(color.value)
+                          ? 'border-purple-500 bg-gradient-to-br from-purple-50 to-fuchsia-50/80 dark:from-purple-900/30 dark:to-fuchsia-900/20 shadow-lg hover:shadow-xl hover:scale-105'
+                          : 'border-white/20 dark:border-gray-700/30 bg-white/50 dark:bg-purple-950/10 backdrop-blur-sm hover:shadow-md hover:bg-white/70 dark:hover:bg-purple-900/20'
+                      }`}
+                    >
+                      <div
+                        className="w-4 h-4 rounded-full mr-2 border border-gray-300 dark:border-gray-600"
+                        style={{ backgroundColor: color.hex }}
+                      />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{color.name}</span>
+                    </button>
+                  ))}
                       </div>
                     </div>
                   )}

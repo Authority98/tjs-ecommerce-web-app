@@ -326,30 +326,30 @@ const AdminPage: React.FC = () => {
             <div className="flex flex-wrap gap-2 mb-6">
               <button
                 onClick={() => setActiveSettingsTab('delivery')}
-                className={`px-4 py-2 rounded-xl font-medium border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm whitespace-nowrap ${
+                className={`px-6 py-3 rounded-full font-medium border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-300 text-sm whitespace-nowrap ${
                   activeSettingsTab === 'delivery'
                     ? 'bg-gradient-to-r from-purple-500 to-violet-500 text-white shadow-lg'
-                    : 'bg-white/80 text-gray-700 hover:bg-white'
+                    : 'bg-white/80 text-gray-700 hover:bg-white border border-gray-300 dark:border-gray-700'
                 }`}
               >
                 Delivery Settings
               </button>
               <button
                 onClick={() => setActiveSettingsTab('installation')}
-                className={`px-4 py-2 rounded-xl font-medium border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm whitespace-nowrap ${
+                className={`px-6 py-3 rounded-full font-medium border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-300 text-sm whitespace-nowrap ${
                   activeSettingsTab === 'installation'
                     ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg'
-                    : 'bg-white/80 text-gray-700 hover:bg-white'
+                    : 'bg-white/80 text-gray-700 hover:bg-white border border-gray-300 dark:border-gray-700'
                 }`}
               >
                 Installation/Teardown Charges
               </button>
               <button
                 onClick={() => setActiveSettingsTab('timing')}
-                className={`px-4 py-2 rounded-xl font-medium border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm whitespace-nowrap ${
+                className={`px-6 py-3 rounded-full font-medium border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-300 text-sm whitespace-nowrap ${
                   activeSettingsTab === 'timing'
                     ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
-                    : 'bg-white/80 text-gray-700 hover:bg-white'
+                    : 'bg-white/80 text-gray-700 hover:bg-white border border-gray-300 dark:border-gray-700'
                 }`}
               >
                 Day Surcharges

@@ -72,7 +72,8 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
   - **UI Consistency**: Adjusted padding for "Delete Order" button in order details modal for consistent spacing.
   - **Product Grid Button Alignment**: Corrected padding for "Edit" and "Delete" buttons in the product grid for visual consistency.
   - **Event Button Icon Alignment**: Fixed icon alignment for "Add New Event" button in the events manager.
-  - **Event Page Product Box Theme**: Updated the theme of product boxes on the event page to match the theme of product boxes in other categories, ensuring visual consistency across the application.
+  - **Event Page Product Box Theme Update**: The theme of product boxes on the event page has been updated to match the theme of product boxes in other categories, ensuring visual consistency across the application.
+- **Filter Pill Display Fix**: The "pill" display issue in the settings section of the admin area and on category pages has been resolved, ensuring consistent and correct styling for filter options.
 - **🚚 Enhanced Delivery System**: Completely redesigned delivery validation and user experience
   - **LATEST**: Precision Postal Code Matching System
     - Implemented allowlist-based postal code matching for Jurong Island and Sentosa
