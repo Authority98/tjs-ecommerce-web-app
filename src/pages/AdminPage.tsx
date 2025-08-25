@@ -253,7 +253,6 @@ const AdminPage: React.FC = () => {
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
-            <MessageSquare className="w-4 h-4 mr-2" />
             Inquiries
           </button>
           <button

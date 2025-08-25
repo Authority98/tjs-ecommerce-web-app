@@ -17,6 +17,29 @@ interface Inquiry {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  event_date?: string;
+  event_time?: string;
+  guest_count?: number;
+  special_requests?: string;
+}
+
+interface InquiryRaw {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  service_name: string;
+  selected_options: string;
+  total_price: number | null;
+  status: 'pending' | 'contacted' | 'quoted' | 'closed';
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+  event_date?: string;
+  event_time?: string;
+  guest_count?: number;
+  special_requests?: string;
 }
 
 const InquiriesManager: React.FC = () => {
@@ -41,7 +64,11 @@ const InquiriesManager: React.FC = () => {
       if (error) {
         console.error('Error fetching inquiries:', error);
       } else {
-        setInquiries(data || []);
+        const processedData = (data as InquiryRaw[] || []).map(inquiry => ({
+          ...inquiry,
+          selected_options: inquiry.selected_options ? JSON.parse(inquiry.selected_options) : []
+        }));
+        setInquiries(processedData);
       }
     } catch (error) {
       console.error('Error fetching inquiries:', error);
