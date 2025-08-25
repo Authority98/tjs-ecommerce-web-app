@@ -10,7 +10,7 @@ import AdminPage from './pages/AdminPage'
 import CategorySelection from './pages/CategorySelection'
 import GiftCardPage from './pages/GiftCardPage'
 import EventsPage from './pages/EventsPage'
-import EventServiceDetailPage from './pages/EventServiceDetailPage';
+
 import Header from './components/Header'
 import Footer from './components/Footer'
 
@@ -29,7 +29,7 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/gift-cards" element={<GiftCardPage />} />
               <Route path="/events" element={<EventsPage />} />
-              <Route path="/events/service/:serviceId" element={<EventServiceDetailPage />} />
+              
               <Route path="/thank-you" element={<ThankYouPage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
