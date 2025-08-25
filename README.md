@@ -74,6 +74,8 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
   - **Event Button Icon Alignment**: Fixed icon alignment for "Add New Event" button in the events manager.
   - **Event Page Product Box Theme Update**: The theme of product boxes on the event page has been updated to match the theme of product boxes in other categories, ensuring visual consistency across the application.
 - The events page now displays only four choices with relevant icons at the top of the product boxes and a product box-like appearance, with the "View Details" button positioned below the price.
+- The pricing display has been removed from the events page.
+- The "View Details" button and the associated `EventServiceDetailPage.tsx` have been removed from the events page.
 - The ability to add new events from the admin panel has been removed.
 - **🚚 Enhanced Delivery System**: Completely redesigned delivery validation and user experience
   - **LATEST**: Precision Postal Code Matching System

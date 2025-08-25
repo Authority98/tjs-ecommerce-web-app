@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+
 import { supabase } from '../lib/supabase';
 import { Sparkles, Cake, Baby, Heart, Users, Briefcase, Factory, Building, Gift, Calendar } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -62,7 +62,7 @@ const EventsPage: React.FC = () => {
   const formatPrice = (service: EventService) => {
     switch (service.price_type) {
       case 'starting_from':
-        return `From $${service.starting_price.toLocaleString()}`
+        return `$${service.starting_price.toLocaleString()}`
       case 'fixed':
         return `$${service.starting_price.toLocaleString()}`
       case 'upon_request':
@@ -113,17 +113,7 @@ const EventsPage: React.FC = () => {
                     <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 leading-relaxed font-manrope">
                       {event.description}
                     </p>
-                    <div className="mt-4 text-center">
-                      <span className="text-lg font-semibold text-emerald-400 block mb-4">
-                        {formatPrice(event)}
-                      </span>
-                      <Link to={`/events/service/${event.id}`} className="inline-block">
-                        <button className="inline-flex items-center px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-full shadow-lg transition-all duration-300">
-                          View Details
-                          <span className="ml-2">→</span>
-                        </button>
-                      </Link>
-                    </div>
+
                   </div>
                 </div>
               </div>
