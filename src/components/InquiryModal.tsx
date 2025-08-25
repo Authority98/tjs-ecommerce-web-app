@@ -93,7 +93,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ isOpen, onClose, serviceNam
         </button>
 
         <h2 className="text-3xl font-bold text-rose-400 mb-6 text-center font-dosis">Inquire About {serviceName}</h2>
-        <p className="text-gray-300 mb-6 text-center">Please fill out the form below and we'll get back to you shortly.</p>
+
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
