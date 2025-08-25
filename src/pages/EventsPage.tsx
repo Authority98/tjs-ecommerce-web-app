@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { supabase } from '../lib/supabase';
+import InquiryModal from '../components/InquiryModal';
 import { Sparkles, Cake, Baby, Heart, Users, Briefcase, Factory, Building, Gift, Calendar } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PageLayout from '../components/PageLayout';
@@ -16,6 +17,18 @@ interface EventService {
 }
 
 const EventsPage: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<EventService | null>(null);
+
+  const handleOpenModal = (service: EventService) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+  };
   const getIconForService = (serviceName: string) => {
     switch (serviceName) {
       case 'Birthday Parties': return <Cake className="w-6 h-6 mr-2 text-rose-400" />;
@@ -106,7 +119,15 @@ const EventsPage: React.FC = () => {
                       <div className="p-4 bg-rose-100 dark:bg-rose-900/30 rounded-full inline-flex items-center justify-center shadow-lg">
                         {React.cloneElement(getIconForService(event.name), { className: 'w-10 h-10 text-rose-500 dark:text-rose-300' })}
                       </div>
-                    </div>
+                     <div className="mt-4 text-center">
+                       <button
+                         onClick={() => handleOpenModal(event)}
+                         className="inline-flex items-center px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-full shadow-lg transition-all duration-300"
+                       >
+                         Enquire Now
+                         <span className="ml-2">→</span>
+                       </button>
+                     </div>
                     <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-3 line-clamp-2 font-dosis text-center">
                       {event.name}
                     </h3>
@@ -122,6 +143,13 @@ const EventsPage: React.FC = () => {
         </div>
       </section>
     </PageLayout>
+    {isModalOpen && selectedService && (
+        <InquiryModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          serviceName={selectedService.name}
+        />
+      )}
   );
 };
 
