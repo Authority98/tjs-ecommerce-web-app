@@ -1,134 +1,62 @@
-import React, { useState, useEffect } from 'react'
 import { Plus, Edit, Trash2, Save, X, Calendar, DollarSign } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
+import React, { useState, useEffect } from 'react'
 import Button from '../ui/Button'
-
-interface EventCategory {
-  id: string
-  name: string
-  description: string
-  display_order: number
-  is_active: boolean
-}
+import Modal from '../ui/Modal'
 
 interface EventService {
   id: string
-  category_id: string
   name: string
   description: string
   starting_price: number
   price_type: 'starting_from' | 'fixed' | 'upon_request' | 'custom_quotation'
   display_order: number
+  button_text: string
   is_active: boolean
+  icon: string
 }
 
 const EventsManager: React.FC = () => {
-  const [categories, setCategories] = useState<EventCategory[]>([])
   const [services, setServices] = useState<EventService[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [editingService, setEditingService] = useState<EventService | null>(null)
   const [showServiceForm, setShowServiceForm] = useState(false)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Omit<EventService, 'id' | 'is_active'>>({
     name: '',
     description: '',
     starting_price: 0,
-    price_type: 'starting_from' as const,
-    display_order: 1
+    price_type: 'starting_from',
+    display_order: 1,
+    button_text: 'Book Now',
+    icon: '',
   })
 
   useEffect(() => {
-    fetchData()
+    fetchInitialData()
   }, [])
 
-  useEffect(() => {
-    if (selectedCategory) {
-      fetchServices(selectedCategory)
-    }
-  }, [selectedCategory])
-
-  const fetchData = async () => {
+  const fetchInitialData = async () => {
     try {
-      // Fetch categories
-      const { data: categoriesData, error: categoriesError } = await supabase
-        .from('events_categories')
+      // Fetch all services
+      const { data: servicesData, error: servicesError } = await supabase
+        .from('events_services')
         .select('*')
         .order('display_order')
 
-      if (categoriesError) {
-        console.error('Error fetching categories:', categoriesError)
-        // Use fallback data
-        setCategories([
-          { id: '1', name: 'Personal Celebrations', description: 'Birthday parties, baby showers, engagements, weddings, anniversaries and family gatherings', display_order: 1, is_active: true },
-          { id: '2', name: 'Corporate & Commercial', description: 'Corporate dinners, product launches, festive office décor, and retail installations', display_order: 2, is_active: true },
-          { id: '3', name: 'Festive & Seasonal Décor', description: 'Christmas décor, lunar new year styling, themed seasonal events', display_order: 3, is_active: true },
-          { id: '4', name: 'Add-On Services', description: 'Event planning, venue sourcing, entertainment, and logistics management', display_order: 4, is_active: true }
-        ])
+      if (servicesError) {
+        console.error('Error fetching services:', servicesError)
+        setServices([])
       } else {
-        setCategories(categoriesData || [])
+        setServices(servicesData || [])
       }
 
-      // Set first category as selected if none selected
-      if (!selectedCategory && (categoriesData?.length || 4) > 0) {
-        setSelectedCategory(categoriesData?.[0]?.id || '1')
-      }
+
+
     } catch (error) {
       console.error('Error:', error)
     } finally {
       setLoading(false)
     }
-  }
-
-  const fetchServices = async (categoryId: string) => {
-    try {
-      const { data: servicesData, error: servicesError } = await supabase
-        .from('events_services')
-        .select('*')
-        .eq('category_id', categoryId)
-        .order('display_order')
-
-      if (servicesError) {
-        console.error('Error fetching services:', servicesError)
-        // Use fallback data based on category
-        const fallbackServices = getFallbackServices(categoryId)
-        setServices(fallbackServices)
-      } else {
-        setServices(servicesData || [])
-      }
-    } catch (error) {
-      console.error('Error:', error)
-      const fallbackServices = getFallbackServices(categoryId)
-      setServices(fallbackServices)
-    }
-  }
-
-  const getFallbackServices = (categoryId: string): EventService[] => {
-    const fallbackData: Record<string, EventService[]> = {
-      '1': [
-        { id: '1', category_id: '1', name: 'Birthday Parties', description: 'Custom birthday party decorations and setup', starting_price: 800, price_type: 'starting_from', display_order: 1, is_active: true },
-        { id: '2', category_id: '1', name: 'Baby Showers & Gender Reveals', description: 'Beautiful baby shower and gender reveal decorations', starting_price: 1200, price_type: 'starting_from', display_order: 2, is_active: true },
-        { id: '3', category_id: '1', name: 'Engagements & Weddings', description: 'Elegant engagement and wedding decoration services', starting_price: 3500, price_type: 'starting_from', display_order: 3, is_active: true },
-        { id: '4', category_id: '1', name: 'Anniversaries & Family Gatherings', description: 'Special anniversary and family celebration décor', starting_price: 1000, price_type: 'starting_from', display_order: 4, is_active: true }
-      ],
-      '2': [
-        { id: '5', category_id: '2', name: 'Corporate Dinners & Galas', description: 'Professional corporate event decorations', starting_price: 5000, price_type: 'starting_from', display_order: 1, is_active: true },
-        { id: '6', category_id: '2', name: 'Product Launches & Brand Activations', description: 'Brand-focused launch event styling', starting_price: 4500, price_type: 'starting_from', display_order: 2, is_active: true },
-        { id: '7', category_id: '2', name: 'Festive Office Décor', description: 'Seasonal office decoration services', starting_price: 2500, price_type: 'starting_from', display_order: 3, is_active: true },
-        { id: '8', category_id: '2', name: 'Retail & Mall Installations', description: 'Large-scale retail decoration projects', starting_price: 0, price_type: 'upon_request', display_order: 4, is_active: true }
-      ],
-      '3': [
-        { id: '9', category_id: '3', name: 'Christmas Décor (Office / Mall / Home)', description: 'Comprehensive Christmas decoration services', starting_price: 3000, price_type: 'starting_from', display_order: 1, is_active: true },
-        { id: '10', category_id: '3', name: 'Lunar New Year / Deepavali / Hari Raya Styling', description: 'Traditional festival decoration services', starting_price: 2800, price_type: 'starting_from', display_order: 2, is_active: true },
-        { id: '11', category_id: '3', name: 'Themed Seasonal Events', description: 'Custom themed seasonal event decorations', starting_price: 0, price_type: 'upon_request', display_order: 3, is_active: true }
-      ],
-      '4': [
-        { id: '12', category_id: '4', name: 'Event Planning & Coordination', description: 'Full event planning and coordination services', starting_price: 1500, price_type: 'starting_from', display_order: 1, is_active: true },
-        { id: '13', category_id: '4', name: 'Venue Sourcing & Styling', description: 'Venue finding and styling services', starting_price: 0, price_type: 'upon_request', display_order: 2, is_active: true },
-        { id: '14', category_id: '4', name: 'Entertainment, Performers & Emcees', description: 'Entertainment and performance coordination', starting_price: 0, price_type: 'upon_request', display_order: 3, is_active: true },
-        { id: '15', category_id: '4', name: 'Logistics & Project Management', description: 'Complete event logistics management', starting_price: 0, price_type: 'custom_quotation', display_order: 4, is_active: true }
-      ]
-    }
-    return fallbackData[categoryId] || []
   }
 
   const handleAddService = () => {
@@ -138,7 +66,9 @@ const EventsManager: React.FC = () => {
       description: '',
       starting_price: 0,
       price_type: 'starting_from',
-      display_order: services.length + 1
+      display_order: services.length + 1,
+      button_text: 'Book Now',
+      icon: '',
     })
     setShowServiceForm(true)
   }
@@ -150,7 +80,9 @@ const EventsManager: React.FC = () => {
       description: service.description,
       starting_price: service.starting_price,
       price_type: service.price_type,
-      display_order: service.display_order
+      display_order: service.display_order,
+      button_text: service.button_text,
+      icon: service.icon,
     })
     setShowServiceForm(true)
   }
@@ -166,7 +98,9 @@ const EventsManager: React.FC = () => {
             description: formData.description,
             starting_price: formData.starting_price,
             price_type: formData.price_type,
-            display_order: formData.display_order
+            display_order: formData.display_order,
+            button_text: formData.button_text,
+            icon: formData.icon,
           })
           .eq('id', editingService.id)
 
@@ -176,20 +110,21 @@ const EventsManager: React.FC = () => {
         const { error } = await supabase
           .from('events_services')
           .insert({
-            category_id: selectedCategory,
             name: formData.name,
             description: formData.description,
             starting_price: formData.starting_price,
             price_type: formData.price_type,
             display_order: formData.display_order,
-            is_active: true
+            button_text: formData.button_text,
+            is_active: true,
+            icon: formData.icon
           })
 
         if (error) throw error
       }
 
       // Refresh services
-      await fetchServices(selectedCategory)
+      await fetchInitialData()
       setShowServiceForm(false)
       setEditingService(null)
     } catch (error) {
@@ -210,12 +145,14 @@ const EventsManager: React.FC = () => {
       if (error) throw error
 
       // Refresh services
-      await fetchServices(selectedCategory)
+      await fetchInitialData()
     } catch (error) {
       console.error('Error deleting service:', error)
       alert('Failed to delete service. Please try again.')
     }
   }
+
+
 
   const formatPrice = (service: EventService) => {
     switch (service.price_type) {
@@ -241,198 +178,136 @@ const EventsManager: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Category Selection */}
-      <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-        <h3 className="text-xl font-bold text-white mb-4">Event Categories</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`p-4 rounded-xl text-left transition-all duration-200 ${
-                selectedCategory === category.id
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              <h4 className="font-semibold mb-2">{category.name}</h4>
-              <p className="text-sm opacity-80">{category.description}</p>
-            </button>
-          ))}
-        </div>
+    <div className="p-4">
+
+      <div className="mb-4">
+        <Button onClick={handleAddService}>
+          <Plus className="mr-2" size={18} /> Add New Event
+        </Button>
       </div>
 
-      {/* Services Management */}
-      {selectedCategory && (
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold text-white">
-              Services for {categories.find(c => c.id === selectedCategory)?.name}
-            </h3>
-            <Button
-              icon={Plus}
-              onClick={handleAddService}
-              className="bg-emerald-500 hover:bg-emerald-600"
+      <Modal
+        isOpen={showServiceForm}
+        onClose={() => setShowServiceForm(false)}
+        title={editingService ? 'Edit Event' : 'Add New Event'}
+      >
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Event Title</label>
+            <input
+              type="text"
+              id="name"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            />
+          </div>
+          <div>
+            <label htmlFor="icon" className="block text-sm font-medium text-gray-700">Icon (Lucide Icon Name)</label>
+            <input
+              type="text"
+              id="icon"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={formData.icon}
+              onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+              placeholder="e.g., Calendar, DollarSign"
+            />
+          </div>
+          <div>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+            <textarea
+              id="description"
+              rows={3}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            ></textarea>
+          </div>
+          <div>
+            <label htmlFor="starting_price" className="block text-sm font-medium text-gray-700">Starting Price</label>
+            <input
+              type="number"
+              id="starting_price"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={formData.starting_price}
+              onChange={(e) => setFormData({ ...formData, starting_price: parseFloat(e.target.value) })}
+            />
+          </div>
+          <div>
+            <label htmlFor="price_type" className="block text-sm font-medium text-gray-700">Price Type</label>
+            <select
+              id="price_type"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={formData.price_type}
+              onChange={(e) => setFormData({ ...formData, price_type: e.target.value as 'starting_from' | 'fixed' | 'upon_request' | 'custom_quotation' })}
             >
-              Add Service
-            </Button>
+              <option value="starting_from">Starting From</option>
+              <option value="fixed">Fixed Price</option>
+              <option value="upon_request">Upon Request</option>
+              <option value="custom_quotation">Custom Quotation</option>
+            </select>
           </div>
+          <div>
+            <label htmlFor="display_order" className="block text-sm font-medium text-gray-700">Display Order</label>
+            <input
+              type="number"
+              id="display_order"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={formData.display_order}
+              onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+            />
+          </div>
+          <div>
+            <label htmlFor="button_text" className="block text-sm font-medium text-gray-700">Button Text</label>
+            <input
+              type="text"
+              id="button_text"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={formData.button_text}
+              onChange={(e) => setFormData({ ...formData, button_text: e.target.value })}
+            />
+          </div>
+          <div className="flex justify-end space-x-2 mt-4">
+            <Button onClick={handleSaveService}><Save className="mr-2" size={18} /> Save</Button>
+            <Button onClick={() => setShowServiceForm(false)} variant="secondary"><X className="mr-2" size={18} /> Cancel</Button>
+          </div>
+        </div>
+      </Modal>
 
-          {/* Services Grid */}
-          <div className="grid gap-4">
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Title</th>
+              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Description</th>
+              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Price</th>
+              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Order</th>
+              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {services.map((service) => (
-              <div
-                key={service.id}
-                className="bg-white/10 rounded-xl p-4 flex items-center justify-between"
-              >
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Calendar className="h-5 w-5 text-emerald-400" />
-                    <h4 className="font-semibold text-white">{service.name}</h4>
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      service.is_active ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-                    }`}>
-                      {service.is_active ? 'Active' : 'Inactive'}
-                    </span>
-                  </div>
-                  <p className="text-gray-300 text-sm mb-2">{service.description}</p>
-                  <div className="flex items-center gap-2 text-emerald-400">
-                    <DollarSign className="h-4 w-4" />
-                    <span className="font-medium">{formatPrice(service)}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleEditService(service)}
-                    className="p-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteService(service.id)}
-                    className="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
+              <tr key={service.id}>
+                <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">{service.name}</td>
+                <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">{service.description}</td>
+                <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">{formatPrice(service)}</td>
+                <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">{service.display_order}</td>
+                <td className="py-2 px-4 border-b border-gray-200 text-sm">
+                  <Button onClick={() => handleEditService(service)} variant="ghost" size="sm">
+                    <Edit size={18} />
+                  </Button>
+                  <Button onClick={() => handleDeleteService(service.id)} variant="ghost" size="sm">
+                    <Trash2 size={18} />
+                  </Button>
+                </td>
+              </tr>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* Service Form Modal */}
-      {showServiceForm && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-gray-900">
-                {editingService ? 'Edit Service' : 'Add New Service'}
-              </h3>
-              <button
-                onClick={() => setShowServiceForm(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Service Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  placeholder="Enter service name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  placeholder="Enter service description"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Price Type
-                </label>
-                <select
-                  value={formData.price_type}
-                  onChange={(e) => setFormData({ ...formData, price_type: e.target.value as any })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                >
-                  <option value="starting_from">Starting From</option>
-                  <option value="fixed">Fixed Price</option>
-                  <option value="upon_request">Price Upon Request</option>
-                  <option value="custom_quotation">Custom Quotation</option>
-                </select>
-              </div>
-
-              {(formData.price_type === 'starting_from' || formData.price_type === 'fixed') && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Price ($)
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.starting_price}
-                    onChange={(e) => setFormData({ ...formData, starting_price: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    placeholder="Enter price"
-                    min="0"
-                  />
-                </div>
-              )}
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Display Order
-                </label>
-                <input
-                  type="number"
-                  value={formData.display_order}
-                  onChange={(e) => setFormData({ ...formData, display_order: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  placeholder="Enter display order"
-                  min="1"
-                />
-              </div>
-            </div>
-
-            <div className="flex gap-3 mt-6">
-              <Button
-                onClick={handleSaveService}
-                icon={Save}
-                className="flex-1 bg-emerald-500 hover:bg-emerald-600"
-              >
-                {editingService ? 'Update' : 'Create'} Service
-              </Button>
-              <Button
-                onClick={() => setShowServiceForm(false)}
-                variant="ghost"
-                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
+
 
 export default EventsManager
