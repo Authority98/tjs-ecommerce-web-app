@@ -195,9 +195,14 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
   - Image slider removed from admin product cards for a streamlined experience
 - **Dark/Light Mode**: System-wide theme toggle with persistent preferences
 
-### 🎨 User Experience
+### 🎨- **🎨 User Experience**
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **Performance-First Design**: Completely removed all animations and motion components for maximum speed
+- **Inquiry Modal Enhancements**:
+  - Side-by-side name and email fields for better form layout
+  - Individual pricing display for service options
+  - Cleaner interface with removed introductory text
+  - Consistent styling with platform design
   - Zero animation overhead - instant UI responses
   - Removed all hover effects and transitions for optimal performance
   - Clean, static interface prioritizing functionality over visual effects
