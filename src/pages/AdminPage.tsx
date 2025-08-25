@@ -461,7 +461,7 @@ const AdminPage: React.FC = () => {
                               <div className="flex justify-between items-center py-2 border-b border-orange-200/50 dark:border-orange-700/50">
                                 <div className="flex items-center">
                                   <Star className="w-4 h-4 text-purple-500 mr-2" />
-                                  <span className="text-gray-600 dark:text-gray-300">Decoration Level ({selectedOrder.decor_level === 100 ? 'Premium Decor' : 'Basic Decor'})</span>
+                                  <span className="text-gray-600 dark:text-gray-300">Decoration Level ({selectedOrder.decor_level === 100 ? 'Full Decor' : selectedOrder.decor_level === 66 ? 'Half Decor' : 'Low Decor'})</span>
                                 </div>
                                 <span className="font-semibold text-gray-800 dark:text-white">Included</span>
                               </div>
@@ -616,7 +616,7 @@ const AdminPage: React.FC = () => {
                             <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Size:</span> {selectedOrder.tree_height}</p>
                             <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Type:</span> {selectedOrder.tree_type}</p>
                             <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Rental Period:</span> {selectedOrder.rental_period} days</p>
-                            <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Decoration Level:</span> {selectedOrder.decor_level === 100 ? 'Premium Decor' : 'Basic Decor'}</p>
+                            <p className="text-gray-600 dark:text-gray-300"><span className="font-medium text-gray-800 dark:text-white">Decoration Level:</span> {selectedOrder.decor_level === 100 ? 'Full Decor' : selectedOrder.decor_level === 66 ? 'Half Decor' : 'Low Decor'}</p>
                           </>
                         )}
                       </div>

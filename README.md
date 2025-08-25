@@ -10,6 +10,12 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **👷 Manpower Pricing Structure Update**: Simplified crew selection with transparent pricing tiers
+  - **Three-Tier System**: Streamlined manpower options to 1-2 Workers (Included), 3-4 Workers (+$120), and 5 Workers (+$250)
+  - **Dynamic Pricing Display**: Real-time pricing calculation and display in scheduling form, order summary, and checkout
+  - **Integrated Calculations**: Manpower charges automatically included in final total with separate "Crew Add-on" line item
+  - **Simplified Selection**: Reduced dropdown options from 20+ individual worker selections to 3 clear pricing tiers
+  - **Enhanced UX**: Clear pricing information displayed directly in dropdown options for transparent cost visibility
 - **🎨 Admin Inquiry Modal UI Improvements**: Enhanced inquiry details modal design for better user experience
   - **Reduced Bulkiness**: Optimized padding and spacing throughout the modal for a more compact, professional appearance
   - **Improved Layout**: Reduced card padding from `p-6` to `p-4`, decreased spacing between sections from `space-y-6` to `space-y-4`

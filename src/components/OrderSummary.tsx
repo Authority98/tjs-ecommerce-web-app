@@ -1,5 +1,5 @@
 import React from 'react'
-import { OrderSummary, RENTAL_PERIODS } from '../types'
+import { OrderSummary, RENTAL_PERIODS, calculateMenPowerCharge, getMenPowerLabel } from '../types'
 import { Package, Star, Shield, Clock, Calendar, Wrench, Trash2, Check, Truck, Zap, Building, FileText, Crown, Sparkles } from 'lucide-react'
 import DiscountCodeInput from './DiscountCodeInput'
 
@@ -184,14 +184,21 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   <div className="flex items-center">
                     {decorationLevel === 100 ? (
                       <Crown className="w-3 h-3 text-pink-500 mr-1.5" />
+                    ) : decorationLevel === 66 ? (
+                      <Star className="w-3 h-3 text-pink-500 mr-1.5" />
                     ) : (
                       <Sparkles className="w-3 h-3 text-pink-500 mr-1.5" />
                     )}
                     <span className="text-xs text-gray-600 dark:text-gray-400">
-                      {decorationLevel === 100 ? 'Premium Decor' : 'Basic Decor'}
+                      {decorationLevel === 100 ? 'Full Decor' : decorationLevel === 66 ? 'Half Decor' : 'Low Decor'}
                     </span>
                   </div>
-                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Included</span>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">
+                    {(() => {
+                      const charge = calculateMenPowerCharge(menPower || 3);
+                      return charge > 0 ? `+$${charge}` : 'Included';
+                    })()}
+                  </span>
                 </div>
               )}
 
@@ -215,7 +222,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                 <div className="flex items-center justify-between py-0.5">
                   <div className="flex items-center">
                     <Wrench className="w-3 h-3 text-pink-500 mr-1.5" />
-                    <span className="text-xs text-gray-600 dark:text-gray-400">Men Power ({menPower} {menPower === 1 ? 'Worker' : 'Workers'})</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400">{getMenPowerLabel(menPower)}</span>
                   </div>
                   <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Included</span>
                 </div>

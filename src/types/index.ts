@@ -214,10 +214,11 @@ export const RENTAL_PERIODS = [
 ]
 
 export const DECOR_LEVELS = [
-  { percentage: 50, label: 'Basic Decor', description: 'Essential decorations' },
+  { percentage: 33, label: 'Low Decor', description: 'Minimal decorations for a subtle touch' },
+  { percentage: 66, label: 'Half Decor', description: 'Balanced decoration package' },
   { 
     percentage: 100, 
-    label: 'Premium Decor', 
+    label: 'Full Decor', 
     description: 'Complete decoration package',
     notes: 'Full service with professional setup',
     detailedDescription: '✨ Complete venue transformation with full decor setup, premium props, ambient lighting, elegant floral arrangements, and professional teardown service. Perfect for clients seeking a luxurious, hands-off experience with zero stress and maximum impact.'
@@ -309,6 +310,25 @@ export const DEFAULT_DELIVERY_ADDONS: DeliveryAddOn[] = [
     enabled: true
   }
 ]
+
+// Men Power Pricing Configuration
+export const MEN_POWER_TIERS = [
+  { min: 1, max: 2, label: '1-2 crew Included', price: 0 },
+  { min: 3, max: 4, label: '3-4 crew +$120', price: 120 },
+  { min: 5, max: 20, label: '5+ crew +$250', price: 250 }
+]
+
+// Calculate men power charges based on crew count
+export const calculateMenPowerCharge = (crewCount: number): number => {
+  const tier = MEN_POWER_TIERS.find(tier => crewCount >= tier.min && crewCount <= tier.max)
+  return tier ? tier.price : 250 // Default to highest tier if out of range
+}
+
+// Get men power label based on crew count
+export const getMenPowerLabel = (crewCount: number): string => {
+  const tier = MEN_POWER_TIERS.find(tier => crewCount >= tier.min && crewCount <= tier.max)
+  return tier ? tier.label : '5+ crew +$250'
+}
 
 export interface InstallationCharge {
   id: string

@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import { Elements } from '@stripe/react-stripe-js'
 import { supabase } from '../lib/supabase'
 import { stripe } from '../lib/stripe'
-import { Product, OrderSummary, CustomerDetails, RENTAL_PERIODS, DeliveryConfiguration, DEFAULT_DELIVERY_ZONES, DEFAULT_DELIVERY_ADDONS, TimingSurcharge } from '../types'
+import { Product, OrderSummary, CustomerDetails, RENTAL_PERIODS, DeliveryConfiguration, DEFAULT_DELIVERY_ZONES, DEFAULT_DELIVERY_ADDONS, TimingSurcharge, calculateMenPowerCharge } from '../types'
 import { calculateDeliveryFee } from '../utils/deliveryCalculator'
 import { showErrorToast, showSuccessToast, showLoadingToast } from '../utils/toast'
 import OrderSummaryComponent from '../components/OrderSummary'
@@ -271,6 +271,12 @@ const CheckoutPage: React.FC = () => {
         total += timingSurcharge
       }
       
+      // Add men power charges for tree orders
+      if (orderData.treeOptions) {
+        const menPowerCharge = calculateMenPowerCharge(menPower)
+        total += menPowerCharge
+      }
+      
       // Add base delivery fee
       total += deliveryFee
       
@@ -414,6 +420,14 @@ const CheckoutPage: React.FC = () => {
       
       // Always show teardown service, even if no surcharge applies
       charges.push({ name: chargeName, amount: daySurcharge })
+    }
+    
+    // Add men power charges for tree orders
+    if (orderData?.treeOptions) {
+      const menPowerCharge = calculateMenPowerCharge(menPower)
+      if (menPowerCharge > 0) {
+        charges.push({ name: 'Crew Add-on', amount: menPowerCharge })
+      }
     }
     
     // Only add delivery charge if there's no delivery error

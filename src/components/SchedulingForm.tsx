@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Calendar, Clock, Sparkles, TreePine, Wrench, Trash2, Palette, Check } from 'lucide-react'
-import { RENTAL_PERIODS, TimingSurcharge } from '../types'
+import { RENTAL_PERIODS, TimingSurcharge, getMenPowerLabel, calculateMenPowerCharge } from '../types'
 import { showSuccessToast } from '../utils/toast'
 import { supabase } from '../lib/supabase'
 import Tooltip from './ui/Tooltip'
@@ -321,11 +321,9 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
               className="w-full p-2 border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm"
               required
             >
-              {Array.from({ length: 18 }, (_, i) => i + 3).map((num) => (
-                <option key={num} value={num}>
-                  {num} {num === 1 ? 'Worker' : 'Workers'}
-                </option>
-              ))}
+              <option value={2}>1-2 Workers - Included</option>
+              <option value={4}>3-4 Workers - +$120</option>
+              <option value={5}>5 Workers - +$250</option>
             </select>
           </div>
         )}

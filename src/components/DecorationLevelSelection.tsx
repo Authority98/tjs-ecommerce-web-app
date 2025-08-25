@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Crown, Sparkles, Check, Info, X } from 'lucide-react'
+import { Crown, Sparkles, Star, Check, Info, X } from 'lucide-react'
 import { TreeOptions, DECOR_LEVELS } from '../types'
 
 interface DecorationLevelSelectionProps {
@@ -16,8 +16,9 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
   const [showModal, setShowModal] = useState(false)
   
   const icons = {
-    100: Crown,
-    50: Sparkles
+    33: Sparkles,
+    66: Star,
+    100: Crown
   }
 
   return (
@@ -86,7 +87,7 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
                 <Crown className="h-5 w-5" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Premium Decor Package
+                Full Decor Package
               </h3>
             </div>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
