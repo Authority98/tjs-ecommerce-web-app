@@ -132,6 +132,10 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 - **🎁 Gift Card System**: Complete gift card functionality with RLS policy fixes
 - **🔧 Database Optimizations**: Fixed row-level security policies for gift cards
 - **⚡ Performance Improvements**: Maintained zero-animation design for optimal speed
+- **🗓️ Events System**: Integrated a comprehensive event management system
+  - **Event Creation and Management**: Allows administrators to create, edit, and manage various events.
+  - **Event Service Details**: Dedicated pages for detailed event service information.
+  - **Button Text Customization**: Added functionality to customize button text for event services.
 - **🎨 Enhanced Decoration Level Selection**: Improved user interface for decoration options
   - Reordered decoration levels with 'Basic Decor' (50%) as the default and first option
   - Added interactive "Learn more" button for 'Premium Decor' with detailed information modal
