@@ -92,65 +92,67 @@ const EventsPage: React.FC = () => {
   }
 
   return (
-    <PageLayout>
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
-              Our Event Services
-            </h1>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-dosis">
-              Find the Perfect Service for Your Occasion
-            </h2>
-            <p className="text-xl text-white max-w-3xl mx-auto">
-              Explore our comprehensive range of event services designed to make your celebration unforgettable.
-            </p>
-          </div>
+    <>
+      <PageLayout>
+        <section className="py-20 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
+                Our Event Services
+              </h1>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-dosis">
+                Find the Perfect Service for Your Occasion
+              </h2>
+              <p className="text-xl text-white max-w-3xl mx-auto">
+                Explore our comprehensive range of event services designed to make your celebration unforgettable.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {events.map((event) => (
-              <div key={event.id} className="group">
-                <div className={`relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 h-full transform hover:scale-105 hover:shadow-2xl`}>
-                  {/* Decorative Elements */}
-                  <div className="absolute -top-4 -right-16 w-24 h-24 bg-white/10 rounded-full blur-2xl z-0"></div>
-                  <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-3xl z-0"></div>
-                  <div className="relative p-8 flex flex-col items-center text-center">
-                    <div className="mb-4 flex justify-center items-center">
-                      <div className="p-4 bg-rose-100 dark:bg-rose-900/30 rounded-full inline-flex items-center justify-center shadow-lg">
-                        {React.cloneElement(getIconForService(event.name), { className: 'w-10 h-10 text-rose-500 dark:text-rose-300' })}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {events.map((event) => (
+                <div key={event.id} className="group">
+                  <div className={`relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 h-full transform hover:scale-105 hover:shadow-2xl`}>
+                    {/* Decorative Elements */}
+                    <div className="absolute -top-4 -right-16 w-24 h-24 bg-white/10 rounded-full blur-2xl z-0"></div>
+                    <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-3xl z-0"></div>
+                    <div className="relative p-8 flex flex-col items-center text-center">
+                      <div className="mb-4 flex justify-center items-center">
+                        <div className="p-4 bg-rose-100 dark:bg-rose-900/30 rounded-full inline-flex items-center justify-center shadow-lg">
+                          {React.cloneElement(getIconForService(event.name), { className: 'w-10 h-10 text-rose-500 dark:text-rose-300' })}
+                        </div>
                       </div>
-                    </div>
-                    <div className="mt-4 text-center">
-                      <button
-                        onClick={() => handleOpenModal(event)}
-                        className="inline-flex items-center px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-full shadow-lg transition-all duration-300"
-                      >
-                        Enquire Now
-                        <span className="ml-2">→</span>
-                      </button>
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-3 line-clamp-2 font-dosis text-center">
-                      {event.name}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 leading-relaxed font-manrope">
-                      {event.description}
-                    </p>
+                      <div className="mt-4 text-center">
+                        <button
+                          onClick={() => handleOpenModal(event)}
+                          className="inline-flex items-center px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-full shadow-lg transition-all duration-300"
+                        >
+                          Enquire Now
+                          <span className="ml-2">→</span>
+                        </button>
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-3 line-clamp-2 font-dosis text-center">
+                        {event.name}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 leading-relaxed font-manrope">
+                        {event.description}
+                      </p>
 
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </PageLayout>
-    {isModalOpen && selectedService && (
-        <InquiryModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          serviceName={selectedService.name}
-        />
-      )}
+        </section>
+      </PageLayout>
+      {isModalOpen && selectedService && (
+          <InquiryModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            serviceName={selectedService.name}
+          />
+        )}
+    </>
   );
 };
 
