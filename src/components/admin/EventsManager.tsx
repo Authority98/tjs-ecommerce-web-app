@@ -1,4 +1,4 @@
-import { Plus, Edit, Trash2, Save, X, Calendar, DollarSign } from 'lucide-react'
+import { Plus, Edit, Trash, Save, X, Calendar, DollarSign } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import React, { useState, useEffect } from 'react'
 import Button from '../ui/Button'
@@ -180,10 +180,42 @@ const EventsManager: React.FC = () => {
   return (
     <div className="p-4">
 
-      <div className="mb-4">
-        <Button onClick={handleAddService}>
-          <Plus className="mr-2" size={18} /> Add New Event
-        </Button>
+      <div className="mb-4 flex justify-between items-center">
+
+        <Button onClick={handleAddService} icon={Plus}>Add New Event</Button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {services.map((service) => (
+          <div key={service.id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+            <div className="p-4 flex-grow">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">{service.name}</h3>
+              <p className="text-gray-600 text-sm mb-4 line-clamp-3">{service.description}</p>
+              <div className="flex items-center justify-between text-sm text-gray-700 mb-2">
+                <span>Price:</span>
+                <span className="font-medium">{formatPrice(service)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm text-gray-700 mb-2">
+                <span>Display Order:</span>
+                <span className="font-medium">{service.display_order}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm text-gray-700 mb-2">
+                <span>Button Text:</span>
+                <span className="font-medium">{service.button_text}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm text-gray-700">
+                <span>Active:</span>
+                <span className={`font-medium ${service.is_active ? 'text-green-600' : 'text-red-600'}`}>
+                  {service.is_active ? 'Yes' : 'No'}
+                </span>
+              </div>
+            </div>
+            <div className="p-4 bg-gray-50 border-t border-gray-200 flex justify-start space-x-2">
+              <Button variant="secondary" onClick={() => handleEditService(service)} icon={Edit}>Edit</Button>
+              <Button variant="danger" onClick={() => handleDeleteService(service.id)} icon={Trash}>Delete</Button>
+            </div>
+          </div>
+        ))}
       </div>
 
       <Modal
@@ -274,37 +306,7 @@ const EventsManager: React.FC = () => {
         </div>
       </Modal>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Title</th>
-              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Description</th>
-              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Price</th>
-              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Order</th>
-              <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {services.map((service) => (
-              <tr key={service.id}>
-                <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">{service.name}</td>
-                <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">{service.description}</td>
-                <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">{formatPrice(service)}</td>
-                <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">{service.display_order}</td>
-                <td className="py-2 px-4 border-b border-gray-200 text-sm">
-                  <Button onClick={() => handleEditService(service)} variant="ghost" size="sm">
-                    <Edit size={18} />
-                  </Button>
-                  <Button onClick={() => handleDeleteService(service.id)} variant="ghost" size="sm">
-                    <Trash2 size={18} />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
     </div>
   )
 }

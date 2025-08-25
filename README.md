@@ -69,6 +69,9 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
     - Visual enhancements with indented sub-items and muted colors for service items
     - Charges breakdown section repositioned to appear before product details for better information hierarchy
   - **Improved Order Information Display**: Better organization and presentation of order data in admin interface
+  - **UI Consistency**: Adjusted padding for "Delete Order" button in order details modal for consistent spacing.
+  - **Product Grid Button Alignment**: Corrected padding for "Edit" and "Delete" buttons in the product grid for visual consistency.
+  - **Event Button Icon Alignment**: Fixed icon alignment for "Add New Event" button in the events manager.
 - **🚚 Enhanced Delivery System**: Completely redesigned delivery validation and user experience
   - **LATEST**: Precision Postal Code Matching System
     - Implemented allowlist-based postal code matching for Jurong Island and Sentosa

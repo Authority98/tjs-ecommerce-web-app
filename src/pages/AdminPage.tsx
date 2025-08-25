@@ -215,7 +215,7 @@ const AdminPage: React.FC = () => {
         <div className="flex flex-wrap gap-2 sm:gap-4 mb-6">
           <button
             onClick={() => setActiveTab('products')}
-            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
+            className={`px-3 sm:px-6 py-3 sm:py-4 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
               activeTab === 'products'
                 ? 'bg-gradient-to-r from-purple-500 to-violet-500 text-white shadow-xl scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
@@ -225,7 +225,7 @@ const AdminPage: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('orders')}
-            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
+            className={`px-3 sm:px-6 py-3 sm:py-4 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
               activeTab === 'orders'
                 ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-xl scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
@@ -235,7 +235,7 @@ const AdminPage: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('discounts')}
-            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
+            className={`px-3 sm:px-6 py-3 sm:py-4 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
               activeTab === 'discounts'
                 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
@@ -245,7 +245,7 @@ const AdminPage: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('events')}
-            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
+            className={`px-3 sm:px-6 py-3 sm:py-4 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
               activeTab === 'events'
                 ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-xl scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
@@ -255,7 +255,7 @@ const AdminPage: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('settings')}
-            className={`px-3 sm:px-6 py-2 sm:py-3 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
+            className={`px-3 sm:px-6 py-3 sm:py-4 rounded-3xl font-bold border border-white/20 dark:border-gray-700/30 backdrop-blur-xl transition-all duration-200 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
               activeTab === 'settings'
                 ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-xl scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
@@ -391,7 +391,7 @@ const AdminPage: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => handleDeleteOrder(selectedOrder.id)}
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium"
+                    className="px-4 py-3 bg-red-500 text-white rounded-lg text-sm font-medium"
                   >
                     Delete Order
                   </button>

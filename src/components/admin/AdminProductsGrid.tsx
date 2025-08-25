@@ -55,7 +55,7 @@ const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
             <button
               key={category.id}
               onClick={() => onCategoryChange(category.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium ${
+              className={`px-4 py-3 rounded-lg text-sm font-medium ${
                 selectedCategory === category.id
                   ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white shadow-lg'
                   : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300'
@@ -162,14 +162,14 @@ const AdminProductsGrid: React.FC<AdminProductsGridProps> = ({
                   <div className="flex space-x-2">
                     <button
                       onClick={() => onEditProduct(product)}
-                      className={`flex-1 flex items-center justify-center space-x-1 bg-gradient-to-r ${getCategoryGradient(product.category)} text-white py-2 px-3 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105`}
+                      className={`flex-1 flex items-center justify-center space-x-1 bg-gradient-to-r ${getCategoryGradient(product.category)} text-white py-3 px-3 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105`}
                     >
                       <Edit className="h-3 w-3" />
                       <span>Edit</span>
                     </button>
                     <button
                       onClick={() => onDeleteProduct(product.id)}
-                      className="flex-1 flex items-center justify-center space-x-1 bg-gradient-to-r from-red-500 to-red-600 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105"
+                      className="flex-1 flex items-center justify-center space-x-1 bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-3 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105"
                     >
                       <Trash2 className="h-3 w-3" />
                       <span>Delete</span>
