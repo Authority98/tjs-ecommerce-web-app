@@ -191,4 +191,6 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ isOpen, onClose, serviceNam
     </div>
   );
 
+};
+
 export default InquiryModal;
