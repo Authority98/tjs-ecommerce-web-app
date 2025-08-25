@@ -59,19 +59,7 @@ const EventsManager: React.FC = () => {
     }
   }
 
-  const handleAddService = () => {
-    setEditingService(null)
-    setFormData({
-      name: '',
-      description: '',
-      starting_price: 0,
-      price_type: 'starting_from',
-      display_order: services.length + 1,
-      button_text: 'Book Now',
-      icon: '',
-    })
-    setShowServiceForm(true)
-  }
+
 
   const handleEditService = (service: EventService) => {
     setEditingService(service)
@@ -182,7 +170,7 @@ const EventsManager: React.FC = () => {
 
       <div className="mb-4 flex justify-between items-center">
 
-        <Button onClick={handleAddService} icon={Plus}>Add New Event</Button>
+
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
