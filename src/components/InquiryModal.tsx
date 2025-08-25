@@ -96,27 +96,29 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ isOpen, onClose, serviceNam
         <p className="text-gray-300 mb-6 text-center">Please fill out the form below and we'll get back to you shortly.</p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label htmlFor="name" className="block text-gray-300 text-sm font-semibold mb-2">Name:</label>
-            <input
-              type="text"
-              id="name"
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-gray-300 text-sm font-semibold mb-2">Email:</label>
-            <input
-              type="email"
-              id="email"
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="name" className="block text-gray-300 text-sm font-semibold mb-2">Name:</label>
+              <input
+                type="text"
+                id="name"
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-gray-300 text-sm font-semibold mb-2">Email:</label>
+              <input
+                type="email"
+                id="email"
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
           </div>
           <div>
             <label htmlFor="phone" className="block text-gray-300 text-sm font-semibold mb-2">Phone:</label>
@@ -157,9 +159,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ isOpen, onClose, serviceNam
                     />
                     <label htmlFor={`option-${index}`} className="ml-3 text-gray-200 flex-grow cursor-pointer">
                       {option.name}
-                      <span className="block text-sm text-gray-400">
-                        {typeof option.price === 'number' ? `$${option.price.toLocaleString()}` : 'Price upon request'}
-                      </span>
+
                     </label>
                   </div>
                 ))}
@@ -167,9 +167,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ isOpen, onClose, serviceNam
             </div>
           )}
 
-          <div className="text-right text-xl font-bold text-rose-300 mt-6 pt-4 border-t border-gray-700">
-            Total: {calculateTotalPrice()}
-          </div>
+
 
           <div className="flex justify-end space-x-4 mt-6">
             <button
