@@ -10,6 +10,10 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🔗 Portfolio Link Update**: Updated navigation menu portfolio links to new dedicated portfolio page
+  - **Header Navigation**: Updated portfolio menu item to link to `https://tjs-landing-page.stagingsite.duckdns.org/portfolio/`
+  - **Footer Navigation**: Updated footer portfolio link to match new URL structure
+  - **Consistent Navigation**: Ensured both header and footer portfolio links point to the same dedicated portfolio page
 - **👷 Manpower Pricing Structure Update**: Simplified crew selection with transparent pricing tiers
   - **Three-Tier System**: Streamlined manpower options to 1-2 Workers (Included), 3-4 Workers (+$120), and 5 Workers (+$250)
   - **Dynamic Pricing Display**: Real-time pricing calculation and display in scheduling form, order summary, and checkout

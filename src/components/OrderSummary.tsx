@@ -193,12 +193,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                       {decorationLevel === 100 ? 'Full Decor' : decorationLevel === 66 ? 'Half Decor' : 'Low Decor'}
                     </span>
                   </div>
-                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">
-                    {(() => {
-                      const charge = calculateMenPowerCharge(menPower || 3);
-                      return charge > 0 ? `+$${charge}` : 'Included';
-                    })()}
-                  </span>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Included</span>
                 </div>
               )}
 
@@ -224,7 +219,12 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                     <Wrench className="w-3 h-3 text-pink-500 mr-1.5" />
                     <span className="text-xs text-gray-600 dark:text-gray-400">{getMenPowerLabel(menPower)}</span>
                   </div>
-                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Included</span>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">
+                    {(() => {
+                      const charge = calculateMenPowerCharge(menPower || 3);
+                      return charge > 0 ? `+$${charge}` : 'Included';
+                    })()}
+                  </span>
                 </div>
               )}
               {/* 5. Assembling charges */}

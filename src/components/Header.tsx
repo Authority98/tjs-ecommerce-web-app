@@ -45,7 +45,7 @@ const Header: React.FC = () => {
     { path: 'https://tjs-landing-page.stagingsite.duckdns.org/', label: 'Home', external: true },
     { path: 'https://tjs-landing-page.stagingsite.duckdns.org/#services', label: 'Services', external: true },
     { path: '/', label: 'Shop Now', external: false },
-    { path: 'https://tjs-landing-page.stagingsite.duckdns.org/#portfolio', label: 'Portfolio', external: true },
+    { path: 'https://tjs-landing-page.stagingsite.duckdns.org/portfolio/', label: 'Portfolio', external: true },
     { path: 'https://tjs-landing-page.stagingsite.duckdns.org/#contact', label: 'Contact', external: true },
     { path: 'https://tjs-landing-page.stagingsite.duckdns.org/#testimonials', label: 'Testimonials', external: true }
   ]

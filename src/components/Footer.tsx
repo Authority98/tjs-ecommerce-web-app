@@ -97,7 +97,7 @@ const Footer: React.FC = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="https://tjs-landing-page.stagingsite.duckdns.org/#portfolio" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
+                  <a href="https://tjs-landing-page.stagingsite.duckdns.org/portfolio/" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
                     <CaretRightIcon className="w-4 h-4 mr-[11px]" color="white" /> Portfolio
                   </a>
                 </li>
