@@ -20,7 +20,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
       </div>
       
       {isVisible && (
-        <div className="absolute z-50 px-3 py-2 text-sm text-white bg-gray-900 dark:bg-gray-700 rounded-lg shadow-lg whitespace-nowrap -top-2 left-6 transform -translate-y-full">
+        <div className="absolute z-50 px-3 py-2.5 text-sm text-white bg-gray-900 dark:bg-gray-700 rounded-lg shadow-lg whitespace-nowrap -top-2 left-6 transform -translate-y-full">
           <div className="relative">
             {content}
             {/* Arrow pointing to the icon */}

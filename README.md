@@ -10,6 +10,13 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🎨 Admin Inquiry Modal UI Improvements**: Enhanced inquiry details modal design for better user experience
+  - **Reduced Bulkiness**: Optimized padding and spacing throughout the modal for a more compact, professional appearance
+  - **Improved Layout**: Reduced card padding from `p-6` to `p-4`, decreased spacing between sections from `space-y-6` to `space-y-4`
+  - **Enhanced Modal Sizing**: Increased modal width to `max-w-4xl` and height to `max-h-[95vh]` for better content visibility
+  - **Optimized Content Display**: Ensured all inquiry details fit without scrolling through improved layout management
+  - **Consistent Spacing**: Standardized icon sizes, reduced margins, and optimized grid gaps for visual consistency
+  - **Better Typography**: Adjusted font sizes and spacing for improved readability and professional appearance
 - **📝 Event Inquiry System**: Complete inquiry management system for event services
   - **Inquiry Modal**: Modern inquiry form with side-by-side email and phone fields for better UX
   - **Service Options Integration**: Dynamic service options based on selected event type with pricing calculation

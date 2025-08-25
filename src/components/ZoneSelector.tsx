@@ -224,7 +224,7 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
               onChange={(e) => setZoneSearchTerm(e.target.value)}
               onFocus={() => setIsZoneOpen(true)}
               onBlur={() => setTimeout(() => setIsZoneOpen(false), 200)}
-              className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm ${
+              className={`w-full pl-10 pr-10 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm ${
                 currentZone 
                   ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-600 text-black dark:text-white'
                   : 'border-gray-300 dark:border-amber-400/30 bg-white dark:bg-amber-950/10 text-black dark:text-white'
@@ -246,7 +246,7 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
                       handleZoneSelect(zoneId)
                       setZoneSearchTerm('')
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-amber-50 dark:hover:bg-amber-900/20 flex items-center justify-between border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+                    className="w-full px-4 py-2.5 text-left hover:bg-amber-50 dark:hover:bg-amber-900/20 flex items-center justify-between border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                   >
                     <div>
                       <div className="font-medium text-gray-900 dark:text-white">{zone.name}</div>
@@ -260,7 +260,7 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
                   </button>
                 ))}
                 {getFilteredZones().length === 0 && (
-                  <div className="px-4 py-3 text-gray-500 dark:text-gray-400 text-center">
+                  <div className="px-4 py-2.5 text-gray-500 dark:text-gray-400 text-center">
                     No zones found
                   </div>
                 )}
@@ -287,7 +287,7 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
               onFocus={() => currentZone && setIsAreaOpen(true)}
               onBlur={() => setTimeout(() => setIsAreaOpen(false), 200)}
               disabled={!currentZone}
-              className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm ${
+              className={`w-full pl-10 pr-10 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm ${
                  currentArea 
                    ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-600 text-black dark:text-white'
                    : !currentZone
@@ -311,13 +311,13 @@ const ZoneSelector: React.FC<ZoneSelectorProps> = ({
                       handleAreaSelect(area)
                       setAreaSearchTerm('')
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-amber-50 dark:hover:bg-amber-900/20 border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+                    className="w-full px-4 py-2.5 text-left hover:bg-amber-50 dark:hover:bg-amber-900/20 border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                   >
                     <div className="font-medium text-gray-900 dark:text-white">{area}</div>
                   </button>
                 ))}
                 {getCurrentAreas().length === 0 && (
-                  <div className="px-4 py-3 text-gray-500 dark:text-gray-400 text-center">
+                  <div className="px-4 py-2.5 text-gray-500 dark:text-gray-400 text-center">
                     No areas found
                   </div>
                 )}
