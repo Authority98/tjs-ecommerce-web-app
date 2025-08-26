@@ -10,6 +10,12 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🎨 Footer Logo Consistency Update**: Updated footer logo to match header branding
+  - **Consistent Logo Implementation**: Replaced simple footer logo with structured layout matching header design
+  - **Added Tagline**: Included "Event planning and decoration services" tagline below logo in footer
+  - **Uniform Styling**: Applied same dimensions (125px height, 160px width) and Dancing Script font styling as header
+  - **Responsive Design**: Maintained centered alignment on mobile and left-aligned on desktop for consistency
+  - **Brand Cohesion**: Ensured visual consistency between header and footer branding elements
 - **🔗 Portfolio Link Update**: Updated navigation menu portfolio links to new dedicated portfolio page
   - **Header Navigation**: Updated portfolio menu item to link to `https://tjs-landing-page.stagingsite.duckdns.org/portfolio/`
   - **Footer Navigation**: Updated footer portfolio link to match new URL structure

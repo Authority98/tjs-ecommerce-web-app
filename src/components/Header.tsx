@@ -54,7 +54,7 @@ const Header: React.FC = () => {
     <header className="relative backdrop-blur-xl bg-transparent z-[150]">
       {/* Desktop Header */}
       <div className="relative w-full max-w-[1430px] mx-auto px-4 sm:px-6 lg:px-8 py-4 hidden md:block">
-        <div className="flex items-center h-24 py-4" style={{width: '100%', gap: '20px'}}>
+        <div className="flex items-center h-24 py-4" style={{width: '100%', gap: '40px'}}>
           <div className="flex justify-start" style={{width: '20%'}}>
             <Link to="/" className="flex flex-col items-center group">
             <div className="relative">
@@ -132,14 +132,13 @@ Event planning and decoration services
           </div>
 
           <div className="flex justify-end" style={{width: '35%'}}>
-            <div className="flex items-center space-x-6">
             {/* Contact Information */}
-            <div className="flex items-center space-x-[20px] ml-8">
+            <div className="flex items-center space-x-8">
               <a 
                 href="https://wa.me/6583392574" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-2 hover:text-[#D9A66C] transition-colors duration-200"
+                className="flex items-center space-x-3 hover:text-[#D9A66C] transition-colors duration-200"
               >
                 <svg width="24px" height="24px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="#D9A66C" stroke="#D9A66C">
                   <g id="SVGRepo_bgCarrier" strokeWidth="0"/>
@@ -157,18 +156,17 @@ Event planning and decoration services
                     </g>
                   </g>
                 </svg>
-                <span className="font-medium text-white" style={{fontSize: '17px'}}>+65 8339 2574</span>
+                <span className="font-medium text-white whitespace-nowrap" style={{fontSize: '17px'}}>+65 8339 2574</span>
               </a>
               <a 
                 href="mailto:twinklejinglesservices@gmail.com" 
-                className="flex items-center space-x-2 hover:text-[#D9A66C] transition-colors duration-200"
+                className="flex items-center space-x-3 hover:text-[#D9A66C] transition-colors duration-200"
               >
-                <FaEnvelope className="text-[#D9A66C] text-[1.5em]" />
-                <span className="font-medium text-white" style={{fontSize: '17px'}}>twinklejinglesservices@gmail.com</span>
+                <FaEnvelope className="text-[#D9A66C] text-[1.5em] flex-shrink-0" />
+                <span className="font-medium text-white whitespace-nowrap" style={{fontSize: '17px'}}>twinklejinglesservices@gmail.com</span>
               </a>
             </div>
           </div>
-        </div>
         </div>
       </div>
       

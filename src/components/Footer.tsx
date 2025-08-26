@@ -48,7 +48,26 @@ const Footer: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-10 md:grid-flow-row-dense" style={{ gap: '64px 70px', marginTop: '30px' }}>
             {/* Logo and Awards */}
             <div className="flex flex-col items-center md:items-start md:col-span-3">
-              <img src="/assets/images/logo.webp" alt="Twinkle Jingle" style={{ height: 'auto', width: '196px' }} className="mb-6" />
+              <div className="flex flex-col items-center md:items-start mb-6">
+                <img
+                  src="/assets/images/logo.webp"
+                  alt="Twinkle Jingle Logo"
+                  className="h-[125px] w-[160px] object-contain mb-2"
+                />
+                <div 
+                   className="text-center md:text-left"
+                   style={{
+                     fontFamily: '"Dancing Script", sans-serif',
+                     fontStyle: 'normal',
+                     fontWeight: 500,
+                     color: 'rgb(217, 166, 108)',
+                     fontSize: '16px',
+                     lineHeight: '21px'
+                   }}
+                 >
+                  Event planning and decoration services
+                </div>
+              </div>
               <div className="mt-0">
                 <div className="e-con-full e-flex e-con e-child" style={{ display: 'flex', gap: '16px', alignContent: 'flex-end', alignItems: 'flex-end', marginRight: '0' }}>
                   <div className="elementor-widget elementor-widget-image">
