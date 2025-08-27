@@ -383,7 +383,7 @@ const AdminPage: React.FC = () => {
               <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-t-3xl">
                 <div>
                   <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
-                    Order #{selectedOrder.id.slice(0, 8)}
+                    Order #{selectedOrder.order_number}
                   </h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 font-medium">
                     Created on {new Date(selectedOrder.created_at).toLocaleDateString()}

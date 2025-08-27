@@ -107,7 +107,7 @@ const ThankYouPage: React.FC = () => {
               {/* Tree order pricing notice */}
               {isTreeOrder && (
                 <div className="text-sm bg-amber-100/50 dark:bg-amber-900/30 p-3 rounded-xl text-amber-800 dark:text-amber-200 font-medium italic border border-amber-200/50 dark:border-amber-700/30">
-                  Final price to be determined after order is placed
+                  We will send over a payment link to your email and phone, after determining the final price for your order
                 </div>
               )}
               <div className="text-sm bg-purple-100/50 dark:bg-purple-900/30 p-3 rounded-xl text-gray-700 dark:text-white font-medium">
@@ -197,52 +197,10 @@ const ThankYouPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Contact Information - Using Decorations Category Design */}
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15 rounded-3xl shadow-xl p-8 mb-12 border border-white/20 dark:border-gray-700/30 relative">
-          {/* Decorative Elements */}
-          <div className="absolute top-4 right-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 rounded-full blur-xl z-0 opacity-40"></div>
-          </div>
-          <div className="absolute bottom-4 left-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 rounded-full blur-lg z-0 opacity-40"></div>
-          </div>
-          <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center font-dosis">
-            Need Help? We're Here for You
-          </h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Phone className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div className="font-semibold text-gray-800 dark:text-white">Call Us</div>
-              <div className="text-gray-600 dark:text-gray-300">(555) 123-4567</div>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Mail className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div className="font-semibold text-gray-800 dark:text-white">Email Us</div>
-              <div className="text-gray-600 dark:text-gray-300">support@twinklejingle.com</div>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Calendar className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div className="font-semibold text-gray-800 dark:text-white">Business Hours</div>
-              <div className="text-gray-600 dark:text-gray-300">Mon-Fri: 9AM-6PM</div>
-            </div>
-          </div>
-        </div>
+
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-purple-600 via-violet-600 to-fuchsia-500 text-white font-semibold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-          >
-            <Home className="h-5 w-5 mr-2" />
-            Continue Shopping
-          </Link>
           <button
             onClick={() => window.print()}
             className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 text-white font-semibold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
@@ -252,17 +210,7 @@ const ThankYouPage: React.FC = () => {
           </button>
         </div>
 
-        {/* Social Sharing */}
-        <div className="text-center mt-12">
-          <p className="text-white font-medium bg-gradient-to-r from-purple-600/30 via-violet-600/30 to-fuchsia-500/30 dark:from-purple-900/40 dark:via-violet-900/40 dark:to-fuchsia-900/40 py-3 px-6 rounded-xl inline-block mb-4 shadow-sm">
-            Share your Christmas joy with friends and family!
-          </p>
-          <div className="flex justify-center space-x-4">
-            <div className="w-3 h-3 bg-violet-500 rounded-full" />
-            <div className="w-3 h-3 bg-amber-500 rounded-full" />
-            <div className="w-3 h-3 bg-fuchsia-500 rounded-full" />
-          </div>
-        </div>
+
       </div>
     </div>
   )
