@@ -10,6 +10,14 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🔧 OrderDetailsModal Component Enhancement**: Major UI improvements for admin order management interface
+  - **Component Renaming**: Renamed `OrderSummaryModal.tsx` to `OrderDetailsModal.tsx` for better semantic clarity
+  - **Two-Column Layout**: Implemented responsive two-column layout with service charges on left and order information on right
+  - **Increased Modal Width**: Expanded modal from `max-w-md` to `max-w-4xl` for better content visibility and organization
+  - **Enhanced Information Display**: Reorganized order status, customer details, and delivery information in right column for improved readability
+  - **Streamlined Delivery Details**: Integrated delivery information (installation date, teardown date, delivery add-ons) directly under customer information section
+  - **Improved Visual Hierarchy**: Better spacing and organization of modal content with proper grid layout and responsive design
+  - **Updated References**: Updated all import statements and component references throughout the application
 - **📱 Mobile Header Contact Enhancement**: Improved mobile user experience with centered contact information
   - **Centered Contact Layout**: Moved both phone (WhatsApp) and email contact information to a centered section below the separator line in mobile header
   - **Added Email Contact**: Included email address with envelope icon in mobile header, matching desktop version functionality

@@ -7,7 +7,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import AdminLogin from '../components/AdminLogin'
 import { AdminStats, AdminProductsGrid, AdminOrdersTable, DiscountCodesManager, DeliverySettings, InstallationChargesSettings, TimingSurchargesSettings } from '../components/admin'
 import InquiriesManager from '../components/admin/InquiriesManager'
-import OrderSummaryModal from '../components/OrderSummaryModal'
+import OrderDetailsModal from '../components/OrderDetailsModal'
 import Button from '../components/ui/Button'
 import { supabase } from '../lib/supabase'
 
@@ -379,7 +379,7 @@ const AdminPage: React.FC = () => {
 
         {/* Order Detail Modal */}
         {selectedOrder && (
-          <OrderSummaryModal 
+          <OrderDetailsModal 
             isOpen={true}
             onClose={() => setSelectedOrder(null)}
             order={selectedOrder}
