@@ -54,8 +54,9 @@ const Header: React.FC = () => {
     <header className="relative backdrop-blur-xl bg-transparent z-[150]">
       {/* Desktop Header */}
       <div className="relative w-full max-w-[1430px] mx-auto px-4 sm:px-6 lg:px-8 py-4 hidden md:block">
-        <div className="flex items-center h-24 py-4" style={{width: '100%', gap: '40px'}}>
-          <div className="flex justify-start" style={{width: '20%'}}>
+        <div className="flex items-center justify-between h-24 py-4 gap-8">
+          {/* Logo Section */}
+          <div className="flex-shrink-0">
             <Link to="/" className="flex flex-col items-center group">
             <div className="relative">
               <img
@@ -90,8 +91,8 @@ Event planning and decoration services
           </div>
           
           {/* Desktop Navigation */}
-          <div className="flex justify-end" style={{width: '45%'}}>
-             <nav className="flex space-x-[30px] items-center">
+          <div className="flex-1 flex justify-center px-4">
+             <nav className="flex space-x-6 items-center">
             {menuItems.map((item) => {
               const isActive = !item.external && (location.pathname === item.path || (item.label === 'Shop Now' && location.pathname !== '/'))
               return (
@@ -131,16 +132,16 @@ Event planning and decoration services
             </nav>
           </div>
 
-          <div className="flex justify-end" style={{width: '35%'}}>
-            {/* Contact Information */}
-            <div className="flex items-center space-x-8">
+          {/* Contact Information */}
+          <div className="flex-shrink-0 min-w-0">
+            <div className="flex items-center space-x-6">
               <a 
                 href="https://wa.me/6583392574" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-3 hover:text-[#D9A66C] transition-colors duration-200"
+                className="flex items-center space-x-3 hover:text-[#D9A66C] transition-colors duration-200 group"
               >
-                <svg width="24px" height="24px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="#D9A66C" stroke="#D9A66C">
+                <svg width="24px" height="24px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="#D9A66C" stroke="#D9A66C" className="flex-shrink-0">
                   <g id="SVGRepo_bgCarrier" strokeWidth="0"/>
                   <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"/>
                   <g id="SVGRepo_iconCarrier">
@@ -156,14 +157,14 @@ Event planning and decoration services
                     </g>
                   </g>
                 </svg>
-                <span className="font-medium text-white whitespace-nowrap" style={{fontSize: '17px'}}>+65 8339 2574</span>
+                <span className="font-medium text-white whitespace-nowrap group-hover:text-[#D9A66C] transition-colors duration-200" style={{fontSize: '17px'}}>+65 8339 2574</span>
               </a>
               <a 
                 href="mailto:twinklejinglesservices@gmail.com" 
-                className="flex items-center space-x-3 hover:text-[#D9A66C] transition-colors duration-200"
+                className="flex items-center space-x-3 hover:text-[#D9A66C] transition-colors duration-200 group"
               >
                 <FaEnvelope className="text-[#D9A66C] text-[1.5em] flex-shrink-0" />
-                <span className="font-medium text-white whitespace-nowrap" style={{fontSize: '17px'}}>twinklejinglesservices@gmail.com</span>
+                <span className="font-medium text-white whitespace-nowrap group-hover:text-[#D9A66C] transition-colors duration-200" style={{fontSize: '17px'}}>twinklejinglesservices@gmail.com</span>
               </a>
             </div>
           </div>
@@ -208,24 +209,8 @@ Event planning and decoration services
         {/* Separator line */}
         <div className="h-px bg-[#D9A66C] w-[90%] mx-auto"></div>
         
-        {/* Menu button and WhatsApp contact */}
-        <div className="flex justify-between items-center px-4 py-3">
-          {/* Mobile Hamburger Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 rounded-md bg-[#D9A66C] text-white hover:bg-[#D9A66C]/90 transition-all duration-200 flex items-center justify-center z-[200] relative"
-            aria-label="Toggle menu"
-            aria-expanded={isMobileMenuOpen}
-          >
-            <div className="relative w-6 h-6 flex items-center justify-center">
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6 text-[#33373D]" />
-              ) : (
-                <Menu className="h-6 w-6 text-[#33373D]" />
-              )}
-            </div>
-          </button>
-          
+        {/* Centered Contact Information */}
+        <div className="flex flex-col items-center space-y-2 px-4 py-3">
           {/* WhatsApp Contact */}
           <a 
             href="https://wa.me/6583392574" 
@@ -251,6 +236,34 @@ Event planning and decoration services
             </svg>
             <span className="font-medium text-white" style={{fontSize: '17px'}}>+65 8339 2574</span>
           </a>
+          
+          {/* Email Contact */}
+          <a 
+            href="mailto:twinklejinglesservices@gmail.com" 
+            className="flex items-center space-x-2 hover:text-[#D9A66C] transition-colors duration-200"
+          >
+            <FaEnvelope className="text-[#D9A66C] text-[1.5em] flex-shrink-0" />
+            <span className="font-medium text-white" style={{fontSize: '17px'}}>twinklejinglesservices@gmail.com</span>
+          </a>
+        </div>
+        
+        {/* Menu button */}
+        <div className="flex justify-center px-4 pb-3">
+          {/* Mobile Hamburger Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 rounded-md bg-[#D9A66C] text-white hover:bg-[#D9A66C]/90 transition-all duration-200 flex items-center justify-center z-[200] relative"
+            aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            <div className="relative w-6 h-6 flex items-center justify-center">
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6 text-[#33373D]" />
+              ) : (
+                <Menu className="h-6 w-6 text-[#33373D]" />
+              )}
+            </div>
+          </button>
         </div>
       </div>
       

@@ -10,6 +10,12 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **📱 Mobile Header Contact Enhancement**: Improved mobile user experience with centered contact information
+  - **Centered Contact Layout**: Moved both phone (WhatsApp) and email contact information to a centered section below the separator line in mobile header
+  - **Added Email Contact**: Included email address with envelope icon in mobile header, matching desktop version functionality
+  - **Restructured Mobile Layout**: Reorganized mobile header with logo at top, centered contact information, and menu button at bottom
+  - **Enhanced Visual Hierarchy**: Used vertical stacking with proper spacing for better mobile readability
+  - **Consistent Styling**: Maintained hover effects and proper styling while ensuring perfect centering on mobile devices
 - **🔧 OrderSummaryModal Component Refactoring**: Major code optimization and UI enhancement for admin order management
   - **Component Centralization**: Created dedicated `OrderSummaryModal.tsx` component to eliminate 400+ lines of duplicate code from AdminPage
   - **Enhanced Service Charges Display**: Redesigned service charges section with professional card-style layout, blue background container, and improved visual hierarchy

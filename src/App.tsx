@@ -17,9 +17,9 @@ import Footer from './components/Footer'
 function App() {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col relative" style={{backgroundImage: 'url(/assets/images/background-image.webp)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
+      <div className="min-h-screen flex flex-col relative overflow-x-hidden w-full" style={{backgroundImage: 'url(/assets/images/background-image.webp)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
         <div className="absolute inset-0" style={{background: 'linear-gradient(180deg, #000000 0%, #510256 100%)', opacity: 0.93, transition: 'background 0.3s, border-radius 0.3s, opacity 0.3s'}}></div>
-        <div className="relative flex flex-col flex-1 z-10">
+        <div className="relative flex flex-col flex-1 z-10 w-full">
           <Header />
           <main className="flex-1">
             <Routes>

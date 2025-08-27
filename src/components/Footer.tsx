@@ -90,7 +90,7 @@ const Footer: React.FC = () => {
             </div>
             
             {/* Quick Links */}
-            <div className="md:col-span-2" style={{ width: '242px' }}>
+            <div className="md:col-span-2">
               <h3 className="font-dosis font-bold text-white text-xl leading-[26px] mb-4">Quick Links</h3>
               <ul className="custom-space-y">
               <style>{`
@@ -134,7 +134,7 @@ const Footer: React.FC = () => {
             </div>
             
             {/* Legal Links */}
-            <div className="md:col-span-2" style={{ width: '220px' }}>
+            <div className="md:col-span-2">
               <h3 className="font-dosis font-bold text-white text-xl leading-[26px] mb-4">LEGAL LINKS</h3>
               <ul className="custom-space-y">
                 <li>
@@ -173,7 +173,7 @@ const Footer: React.FC = () => {
             </div>
             
             {/* Follow Us */}
-            <div className="md:col-span-2" style={{ width: '297px' }}>
+            <div className="md:col-span-2">
               <h3 className="font-dosis font-bold text-white text-xl leading-[26px] mb-4">Follow Us</h3>
               <p className="font-manrope font-bold italic text-[17px] leading-[26px] text-[#ffffffd4] mb-4">
                 Join our festive world for decor inspiration, exclusive previews, and behind-the-scenes magic.
