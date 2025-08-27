@@ -528,8 +528,7 @@ const CheckoutPage: React.FC = () => {
       
       // Define order types within function scope
       const isGiftCard = orderData?.type === 'giftcard'
-      const isEventService = orderData?.type === 'event'
-      console.log('Order type check:', { orderType: orderData.type, isGiftCard, isEventService })
+      console.log('Order type check:', { orderType: orderData.type, isGiftCard })
       
       let giftCardId = null;
       
@@ -568,25 +567,14 @@ const CheckoutPage: React.FC = () => {
         delivery_zone: customerDetails.deliveryZone || null,
         delivery_area: customerDetails.deliveryArea || null,
         delivery_fee: customerDetails.deliveryFee || 0,
-        order_type: isGiftCard ? 'giftcard' : isEventService ? 'event' : 'product',
+        order_type: isGiftCard ? 'giftcard' : 'product',
         payment_intent_id: null,
         ...(isGiftCard ? {
           gift_card_id: giftCardId,
-          product_id: null,
-          event_service_id: null
-        } : isEventService ? {
-          event_service_id: orderData.eventService?.id,
-          product_id: null,
-          gift_card_id: null,
-          installation_date: installationDate || null,
-          installation_time: installationTime || null,
-          teardown_date: teardownDate || null,
-          teardown_time: teardownTime || null,
-          rush_order: rushOrder
+          product_id: null
         } : {
           product_id: orderData.product?.id,
           gift_card_id: null,
-          event_service_id: null,
           tree_height: orderData.treeOptions?.height,
           tree_width: orderData.treeOptions?.width,
           tree_type: orderData.treeOptions?.type,
@@ -638,7 +626,7 @@ const CheckoutPage: React.FC = () => {
       console.log('Session storage cleared')
       
       // Navigate to thank you page with order number
-      const orderType = orderData.giftCard ? 'giftcard' : isEventService ? 'event' : 'product'
+      const orderType = orderData.giftCard ? 'giftcard' : 'product'
       const category = orderData.product?.category || orderData.eventService?.category || ''
       const thankYouUrl = `/thank-you?orderNumber=${orderNumber}&total=${calculateFinalTotal()}&orderType=${orderType}&category=${category}`
       console.log('Navigating to thank you page:', thankYouUrl)
@@ -655,7 +643,6 @@ const CheckoutPage: React.FC = () => {
 
   // Define steps based on order type - skip scheduling for gift cards and decoration/ribbon/centrepiece products
   const isGiftCard = orderData?.type === 'giftcard'
-  const isEventService = orderData?.type === 'event'
   const isDecorationOrRibbon = orderData?.product?.category === 'decorations' || orderData?.product?.category === 'ribbons'
   const skipScheduling = isGiftCard || isDecorationOrRibbon
   
@@ -827,7 +814,7 @@ const CheckoutPage: React.FC = () => {
                     onNext={() => setCurrentStep(2)}
                     onBack={() => setCurrentStep(1)}
                     isTreeOrder={!!orderData.treeOptions}
-                    isEventService={isEventService}
+
                     installationSelected={installationSelected}
                     setInstallationSelected={setInstallationSelected}
                     teardownSelected={teardownSelected}

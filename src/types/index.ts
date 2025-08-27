@@ -360,8 +360,7 @@ export interface Order {
   delivery_address: string
   product_id?: string
   gift_card_id?: string
-  event_service_id?: string
-  order_type: 'product' | 'giftcard' | 'event'
+  order_type: 'product' | 'giftcard'
   tree_height?: string
   tree_width?: string
   tree_type?: string

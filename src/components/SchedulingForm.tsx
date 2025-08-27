@@ -28,7 +28,7 @@ interface SchedulingFormProps {
   onNext: () => void
   onBack: () => void
   isTreeOrder: boolean
-  isEventService?: boolean
+
   installationSelected: boolean
   setInstallationSelected: (selected: boolean) => void
   teardownSelected: boolean
@@ -56,7 +56,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   onNext,
   onBack,
   isTreeOrder,
-  isEventService = false,
+
   installationSelected,
   setInstallationSelected,
   teardownSelected,
@@ -155,9 +155,9 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
     }
   }, [installationDate])
 
-  // Auto-enable teardown service when teardown date is selected (for tree orders and event services)
+  // Auto-enable teardown service when teardown date is selected (for tree orders)
   useEffect(() => {
-    if ((isTreeOrder || isEventService) && teardownDate && !teardownSelected) {
+    if (isTreeOrder && teardownDate && !teardownSelected) {
       setTeardownSelected(true)
       const daySurcharge = getDayTypeSurcharge(teardownDate)
       
@@ -168,7 +168,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
       }
       showSuccessToast(message)
     }
-  }, [teardownDate, isTreeOrder, isEventService])
+  }, [teardownDate, isTreeOrder])
 
   return (
     <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/15 dark:to-orange-950/15 rounded-3xl shadow-xl p-8 border border-white/20 dark:border-gray-700/30 relative">
@@ -180,7 +180,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
         <div className="w-12 h-12 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 rounded-full blur-lg z-0 opacity-40"></div>
       </div>
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 font-dosis">
-        {isTreeOrder ? 'Installation & Service Scheduling' : isEventService ? 'Event Service Scheduling' : 'Delivery Scheduling'}
+        {isTreeOrder ? 'Installation & Service Scheduling' : 'Delivery Scheduling'}
       </h2>
       
       {/* Header separator */}
@@ -261,8 +261,8 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4" style={{color: '#F59E0B'}} />
-                <span>{isTreeOrder ? 'Installation Date' : isEventService ? 'Event Date' : 'Delivery Date'} {(isTreeOrder || isEventService) && '*'}</span>
-                <Tooltip content={isTreeOrder ? "Select your preferred date for tree installation and decoration" : isEventService ? "Select your preferred date for the event service" : "Select your preferred delivery date"} />
+                <span>{isTreeOrder ? 'Installation Date' : 'Delivery Date'} {isTreeOrder && '*'}</span>
+                <Tooltip content={isTreeOrder ? "Select your preferred date for tree installation and decoration" : "Select your preferred delivery date"} />
               </div>
             </label>
             <input
@@ -276,17 +276,17 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
               }}
               min={today}
               className="w-full p-2 border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm"
-              required={isTreeOrder || isEventService}
+              required={isTreeOrder}
             />
           </div>
 
-          {(isTreeOrder || isEventService) && (
+          {isTreeOrder && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-4 w-4" style={{color: '#F59E0B'}} />
                   <span>Teardown Date *</span>
-                  <Tooltip content={isTreeOrder ? "Select the date when you'd like us to remove the tree and decorations" : "Select the date when you'd like us to clean up after the event"} />
+                  <Tooltip content="Select the date when you'd like us to remove the tree and decorations" />
                 </div>
               </label>
               <input
