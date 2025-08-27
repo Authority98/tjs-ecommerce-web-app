@@ -107,9 +107,11 @@ const AdminOrdersTable: React.FC<AdminOrdersTableProps> = ({
                 </span>
                 <button
                   onClick={() => onViewOrder(order)}
-                  className="p-2 sm:p-3 text-gray-700 dark:text-white hover:bg-white/20 rounded-lg sm:rounded-xl transition-all duration-200 border border-white/30"
+                  className="flex items-center space-x-2 px-3 py-2 sm:px-4 sm:py-2 text-gray-700 dark:text-white hover:bg-white/20 rounded-lg sm:rounded-xl transition-all duration-200 border border-white/30 text-xs sm:text-sm font-medium"
                 >
-                  <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <Eye className="h-4 w-4 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">View Details</span>
+                  <span className="sm:hidden">View</span>
                 </button>
               </div>
             </div>

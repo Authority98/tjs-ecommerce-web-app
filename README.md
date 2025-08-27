@@ -10,6 +10,16 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🔧 OrderSummaryModal Component Refactoring**: Major code optimization and UI enhancement for admin order management
+  - **Component Centralization**: Created dedicated `OrderSummaryModal.tsx` component to eliminate 400+ lines of duplicate code from AdminPage
+  - **Enhanced Service Charges Display**: Redesigned service charges section with professional card-style layout, blue background container, and improved visual hierarchy
+  - **Consolidated Charge Structure**: Moved rental and decor details from "Customizations" to "Service Charges" section for better organization
+  - **Improved Typography**: Enhanced font weights, color coding (blue for "Price to be determined", green for additional charges), and consistent spacing
+  - **Visual Separators**: Added subtle border separators between charge items with proper padding and responsive design
+  - **TypeScript Safety**: Implemented proper null checking and type safety for order data handling
+  - **Removed Redundant Messaging**: Eliminated "Final price will be confirmed after order is placed" notice for cleaner interface
+  - **Reusable Architecture**: Created maintainable, reusable component that can be used across different parts of the application
+  - **Dark Mode Support**: Full dark/light theme compatibility with appropriate color variations
 - **✨ Thank You Page UI Improvements**: Enhanced post-order experience with cleaner interface and consistent order tracking
   - **Order Number Consistency**: Fixed order number display mismatch between thank you page and admin area - both now show the same TJ-format order numbers
   - **Updated Payment Messaging**: Changed payment confirmation text to "We will send over a payment link to your email and phone, after determining the final price for your order"
