@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
-import { Elements } from '@stripe/react-stripe-js'
 import { supabase } from '../lib/supabase'
-import { stripe } from '../lib/stripe'
 import { Product, OrderSummary, CustomerDetails, RENTAL_PERIODS, DeliveryConfiguration, DEFAULT_DELIVERY_ZONES, DEFAULT_DELIVERY_ADDONS, TimingSurcharge, calculateMenPowerCharge } from '../types'
 import { calculateDeliveryFee } from '../utils/deliveryCalculator'
 import { showErrorToast, showSuccessToast, showLoadingToast } from '../utils/toast'
 import OrderSummaryComponent from '../components/OrderSummary'
 import CustomerDetailsForm from '../components/CustomerDetailsForm'
 import SchedulingForm from '../components/SchedulingForm'
-import StripePayment from '../components/StripePayment'
+import OrderConfirmation from '../components/OrderConfirmation'
 import LoadingSpinner from '../components/LoadingSpinner'
 import './CheckoutPage.css'
 
@@ -426,7 +424,7 @@ const CheckoutPage: React.FC = () => {
     if (orderData?.treeOptions) {
       const menPowerCharge = calculateMenPowerCharge(menPower)
       if (menPowerCharge > 0) {
-        charges.push({ name: 'Crew Add-on', amount: menPowerCharge })
+        charges.push({ name: 'Workers Add-on', amount: menPowerCharge })
       }
     }
     
@@ -464,27 +462,22 @@ const CheckoutPage: React.FC = () => {
     return `TJ-${timestamp}-${random}`
   }
 
-  const handlePaymentSuccess = async (paymentIntentId: string) => {
+  const handleOrderConfirm = async () => {
     setPaymentProcessing(true)
     try {
-      console.log('Payment successful, submitting order with payment intent:', paymentIntentId)
-      await handleSubmitOrder(paymentIntentId)
+      console.log('Order confirmed, submitting order without payment')
+      await handleSubmitOrder()
       console.log('Order submitted successfully')
     } catch (error) {
-      console.error('Error in handlePaymentSuccess:', error)
+      console.error('Error in handleOrderConfirm:', error)
       showErrorToast('Failed to process order. Please contact support.')
     } finally {
       setPaymentProcessing(false)
     }
   }
 
-  const handlePaymentError = (error: string) => {
-    console.error('Payment error:', error)
-    showErrorToast(`Payment failed: ${error}`)
-  }
-
-  const handleSubmitOrder = async (paymentIntentId?: string) => {
-    console.log('Starting handleSubmitOrder with:', { paymentIntentId, orderData, customerDetails })
+  const handleSubmitOrder = async () => {
+    console.log('Starting handleSubmitOrder with:', { orderData, customerDetails })
     
     if (!orderData || !customerDetails.name || !customerDetails.email) {
       console.error('Missing required data:', { orderData: !!orderData, name: !!customerDetails.name, email: !!customerDetails.email })
@@ -538,7 +531,7 @@ const CheckoutPage: React.FC = () => {
         delivery_area: customerDetails.deliveryArea || null,
         delivery_fee: customerDetails.deliveryFee || 0,
         order_type: isGiftCard ? 'giftcard' : isEventService ? 'event' : 'product',
-        payment_intent_id: paymentIntentId,
+        payment_intent_id: null,
         ...(isGiftCard ? {
           gift_card_id: giftCardId,
           product_id: null,
@@ -631,12 +624,12 @@ const CheckoutPage: React.FC = () => {
   const steps = skipScheduling 
     ? [
         { number: 1, title: 'Delivery', completed: currentStep > 1 },
-        { number: 2, title: 'Payment', completed: currentStep > 2 }
+        { number: 2, title: 'Confirm Order', completed: currentStep > 2 }
       ]
     : [
         { number: 1, title: 'Scheduling', completed: currentStep > 1 },
         { number: 2, title: 'Delivery', completed: currentStep > 2 },
-        { number: 3, title: 'Payment', completed: currentStep > 3 }
+        { number: 3, title: 'Confirm Order', completed: currentStep > 3 }
       ]
 
   const floatingElements = [
@@ -700,8 +693,7 @@ const CheckoutPage: React.FC = () => {
   }
 
   return (
-    <Elements stripe={stripe}>
-      <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden">
         {/* Floating Background Elements */}
         {floatingElements.map((element, index) => (
           <div
@@ -811,7 +803,7 @@ const CheckoutPage: React.FC = () => {
                     setCustomerDetails={setCustomerDetails}
                     onNext={() => setCurrentStep(skipScheduling ? 2 : 3)}
                     onBack={skipScheduling ? undefined : () => setCurrentStep(1)}
-                    nextButtonText={'Continue to Payment'}
+                    nextButtonText={'Continue to Confirm Order'}
                     isGiftCard={isGiftCard}
                     deliveryConfig={deliveryConfig}
                     selectedDeliveryAddOns={selectedDeliveryAddOns}
@@ -820,10 +812,9 @@ const CheckoutPage: React.FC = () => {
                 )}
                 
                 {((currentStep === 3 && !skipScheduling) || (currentStep === 2 && skipScheduling)) && (
-                  <StripePayment
+                  <OrderConfirmation
                     amount={calculateFinalTotal()}
-                    onPaymentSuccess={handlePaymentSuccess}
-                    onPaymentError={handlePaymentError}
+                    onOrderConfirm={handleOrderConfirm}
                     onBack={() => setCurrentStep(skipScheduling ? 1 : 2)}
                     loading={paymentProcessing}
                     customerDetails={{
@@ -831,14 +822,7 @@ const CheckoutPage: React.FC = () => {
                       email: customerDetails.email,
                       phone: customerDetails.phone
                     }}
-                    onCustomerDetailsChange={(details) => {
-                      setCustomerDetails(prev => ({
-                        ...prev,
-                        name: details.name,
-                        email: details.email,
-                        phone: details.phone
-                      }));
-                    }}
+                    onCustomerDetailsChange={updateCustomerPersonalDetails}
                   />
                 )}
               </div>
@@ -866,8 +850,7 @@ const CheckoutPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
-    </Elements>
+    </div>
   )
 }
 

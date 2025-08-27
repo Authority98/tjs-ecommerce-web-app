@@ -193,7 +193,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                       {decorationLevel === 100 ? 'Full Decor' : decorationLevel === 66 ? 'Half Decor' : 'Low Decor'}
                     </span>
                   </div>
-                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Included</span>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Price to be determined</span>
                 </div>
               )}
 
@@ -288,12 +288,7 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
           <div className="pt-4 mt-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <div className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</div>
-                {orderData.product?.category === 'trees' && (
-                  <div className="text-xs bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded text-amber-700 dark:text-amber-300">
-                     Final price upon order
-                   </div>
-                )}
+                <div className="text-gray-600 dark:text-gray-400 text-sm">Estimated Total</div>
               </div>
               {isCalculatingTotal ? (
                 <div className="flex items-center space-x-2">
@@ -306,6 +301,11 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                 </div>
               ) : (
                 <div className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400">${finalTotal}</div>
+              )}
+              {orderData.product?.category === 'trees' && (
+                <div className="text-xs bg-amber-100/50 dark:bg-amber-900/30 px-2 py-1 rounded text-amber-700 dark:text-amber-300 mt-2 inline-block">
+                   Final price will be confirmed after order is placed
+                 </div>
               )}
             </div>
           </div>
