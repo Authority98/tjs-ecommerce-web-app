@@ -12,6 +12,15 @@ interface Order {
   customer_email: string;
   customer_phone?: string;
   customer_address?: string;
+  // Singapore-specific address fields
+  unit_number?: string;
+  building_name?: string;
+  street_address?: string;
+  postal_code?: string;
+  // Zone-based delivery fields
+  delivery_zone?: string;
+  delivery_area?: string;
+  delivery_fee?: number;
   tree_height?: string;
   tree_type?: string;
   rental_period?: number;
@@ -92,14 +101,6 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ order, isOpen, on
   useEffect(() => {
     let total = 0;
     
-    // Add base product/service costs (excluding editable charges)
-    total += order.total_amount || 0;
-    
-    // Subtract original charges that are now editable
-    if (order.installation_charges) total -= order.installation_charges;
-    if (order.teardown_charges) total -= order.teardown_charges;
-    if (order.rush_order_fee) total -= order.rush_order_fee;
-    
     // Add edited charges
     Object.values(editedCharges).forEach(charge => {
       total += charge || 0;
@@ -109,6 +110,13 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ order, isOpen, on
     customCharges.forEach(charge => {
       total += charge.amount || 0;
     });
+    
+    // Add delivery add-ons
+    if (order.selected_delivery_addons) {
+      order.selected_delivery_addons.forEach(addon => {
+        total += addon.fee || 0;
+      });
+    }
     
     setCalculatedTotal(Math.max(0, total));
   }, [editedCharges, customCharges, order]);
@@ -490,11 +498,78 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ order, isOpen, on
               {/* Customer Information */}
               <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-700">
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Customer Information</h4>
-                <div className="space-y-1 text-xs text-gray-600 dark:text-gray-300">
+                <div className="space-y-1 text-sm text-gray-600 dark:text-gray-300">
                   <p><span className="font-medium">Name:</span> {order.customer_name}</p>
                   <p><span className="font-medium">Email:</span> {order.customer_email}</p>
                   {order.customer_phone && <p><span className="font-medium">Phone:</span> {order.customer_phone}</p>}
-                  {order.customer_address && <p><span className="font-medium">Address:</span> {order.customer_address}</p>}
+                  
+                  {/* Delivery Address Details */}
+                  {(order.delivery_zone || order.delivery_area || order.street_address || order.unit_number || order.building_name || order.postal_code) && (
+                    <div className="mt-3 pt-3 border-t border-blue-200 dark:border-blue-600">
+                      <div className="flex items-center mb-2">
+                        <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+                        <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm">Delivery Address</p>
+                      </div>
+                      <div className="grid grid-cols-1 gap-1 ml-4">
+                        {/* Zone and Area in one line */}
+                        {(order.delivery_zone || order.delivery_area) && (
+                          <div className="flex flex-wrap gap-4">
+                            {order.delivery_zone && (
+                              <span className="text-sm">
+                                <span className="text-gray-500 dark:text-gray-400">Zone:</span>
+                                <span className="ml-1 font-medium text-gray-700 dark:text-gray-200">{order.delivery_zone}</span>
+                              </span>
+                            )}
+                            {order.delivery_area && (
+                              <span className="text-sm">
+                                <span className="text-gray-500 dark:text-gray-400">Area:</span>
+                                <span className="ml-1 font-medium text-gray-700 dark:text-gray-200">{order.delivery_area}</span>
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Full Address */}
+                        {order.street_address && (
+                          <p className="text-sm">
+                            <span className="text-gray-500 dark:text-gray-400">Address:</span>
+                            <span className="ml-1 font-medium text-gray-700 dark:text-gray-200">{order.street_address}</span>
+                          </p>
+                        )}
+                        
+                        {/* Unit and Building in one line */}
+                        {(order.unit_number || order.building_name) && (
+                          <div className="flex flex-wrap gap-4">
+                            {order.unit_number && (
+                              <span className="text-sm">
+                                <span className="text-gray-500 dark:text-gray-400">Unit:</span>
+                                <span className="ml-1 font-medium text-gray-700 dark:text-gray-200">{order.unit_number}</span>
+                              </span>
+                            )}
+                            {order.building_name && (
+                              <span className="text-sm">
+                                <span className="text-gray-500 dark:text-gray-400">Building:</span>
+                                <span className="ml-1 font-medium text-gray-700 dark:text-gray-200">{order.building_name}</span>
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Postal Code */}
+                        {order.postal_code && (
+                          <p className="text-sm">
+                            <span className="text-gray-500 dark:text-gray-400">Postal:</span>
+                            <span className="ml-1 font-medium text-gray-700 dark:text-gray-200">{order.postal_code}</span>
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Fallback to legacy address field if new fields are not available */}
+                  {!order.delivery_zone && !order.delivery_area && !order.street_address && order.customer_address && (
+                    <p><span className="font-medium">Address:</span> {order.customer_address}</p>
+                  )}
                 </div>
               </div>
 

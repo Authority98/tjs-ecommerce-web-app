@@ -10,7 +10,7 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
-- **🔧 OrderDetailsModal Component Enhancement**: Major UI improvements for admin order management interface
+- **🔧 OrderDetailsModal Component Enhancement & Bug Fixes**: Major UI improvements and critical fixes for admin order management interface
   - **Component Renaming**: Renamed `OrderSummaryModal.tsx` to `OrderDetailsModal.tsx` for better semantic clarity
   - **Two-Column Layout**: Implemented responsive two-column layout with service charges on left and order information on right
   - **Increased Modal Width**: Expanded modal from `max-w-md` to `max-w-4xl` for better content visibility and organization
@@ -18,6 +18,13 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
   - **Streamlined Delivery Details**: Integrated delivery information (installation date, teardown date, delivery add-ons) directly under customer information section
   - **Improved Visual Hierarchy**: Better spacing and organization of modal content with proper grid layout and responsive design
   - **Updated References**: Updated all import statements and component references throughout the application
+  - **Fixed Missing Delivery Fields**: Resolved critical issue where delivery details (unit number, building name, street address, postal code, delivery zone, delivery area, delivery fee) were not displaying in order details
+  - **Enhanced Order Interface**: Updated Order interface to include all delivery-related fields matching database schema
+  - **Improved Customer Information Display**: Added comprehensive delivery address section with organized field grouping and conditional rendering
+  - **Visual Enhancements**: Implemented cleaner delivery address display with blue dot indicator, improved typography, and smart field grouping (Zone & Area, Unit & Building, Postal Code)
+  - **Text Consistency**: Standardized text sizes across service charges and customer information sections for uniform appearance
+  - **Corrected Total Calculation**: Fixed estimated total calculation logic to accurately sum edited service charges, custom charges, and delivery add-ons without double-counting base amounts
+  - **Removed Fee Display**: Cleaned up customer information section by removing delivery fee display (already shown in service charges)
 - **📱 Mobile Header Contact Enhancement**: Improved mobile user experience with centered contact information
   - **Centered Contact Layout**: Moved both phone (WhatsApp) and email contact information to a centered section below the separator line in mobile header
   - **Added Email Contact**: Included email address with envelope icon in mobile header, matching desktop version functionality
