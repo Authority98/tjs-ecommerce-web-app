@@ -251,7 +251,19 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   </span>
                 </div>
               ))}
-              {/* 7. Delivery Add-ons - Minimal compact design */}
+              {/* 7. Delivery section - only show if delivery charge exists */}
+              {additionalCharges.find(charge => charge.name === 'Delivery') && (
+                <div className="flex items-center justify-between py-0.5">
+                  <div className="flex items-center">
+                    <Truck className="w-3 h-3 text-pink-500 mr-1.5" />
+                    <span className="text-xs text-gray-600 dark:text-gray-400">
+                      {orderData.product?.category === 'trees' ? 'Two Way Trip (Delivery)' : 'Delivery'}
+                    </span>
+                  </div>
+                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
+                </div>
+              )}
+              {/* 8. Delivery Add-ons - Minimal compact design */}
               {selectedDeliveryAddOns && deliveryConfig && selectedDeliveryAddOns.length > 0 && (
                 <div className="flex flex-wrap gap-1 py-0.5">
                   {selectedDeliveryAddOns.map((addOnId) => {
@@ -267,24 +279,12 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   })}
                 </div>
               )}
-              {/* 8. Delivery section - only show if delivery charge exists */}
-              {additionalCharges.find(charge => charge.name === 'Delivery') && (
-                <div className="flex items-center justify-between py-0.5">
-                  <div className="flex items-center">
-                    <Truck className="w-3 h-3 text-pink-500 mr-1.5" />
-                    <span className="text-xs text-gray-600 dark:text-gray-400">
-                      {orderData.product?.category === 'trees' ? 'Two Way Trip' : 'Delivery'}
-                    </span>
-                  </div>
-                  <span className="text-xs font-medium text-pink-600 dark:text-pink-400">+${additionalCharges.find(charge => charge.name === 'Delivery')?.amount}</span>
-                </div>
-              )}
             </div>
           </div>
         )}
 
-        {/* Total - only show from delivery section onwards (step 2+) */}
-        {currentStep >= 2 && (
+        {/* Total - only show if price is greater than zero */}
+        {finalTotal > 0 && (
           <div className="pt-4 mt-4">
             <div>
               <div className="flex items-center gap-2 mb-2">

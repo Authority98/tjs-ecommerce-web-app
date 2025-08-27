@@ -104,14 +104,16 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
             </div>
           </div>
           
-          <div className="border-t border-amber-200 dark:border-amber-700/30 pt-3 mt-4">
-            <div className="flex justify-between items-center">
-              <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">Estimated Total:</span>
-              <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">
-                ${amount.toFixed(2)}
-              </span>
+          {amount > 0 && (
+            <div className="border-t border-amber-200 dark:border-amber-700/30 pt-3 mt-4">
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">Estimated Total:</span>
+                <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">
+                  ${amount.toFixed(2)}
+                </span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -129,13 +131,7 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
             </h4>
             <div className="space-y-2 text-blue-700 dark:text-blue-300 text-sm leading-relaxed">
               <p>
-                The final price will be determined after you place your order based on your specific requirements and customizations.
-              </p>
-              <p>
-                After order confirmation, we will send a payment link to your email address and phone number for secure payment processing.
-              </p>
-              <p>
-                Our team will also contact you to confirm order details and arrange delivery or service scheduling.
+                The final price will be determined after order placement based on your specific requirements and customizations, then we'll send a secure payment link to your email and phone for processing.
               </p>
             </div>
           </div>
@@ -152,11 +148,7 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
             className="mt-1 w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 rounded focus:ring-amber-500 focus:ring-2"
           />
           <span className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            I agree to the{' '}
-            <a href="#" className="text-amber-600 dark:text-amber-400 hover:underline">
-              terms and conditions
-            </a>{' '}
-            and understand that payment will be collected after order confirmation via a secure payment link sent to my email and phone.
+            I understand that payment will be collected after order confirmation via a secure payment link sent to my email and phone.
           </span>
         </label>
       </div>

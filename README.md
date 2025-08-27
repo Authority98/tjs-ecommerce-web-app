@@ -10,12 +10,19 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🎨 Visual Men Power Selection**: Enhanced checkout flow with improved worker selection interface
+  - **Card-Based Selection**: Replaced dropdown select field with visual card interface matching decoration level selection pattern
+  - **Intuitive Design**: Three visual cards displaying 1-2 Workers (Included), 3-4 Workers (+$120), and 5 Workers (+$250)
+  - **Visual Feedback**: Active selection highlighted with amber styling and check mark indicator
+  - **Consistent UI**: Maintains design consistency with other visual selection components throughout checkout
+  - **Improved UX**: Users can now see all options at once with clear pricing information and hover effects
 - **💰 Enhanced Checkout Flow Messaging**: Improved price confirmation and payment messaging
   - **Clear Price Confirmation**: Added "Final price will be confirmed after order is placed" notice positioned directly under amount displays in OrderSummary
   - **Payment Process Clarity**: Updated terms agreement to clarify payment collection via secure link after order confirmation
   - **Consistent Messaging**: Standardized price determination messaging across checkout components
   - **Professional Communication**: Enhanced customer communication about manual payment link process in checkout flow
   - **Optimized Placement**: Relocated price confirmation notice from fields section to directly under amount display for better visibility
+  - **Conditional Total Display**: Estimated total now hidden when price is zero to avoid confusing $0 displays
 - **🎨 Footer Logo Consistency Update**: Updated footer logo to match header branding
   - **Consistent Logo Implementation**: Replaced simple footer logo with structured layout matching header design
   - **Added Tagline**: Included "Event planning and decoration services" tagline below logo in footer

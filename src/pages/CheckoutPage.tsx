@@ -37,11 +37,11 @@ const CheckoutPage: React.FC = () => {
   const [teardownTime, setTeardownTime] = useState('')
   const [rushOrder, setRushOrder] = useState(false)
   const [rentalPeriod, setRentalPeriod] = useState(45)
-  const [decorationLevel, setDecorationLevel] = useState(50)
+  const [decorationLevel, setDecorationLevel] = useState(66)
 
   const [installationSelected, setInstallationSelected] = useState(false)
   const [teardownSelected, setTeardownSelected] = useState(false)
-  const [menPower, setMenPower] = useState(3)
+  const [menPower, setMenPower] = useState(2)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
   const [appliedDiscount, setAppliedDiscount] = useState<{
     id: string
@@ -55,10 +55,48 @@ const CheckoutPage: React.FC = () => {
   const [deliveryError, setDeliveryError] = useState<string | null>(null)
   const [selectedDeliveryAddOns, setSelectedDeliveryAddOns] = useState<string[]>([])  
   const [timingSurcharges, setTimingSurcharges] = useState<TimingSurcharge[]>([])
+  const [isCalculatingTotal, setIsCalculatingTotal] = useState(false)
+
+  // Function to show loading dots briefly when price-based items are selected
+  const showCalculatingTotal = () => {
+    setIsCalculatingTotal(true)
+    setTimeout(() => {
+      setIsCalculatingTotal(false)
+    }, 1000) // Show for 1 second
+  }
 
   useEffect(() => {
     initializeCheckout()
   }, [])
+
+  // Trigger loading animation when price-based items are selected
+  useEffect(() => {
+    if (decorationLevel) {
+      showCalculatingTotal()
+    }
+  }, [decorationLevel])
+
+  useEffect(() => {
+    if (rentalPeriod) {
+      showCalculatingTotal()
+    }
+  }, [rentalPeriod])
+
+  useEffect(() => {
+    if (menPower) {
+      showCalculatingTotal()
+    }
+  }, [menPower])
+
+  useEffect(() => {
+    showCalculatingTotal()
+  }, [installationSelected, teardownSelected])
+
+  useEffect(() => {
+    if (selectedDeliveryAddOns.length > 0) {
+      showCalculatingTotal()
+    }
+  }, [selectedDeliveryAddOns])
 
   // Load delivery configuration
   const loadDeliveryConfig = async () => {
@@ -840,7 +878,7 @@ const CheckoutPage: React.FC = () => {
                 deliveryError={deliveryError || undefined}
                 appliedDiscount={appliedDiscount}
                 onDiscountApplied={setAppliedDiscount}
-                isCalculatingTotal={!areAllOptionsSelected()}
+                isCalculatingTotal={isCalculatingTotal}
                 decorationLevel={decorationLevel}
 
                 selectedDeliveryAddOns={selectedDeliveryAddOns}

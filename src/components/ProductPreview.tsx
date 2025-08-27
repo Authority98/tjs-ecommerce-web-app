@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react'
-import { Ruler, TreePine, Calendar, Palette, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import { Ruler, TreePine, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import { Product, TreeOptions } from '../types'
 import ProductTags from './ProductTags'
 import Lightbox from './ui/Lightbox'
@@ -134,39 +134,7 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({
                 )}
               </div>
               
-              {/* Rental Period Selection */}
-              <div className="flex items-center space-x-2 text-sm">
-                <Calendar className="h-4 w-4" style={{color: '#ec4899'}} />
-                {selectedOptions.rentalPeriod > 0 ? (
-                  <span className="text-gray-600 dark:text-gray-300">Rental: {selectedOptions.rentalPeriod} days</span>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <span className="text-gray-400 dark:text-gray-500">Rental:</span>
-                    <div className="flex space-x-1">
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms', animationDuration: '2s' }}></div>
-            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.7s', animationDuration: '2s' }}></div>
-            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '1.4s', animationDuration: '2s' }}></div>
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              {/* Decoration Level Selection */}
-              <div className="flex items-center space-x-2 text-sm">
-                <Palette className="h-4 w-4" style={{color: '#ec4899'}} />
-                {selectedOptions.decorLevel > 0 ? (
-                  <span className="text-gray-600 dark:text-gray-300">Decor: {selectedOptions.decorLevel}%</span>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <span className="text-gray-400 dark:text-gray-500">Decor:</span>
-                    <div className="flex space-x-1">
-                      <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0ms', animationDuration: '2s' }}></div>
-            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.7s', animationDuration: '2s' }}></div>
-            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '1.4s', animationDuration: '2s' }}></div>
-                    </div>
-                  </div>
-                )}
-              </div>
+
             </div>
 
           </div>

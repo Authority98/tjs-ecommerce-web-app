@@ -5,6 +5,7 @@ import { showSuccessToast } from '../utils/toast'
 import { supabase } from '../lib/supabase'
 import Tooltip from './ui/Tooltip'
 import DecorationLevelSelection from './DecorationLevelSelection'
+import MenPowerSelection from './MenPowerSelection'
 
 interface SchedulingFormProps {
   installationDate: string
@@ -47,7 +48,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   setRushOrder,
   rentalPeriod = 45,
   setRentalPeriod,
-  decorationLevel = 50,
+  decorationLevel = 66,
   setDecorationLevel,
 
   menPower,
@@ -308,23 +309,17 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
         {/* Men Power Selection - Only for tree orders */}
         {isTreeOrder && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               <div className="flex items-center space-x-2">
                 <Wrench className="h-4 w-4" style={{color: '#F59E0B'}} />
                 <span>Men Power *</span>
                 <Tooltip content="Select the number of workers needed for your tree installation" />
               </div>
             </label>
-            <select
-              value={menPower}
-              onChange={(e) => setMenPower(Number(e.target.value))}
-              className="w-full p-2 border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/60 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm"
-              required
-            >
-              <option value={2}>1-2 Workers - Included</option>
-              <option value={4}>3-4 Workers - +$120</option>
-              <option value={5}>5 Workers - +$250</option>
-            </select>
+            <MenPowerSelection
+              selectedMenPower={menPower}
+              onMenPowerSelect={setMenPower}
+            />
           </div>
         )}
 
