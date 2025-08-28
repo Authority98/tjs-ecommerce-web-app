@@ -10,6 +10,12 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **💰 Tree Pricing Update (January 2025)**: Updated all tree category products to zero price for promotional pricing
+  - **Zero Price Implementation**: Set all tree category products to $0 price, similar to previous "bling bling Christmas tree" change
+  - **SQL Migration Created**: Added comprehensive migration file `20250130000000_update_tree_prices_to_zero.sql` for database updates
+  - **Manual SQL Script**: Provided standalone SQL script `update_tree_prices_to_zero.sql` for direct execution in Supabase dashboard
+  - **Database Consistency**: Ensured all tree products maintain consistent zero pricing structure across the platform
+  - **Admin Interface Ready**: Price changes will reflect immediately in admin product management and customer-facing pages
 - **🔧 OrderDetailsModal Component Enhancement & Bug Fixes**: Major UI improvements and critical fixes for admin order management interface
   - **Component Renaming**: Renamed `OrderSummaryModal.tsx` to `OrderDetailsModal.tsx` for better semantic clarity
   - **Two-Column Layout**: Implemented responsive two-column layout with service charges on left and order information on right
