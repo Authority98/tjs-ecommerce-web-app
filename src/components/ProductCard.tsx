@@ -53,7 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
       <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-3xl z-0"></div>
       <div className="relative overflow-hidden group rounded-t-2xl">
         {/* Main Image Display */}
-        <div className="relative w-full h-72 bg-gray-100 rounded-xl overflow-hidden">
+        <div className="relative w-full h-56 bg-gray-100 rounded-xl overflow-hidden">
           <img
             src={product.images[currentImageIndex]}
             alt={`${product.title} ${currentImageIndex + 1}`}
@@ -106,8 +106,8 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
           <div
             className="absolute top-6 right-6 z-10"
           >
-            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl px-4 py-2 shadow-lg border border-white/20 dark:border-gray-700/30">
-              <span className="text-2xl font-bold text-purple-600 dark:text-amber-400">
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-xl px-3 py-1.5 shadow-lg border border-white/20 dark:border-gray-700/30">
+              <span className="text-xl font-bold text-purple-600 dark:text-amber-400">
                 ${product.price}
               </span>
             </div>
@@ -129,21 +129,21 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
 
       </div>
       
-      <div className="p-8">
+      <div className="p-6">
         <h3 
-          className="text-2xl font-bold text-gray-800 dark:text-white mb-3 line-clamp-2 font-dosis"
+          className="text-xl font-bold text-gray-800 dark:text-white mb-2 line-clamp-2 font-dosis"
         >
           {product.title}
         </h3>
         <ProductTags product={product} />
         
-        <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 leading-relaxed font-manrope">
+        <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 leading-relaxed font-manrope text-sm">
           {product.description}
         </p>
         
         <Link to={handleProductClick()}>
           <button
-            className={`w-full flex items-center justify-center px-8 py-4 bg-gradient-to-r ${getCategoryGradient(product.category)} text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
+            className={`w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r ${getCategoryGradient(product.category)} text-white font-bold text-base rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
           >
             <span className="flex items-center space-x-3">
               {product.category === 'trees' ? (

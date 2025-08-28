@@ -139,6 +139,32 @@ const ProductPage: React.FC = () => {
       })
     }
 
+    // Sort by number of customization options (most options first)
+    filtered.sort((a, b) => {
+      let aOptions = 0
+      let bOptions = 0
+      
+      // Count color options
+      if (a.color) {
+        aOptions += a.color.split(',').length
+      }
+      if (b.color) {
+        bOptions += b.color.split(',').length
+      }
+      
+      // Count decoration option (for trees)
+      if (validCategory === 'trees') {
+        if (a.decorated !== undefined) aOptions += 1
+        if (b.decorated !== undefined) bOptions += 1
+      }
+      
+      // Sort by options count (descending), then by creation date (newest first)
+      if (bOptions !== aOptions) {
+        return bOptions - aOptions
+      }
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    })
+
     setFilteredProducts(filtered)
   }
 
@@ -240,9 +266,11 @@ const ProductPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
-            Our Products
-          </h1>
+          {validCategory !== 'trees' && validCategory !== 'decorations' && validCategory !== 'ribbons' && (
+            <h1 className="text-white mb-6" style={{fontFamily: 'Dancing Script', fontWeight: 500, fontSize: '30px', lineHeight: '39px', color: '#d9a66c'}}>
+              Our Products
+            </h1>
+          )}
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-dosis">
             {categoryInfo.title}
           </h2>
@@ -430,7 +458,7 @@ const ProductPage: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 relative z-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 relative z-20">
             {filteredProducts.map((product, index) => (
               <div key={product.id} className="transform transition-all duration-300 hover:scale-105 hover:translate-y-[-5px]">
                 <ProductCard product={product} />
