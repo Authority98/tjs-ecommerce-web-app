@@ -10,6 +10,17 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🗑️ Bulk Order Deletion Implementation (August 2025)**: Comprehensive order deletion system for admin management
+  - **Migration-Based Deletion**: Implemented secure bulk order deletion using Supabase CLI migration system for production safety
+  - **Multi-Modal Implementation**: Created three deletion approaches - Admin UI integration, Supabase CLI commands, and direct SQL execution
+  - **Safety Protocols**: Multi-step confirmation system with typing verification to prevent accidental deletions
+  - **Database Migration**: Successfully applied migration `20250829180104_execute_order_deletion_now.sql` to delete all 73 orders
+  - **CLI Automation**: Created bash scripts and migration files for automated deletion with comprehensive error handling
+  - **Transaction Safety**: All deletion operations wrapped in database transactions with proper rollback capabilities
+  - **Migration History**: Tracked deletion operations in `supabase_migrations.schema_migrations` for audit trail
+  - **Clean Codebase**: Removed temporary bulk deletion UI components after successful operation completion
+  - **Documentation**: Complete README update with deletion methodology and safety protocols for future reference
+
 - **💰 Tree Pricing Update (January 2025)**: Updated all tree category products to zero price for promotional pricing
   - **Zero Price Implementation**: Set all tree category products to $0 price, similar to previous "bling bling Christmas tree" change
   - **SQL Migration Created**: Added comprehensive migration file `20250130000000_update_tree_prices_to_zero.sql` for database updates
@@ -476,8 +487,11 @@ src/
 
 ### Admin Features
 - **Product Management**: Add, edit, and delete products
-- **Order Management**: View and update order statuses
+- **Order Management**: View, update order statuses, and individual order deletion
+- **Inquiry Management**: View and manage customer event inquiries
+- **Configuration Management**: Delivery settings, installation charges, and timing surcharges
 - **Analytics Dashboard**: Order statistics and insights
+- **Database Operations**: Migration-based bulk operations with CLI support
 
 ## 🎨 Design System
 
