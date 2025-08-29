@@ -101,27 +101,27 @@ const Footer: React.FC = () => {
                 }
               `}</style>
                 <li>
-                  <a href="https://tjs-landing-page.stagingsite.duckdns.org/" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
+                  <a href="https://twinklejingle.net/" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
                     <CaretRightIcon className="w-4 h-4 mr-[11px]" color="white" /> Home
                   </a>
                 </li>
                 <li>
-                  <a href="https://tjs-landing-page.stagingsite.duckdns.org/#about" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
+                  <a href="https://twinklejingle.net/#about" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
                     <CaretRightIcon className="w-4 h-4 mr-[11px]" color="white" /> About Us
                   </a>
                 </li>
                 <li>
-                  <a href="https://tjs-landing-page.stagingsite.duckdns.org/#services" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
+                  <a href="https://twinklejingle.net/#services" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
                     <CaretRightIcon className="w-4 h-4 mr-[11px]" color="white" /> Our Services
                   </a>
                 </li>
                 <li>
-                  <a href="https://tjs-landing-page.stagingsite.duckdns.org/portfolio/" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
+                  <a href="https://twinklejingle.net/portfolio/" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
                     <CaretRightIcon className="w-4 h-4 mr-[11px]" color="white" /> Portfolio
                   </a>
                 </li>
                 <li>
-                  <a href="https://tjs-landing-page.stagingsite.duckdns.org/#testimonials" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
+                  <a href="https://twinklejingle.net/#testimonials" target="_blank" rel="noopener noreferrer" className="font-manrope text-[#FFFFFFD4] text-[15px] leading-[23px] hover:text-[#d9a66c] flex items-center">
                     <CaretRightIcon className="w-4 h-4 mr-[11px]" color="white" /> Testimonials
                   </a>
                 </li>

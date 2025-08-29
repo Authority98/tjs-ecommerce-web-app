@@ -73,7 +73,7 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
   - **Responsive Design**: Maintained centered alignment on mobile and left-aligned on desktop for consistency
   - **Brand Cohesion**: Ensured visual consistency between header and footer branding elements
 - **🔗 Portfolio Link Update**: Updated navigation menu portfolio links to new dedicated portfolio page
-  - **Header Navigation**: Updated portfolio menu item to link to `https://tjs-landing-page.stagingsite.duckdns.org/portfolio/`
+  - **Header Navigation**: Updated portfolio menu item to link to `https://twinklejingle.net/portfolio/`
   - **Footer Navigation**: Updated footer portfolio link to match new URL structure
   - **Consistent Navigation**: Ensured both header and footer portfolio links point to the same dedicated portfolio page
 - **👷 Manpower Pricing Structure Update**: Simplified worker selection with transparent pricing tiers
