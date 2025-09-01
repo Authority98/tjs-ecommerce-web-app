@@ -12,14 +12,20 @@ const MenPowerSelection: React.FC<MenPowerSelectionProps> = ({
 }) => {
   const menPowerOptions = [
     {
-      value: 3,
-      label: '3-4 Workers',
-      description: 'Basic team',
+      value: 2,
+      label: '1-2 Workers',
+      description: 'Included',
       additionalCost: 0
     },
     {
+      value: 3,
+      label: '3-4 Workers',
+      description: '+$120',
+      additionalCost: 120
+    },
+    {
       value: 5,
-      label: '5+ Workers',
+      label: '5 Workers',
       description: '+$250',
       additionalCost: 250
     }

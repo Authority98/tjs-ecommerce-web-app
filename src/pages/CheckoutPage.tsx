@@ -41,7 +41,7 @@ const CheckoutPage: React.FC = () => {
 
   const [installationSelected, setInstallationSelected] = useState(false)
   const [teardownSelected, setTeardownSelected] = useState(false)
-  const [menPower, setMenPower] = useState(3)
+  const [menPower, setMenPower] = useState(2)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
   const [appliedDiscount, setAppliedDiscount] = useState<{
     id: string
