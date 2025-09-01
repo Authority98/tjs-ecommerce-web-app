@@ -48,7 +48,7 @@ const SchedulingForm: React.FC<SchedulingFormProps> = ({
   setRushOrder,
   rentalPeriod = 45,
   setRentalPeriod,
-  decorationLevel = 66,
+  decorationLevel = 75,
   setDecorationLevel,
 
   menPower,

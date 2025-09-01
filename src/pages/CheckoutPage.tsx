@@ -37,11 +37,11 @@ const CheckoutPage: React.FC = () => {
   const [teardownTime, setTeardownTime] = useState('')
   const [rushOrder, setRushOrder] = useState(false)
   const [rentalPeriod, setRentalPeriod] = useState(45)
-  const [decorationLevel, setDecorationLevel] = useState(66)
+  const [decorationLevel, setDecorationLevel] = useState(75)
 
   const [installationSelected, setInstallationSelected] = useState(false)
   const [teardownSelected, setTeardownSelected] = useState(false)
-  const [menPower, setMenPower] = useState(2)
+  const [menPower, setMenPower] = useState(3)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
   const [appliedDiscount, setAppliedDiscount] = useState<{
     id: string

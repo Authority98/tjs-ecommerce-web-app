@@ -10,6 +10,17 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **🐛 Critical Checkout Bug Fix (September 2025)**: Resolved database constraint violations preventing order placement
+  - **Database Constraint Analysis**: Identified mismatch between frontend values and database constraints for men_power and decor_level fields
+  - **men_power Constraint Fix**: Updated minimum value from 2 to 3 workers to match database constraint (men_power >= 3 AND men_power <= 20)
+  - **decor_level Constraint Fix**: Updated decoration levels from [33, 66, 100] to [50, 75, 100] to match database constraint (decor_level IN (50, 75, 100))
+  - **Component Updates**: Fixed MenPowerSelection component to remove invalid 1-2 workers option, updated DecorationLevelSelection icons mapping
+  - **Default Value Corrections**: Updated CheckoutPage, SchedulingForm, and TreeCustomization components with valid default values
+  - **Type Safety Improvements**: Updated MEN_POWER_TIERS and DECOR_LEVELS constants to match database schema requirements
+  - **UI Consistency**: Updated OrderSummary component logic to handle new decoration level values (50=Low, 75=Half, 100=Full)
+  - **Pricing Structure**: Simplified men power pricing to 3-4 workers (Basic team, $0) and 5+ workers (+$250)
+  - **Error Resolution**: Eliminated PostgreSQL 23514 constraint violation errors that were preventing successful order submissions
+
 - **🗑️ Bulk Order Deletion Implementation (August 2025)**: Comprehensive order deletion system for admin management
   - **Migration-Based Deletion**: Implemented secure bulk order deletion using Supabase CLI migration system for production safety
   - **Multi-Modal Implementation**: Created three deletion approaches - Admin UI integration, Supabase CLI commands, and direct SQL execution

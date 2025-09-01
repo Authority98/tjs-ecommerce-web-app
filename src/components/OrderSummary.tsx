@@ -184,13 +184,13 @@ const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
                   <div className="flex items-center">
                     {decorationLevel === 100 ? (
                       <Crown className="w-3 h-3 text-pink-500 mr-1.5" />
-                    ) : decorationLevel === 66 ? (
+                    ) : decorationLevel === 75 ? (
                       <Star className="w-3 h-3 text-pink-500 mr-1.5" />
                     ) : (
                       <Sparkles className="w-3 h-3 text-pink-500 mr-1.5" />
                     )}
                     <span className="text-xs text-gray-600 dark:text-gray-400">
-                      {decorationLevel === 100 ? 'Full Decor' : decorationLevel === 66 ? 'Half Decor' : 'Low Decor'}
+                      {decorationLevel === 100 ? 'Full Decor' : decorationLevel === 75 ? 'Half Decor' : 'Low Decor'}
                     </span>
                   </div>
                   <span className="text-xs font-medium text-pink-600 dark:text-pink-400">Price to be determined</span>

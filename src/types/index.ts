@@ -214,8 +214,8 @@ export const RENTAL_PERIODS = [
 ]
 
 export const DECOR_LEVELS = [
-  { percentage: 33, label: 'Low Decor', description: 'Minimal decorations for a subtle touch' },
-  { percentage: 66, label: 'Half Decor', description: 'Balanced decoration package' },
+  { percentage: 50, label: 'Low Decor', description: 'Minimal decorations for a subtle touch' },
+  { percentage: 75, label: 'Half Decor', description: 'Balanced decoration package' },
   { 
     percentage: 100, 
     label: 'Full Decor', 
@@ -313,8 +313,7 @@ export const DEFAULT_DELIVERY_ADDONS: DeliveryAddOn[] = [
 
 // Men Power Pricing Configuration
 export const MEN_POWER_TIERS = [
-  { min: 1, max: 2, label: '1-2 workers Included', price: 0 },
-  { min: 3, max: 4, label: '3-4 workers +$120', price: 120 },
+  { min: 3, max: 4, label: '3-4 workers Basic team', price: 0 },
   { min: 5, max: 20, label: '5+ workers +$250', price: 250 }
 ]
 

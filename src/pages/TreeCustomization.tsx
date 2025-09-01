@@ -35,7 +35,7 @@ const [selectedOptions, setSelectedOptions] = useState<TreeOptions>({
     height: '',
     width: '',
     type: '',
-    decorLevel: 0
+    decorLevel: 75
   })
   const floatingElements = [
     { image: '/assets/images/Vector-Smart-Object-1ss-1.png', delay: 0, x: '31%', y: '35%', size: 54 },

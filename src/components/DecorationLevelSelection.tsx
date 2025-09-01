@@ -16,8 +16,8 @@ const DecorationLevelSelection: React.FC<DecorationLevelSelectionProps> = ({
   const [showModal, setShowModal] = useState(false)
   
   const icons = {
-    33: Sparkles,
-    66: Star,
+    50: Sparkles,
+    75: Star,
     100: Crown
   }
 
