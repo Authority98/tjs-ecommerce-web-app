@@ -10,6 +10,13 @@ A modern, full-featured e-commerce application specializing in Christmas trees, 
 
 ## 📋 Latest Updates
 
+- **📊 Google Tag Manager Integration**: Added Google Tag Manager for enhanced analytics and marketing capabilities
+  - **Script Implementation**: Added GTM script in the head section of index.html
+  - **Noscript Fallback**: Implemented noscript iframe for browsers with JavaScript disabled
+  - **Container ID**: Using container ID GTM-WGFN2B82 for tracking and analytics
+  - **Data Layer Support**: Full support for custom data layer events and variables
+  - **Marketing Integration**: Ready for integration with Google Ads, Facebook Pixel, and other marketing tools
+
 - **🐛 Critical Checkout Bug Fix (September 2025)**: Resolved database constraint violations preventing order placement
   - **Database Constraint Analysis**: Identified mismatch between frontend values and database constraints for men_power and decor_level fields
   - **men_power Constraint Fix**: Updated minimum value from 2 to 3 workers to match database constraint (men_power >= 3 AND men_power <= 20)
